@@ -1,0 +1,1 @@
+rootProject.name = "gitlab-template-lint-plugin"
