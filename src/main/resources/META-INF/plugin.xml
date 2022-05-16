@@ -29,7 +29,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <externalAnnotator
                 language="yaml"
-                implementationClass="com.github.blarc.gitlabtemplatelintplugin.GitlabLintExternalAnnotator"
+                implementationClass="com.github.blarc.gitlab.template.lint.plugin.GitlabLintExternalAnnotator"
         />
     </extensions>
 </idea-plugin>

@@ -20,11 +20,9 @@ intellij {
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
 
-//    plugins.set(properties("platformPlugins").split(',')
-//        .map(String::trim)
-//        .filter(String::isNotEmpty))
-
-    plugins.set(listOf("org.jetbrains.plugins.yaml"))
+    plugins.set(properties("platformPlugins").split(',')
+        .map(String::trim)
+        .filter(String::isNotEmpty))
 }
 
 tasks {

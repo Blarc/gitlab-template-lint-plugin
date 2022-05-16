@@ -1,8 +1,11 @@
-package com.github.blarc.gitlabtemplatelintplugin
+package com.github.blarc.gitlab.template.lint.plugin
 
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.ExternalAnnotator
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.fileEditor.FileDocumentManager
+import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiFile
 import org.jetbrains.yaml.psi.YAMLFile
 
@@ -20,6 +23,11 @@ class GitlabLintExternalAnnotator : ExternalAnnotator<YAMLFile, List<GitlabLintP
     }
 
     override fun doAnnotate(file: YAMLFile): List<GitlabLintProblem> {
+        val fileManager = FileDocumentManager.getInstance()
+        val fileSystem = LocalFileSystem.getInstance()
+        val linter = file.project.service<GitlabLintRunner>()
+
+        linter.run(file.text)
         println("doAnnotate")
         return emptyList()
     }

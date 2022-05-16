@@ -1,4 +1,4 @@
-package com.github.blarc.gitlabtemplatelintplugin
+package com.github.blarc.gitlab.template.lint.plugin
 
 class GitlabLintProblem(
     val file: String,
