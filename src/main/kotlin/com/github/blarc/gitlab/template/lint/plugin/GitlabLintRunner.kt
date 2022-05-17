@@ -2,50 +2,62 @@ package com.github.blarc.gitlab.template.lint.plugin
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
-import okhttp3.MediaType.Companion.toMediaType
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
 import org.yaml.snakeyaml.Yaml
 import java.time.Duration
+
 
 @Service
 class GitlabLintRunner(project: Project) {
     companion object {
         private val timeout = Duration.ofSeconds(30)
+        private val json = Json { ignoreUnknownKeys = true }
     }
 
-    fun run(content: String): List<String> {
-
+    fun run(content: String): List<GitlabLintResponse> {
 
         try {
             val load = Yaml().load<Map<String, Any>>(content)
-
-            println(content)
         }
         catch (e: Exception) {
-            e.printStackTrace()
+            println("Invalid yaml!")
+            return listOf()
         }
 
-        val request = Request.Builder()
-            .url("https://gitlab.x.si/api/v4/ci/lint")
-            .header("PRIVATE-TOKEN", "insert_token")
-            .post("{content: $content}".toRequestBody("application/json; charset=utf-8".toMediaType()))
+        val formBody = FormBody.Builder()
+            .add("content", content)
             .build()
 
-        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url("")
+            .header("PRIVATE-TOKEN", "")
+            .header("Content-Type", "application/json")
+            .post(formBody)
+            .build()
+
+        val client = OkHttpClient.Builder()
+            .callTimeout(timeout)
+            .build()
+
         try {
-            val response = client.newCall(request).execute()
-            println(response.body!!.toString())
+            client.newCall(request).execute().use {
+                if (it.isSuccessful) {
+                    val responseString = it.body!!.string()
+                    val decodeFromString = json.decodeFromString<GitlabLintResponse>(responseString)
+                    println(decodeFromString)
+                }
+                else {
+                    println("Unexpected code $it")
+                }
+            }
         }
         catch (e: Exception) {
             e.printStackTrace()
         }
-
-        client.newCall(request).execute()
-
-
-
         return listOf()
     }
 

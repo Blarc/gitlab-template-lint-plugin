@@ -5,6 +5,7 @@ fun properties(key: String) = project.findProperty(key).toString()
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.20"
     id("org.jetbrains.intellij") version "1.5.2"
+    kotlin("plugin.serialization") version "1.4.21"
 }
 
 group = properties("pluginGroup")

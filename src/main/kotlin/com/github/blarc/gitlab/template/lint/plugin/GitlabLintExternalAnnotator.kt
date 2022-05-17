@@ -9,7 +9,7 @@ import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiFile
 import org.jetbrains.yaml.psi.YAMLFile
 
-class GitlabLintExternalAnnotator : ExternalAnnotator<YAMLFile, List<GitlabLintProblem>>() {
+class GitlabLintExternalAnnotator : ExternalAnnotator<YAMLFile, List<GitlabLintResponse>>() {
     override fun collectInformation(file: PsiFile): YAMLFile? {
         if (file !is YAMLFile) {
             return null
@@ -22,17 +22,15 @@ class GitlabLintExternalAnnotator : ExternalAnnotator<YAMLFile, List<GitlabLintP
         return collectInformation(file)
     }
 
-    override fun doAnnotate(file: YAMLFile): List<GitlabLintProblem> {
+    override fun doAnnotate(file: YAMLFile): List<GitlabLintResponse> {
         val fileManager = FileDocumentManager.getInstance()
         val fileSystem = LocalFileSystem.getInstance()
         val linter = file.project.service<GitlabLintRunner>()
 
-        linter.run(file.text)
-        println("doAnnotate")
-        return emptyList()
+        return linter.run(file.text)
     }
 
-    override fun apply(file: PsiFile, annotationResult: List<GitlabLintProblem>?, holder: AnnotationHolder) {
+    override fun apply(file: PsiFile, annotationResult: List<GitlabLintResponse>?, holder: AnnotationHolder) {
         super.apply(file, annotationResult, holder)
     }
 
