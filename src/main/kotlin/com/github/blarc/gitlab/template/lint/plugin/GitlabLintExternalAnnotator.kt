@@ -27,7 +27,7 @@ class GitlabLintExternalAnnotator : ExternalAnnotator<YAMLFile, List<GitlabLintR
         val fileSystem = LocalFileSystem.getInstance()
         val linter = file.project.service<GitlabLintRunner>()
 
-        return linter.run(file.text)
+        return linter.run(file.text, file.originalFile.virtualFile.path)
     }
 
     override fun apply(file: PsiFile, annotationResult: List<GitlabLintResponse>?, holder: AnnotationHolder) {

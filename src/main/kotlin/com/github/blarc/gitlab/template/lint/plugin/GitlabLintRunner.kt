@@ -1,16 +1,14 @@
 package com.github.blarc.gitlab.template.lint.plugin
 
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitLabFactory
+import com.intellij.dvcs.DvcsUtil
 import com.intellij.execution.configurations.GeneralCommandLine
-import com.intellij.execution.util.ExecUtil
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
-import kotlinx.serialization.decodeFromString
+import git4idea.GitUtil
 import kotlinx.serialization.json.Json
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.yaml.snakeyaml.Yaml
-import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.time.Duration
 
@@ -22,7 +20,7 @@ class GitlabLintRunner(private val project: Project) {
         private val json = Json { ignoreUnknownKeys = true }
     }
 
-    fun run(content: String): List<GitlabLintResponse> {
+    fun run(content: String, filePath: String): List<GitlabLintResponse> {
 
         try {
             val load = Yaml().load<Map<String, Any>>(content)
@@ -32,45 +30,15 @@ class GitlabLintRunner(private val project: Project) {
             return listOf()
         }
 
-        val formBody = FormBody.Builder()
-            .add("content", content)
-            .build()
+        val repositoryManager = GitUtil.getRepositoryManager(project)
+        val repository = DvcsUtil.guessCurrentRepositoryQuick(project, repositoryManager, filePath)
+        val url = repository!!.remotes.first().urls[0].toHttpUrlOrNull()
 
-        val request = Request.Builder()
-            .url("")
-            .header("PRIVATE-TOKEN", "")
-            .header("Content-Type", "application/json")
-            .post(formBody)
-            .build()
+        val gitlab = GitLabFactory.getInstance(project)!!.getGitLab("${url?.scheme}://${url?.host}")
 
-        val client = OkHttpClient.Builder()
-            .callTimeout(timeout)
-            .build()
-
-        try {
-            client.newCall(request).execute().use {
-                if (it.isSuccessful) {
-                    val responseString = it.body!!.string()
-                    val decodeFromString = json.decodeFromString<GitlabLintResponse>(responseString)
-                    println(decodeFromString)
-                }
-                else {
-                    println("Unexpected code $it")
-                }
-            }
-        }
-        catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        val generalCommandLine = GeneralCommandLine(arrayListOf("git", "status"))
-        generalCommandLine.setCharset(Charset.forName("UTF-8"))
-        generalCommandLine.setWorkDirectory(project.basePath)
-
-        val execAndGetOutput = ExecUtil.execAndGetOutput(generalCommandLine)
-        println(execAndGetOutput)
-
-        "https://gitlab.medius.si/api/v4/projects?search=jakob-test"
+        gitlab.getVersion().thenAccept {
+            println(it)
+        }.get()
 
         return listOf()
     }

@@ -23,6 +23,7 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>Git4Idea</depends>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
@@ -31,5 +32,19 @@
                 language="yaml"
                 implementationClass="com.github.blarc.gitlab.template.lint.plugin.GitlabLintExternalAnnotator"
         />
+
+        <applicationService
+                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"/>
+
+        <projectService
+                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.gitlab.GitLabFactory"/>
+
+
+        <applicationConfigurable
+                parentId="tools"
+                instance="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsConfigurable"
+                id="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsConfigurable"
+                displayName="Gitlab Template Lint"/>
+
     </extensions>
 </idea-plugin>
