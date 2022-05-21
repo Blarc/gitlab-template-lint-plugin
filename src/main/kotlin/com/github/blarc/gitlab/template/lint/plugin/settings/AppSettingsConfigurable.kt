@@ -32,7 +32,7 @@ class AppSettingsConfigurable : Configurable {
 
     override fun apply() {
         val settings: AppSettingsState = AppSettingsState.instance
-        settings.gitlabToken = mySettingsComponent!!.gitlabToken.toString()
+        settings.gitlabToken = String(mySettingsComponent!!.gitlabToken!!)
     }
 
     override fun reset() {

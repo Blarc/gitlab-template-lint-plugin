@@ -27,14 +27,14 @@ open class GitLab @JvmOverloads constructor(
 
     private fun prepareRequest(urlSuffix: String): Request.Builder {
         return Request.Builder()
-            .url(baseUri + urlSuffix)
+            .url("${baseUri}/api/v4${urlSuffix}")
             .addHeader("Private-Token", privateToken)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun getVersion(): CompletableFuture<GitlabVersionResponse> {
+    fun getVersion(): CompletableFuture<GitlabVersion> {
         val url = "$baseUri/version"
-        val result: CompletableFuture<GitlabVersionResponse> = CompletableFuture<GitlabVersionResponse>()
+        val result: CompletableFuture<GitlabVersion> = CompletableFuture<GitlabVersion>()
         if (url.toHttpUrlOrNull() == null) {
             result.completeExceptionally(HttpResponseException(500, "Incorrect GitLab URL"))
             return result
@@ -43,7 +43,10 @@ open class GitLab @JvmOverloads constructor(
             result.completeExceptionally(HttpResponseException(500, "Remove last slash from URL"))
             return result
         }
-        val request: Request = prepareRequest("/version").build()
+        val request: Request = prepareRequest("/version")
+            .get()
+            .build()
+
         httpClient.newCall(request)
             .enqueue(object: Callback {
                 override fun onFailure(call: Call, e: IOException) {
@@ -54,11 +57,11 @@ open class GitLab @JvmOverloads constructor(
                     response.use {
                         if (it.isSuccessful) {
                             val responseString = it.body!!.string()
-                            val decodeFromString = json.decodeFromString<GitlabVersionResponse>(responseString)
+                            val decodeFromString = json.decodeFromString<GitlabVersion>(responseString)
                             result.complete(decodeFromString)
                         }
                         else {
-                            result.completeExceptionally(RuntimeException("Exception when calling linter!"))
+                            result.completeExceptionally(RuntimeException(it.body?.string() ?: "Request was unsuccessful!"))
                         }
                     }
                 }
@@ -68,15 +71,13 @@ open class GitLab @JvmOverloads constructor(
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun searchProject(projectName: String): CompletableFuture<List<GitlabProject>> {
+    fun searchProject(projectName: String): CompletableFuture<Array<GitlabProject>> {
 
-        val request: Request = Request.Builder()
-            .url("$baseUri/projects?search=$projectName")
-            .addHeader("Private-Token", privateToken)
+        val request: Request = prepareRequest("/projects?search=$projectName")
             .get()
             .build()
 
-        val result: CompletableFuture<List<GitlabProject>> = CompletableFuture<List<GitlabProject>>()
+        val result = CompletableFuture<Array<GitlabProject>>()
 
         httpClient.newCall(request)
             .enqueue(object: Callback{
@@ -88,11 +89,11 @@ open class GitLab @JvmOverloads constructor(
                     response.use {
                         if (it.isSuccessful) {
                             val responseString = it.body!!.string()
-                            val decodeFromString = json.decodeFromString<List<GitlabProject>>(responseString)
+                            val decodeFromString = json.decodeFromString<Array<GitlabProject>>(responseString)
                             result.complete(decodeFromString)
                         }
                         else {
-                            result.completeExceptionally(RuntimeException("Exception when calling linter!"))
+                            result.completeExceptionally(RuntimeException(it.body?.string() ?: "Request was unsuccessful!"))
                         }
                     }
                 }
@@ -108,7 +109,7 @@ open class GitLab @JvmOverloads constructor(
             .add("content", content)
             .build()
 
-        val request = prepareRequest("${projectId}/704/ci/lint\"")
+        val request = prepareRequest("/projects/${projectId}/ci/lint")
             .header("Content-Type", "application/json")
             .post(formBody)
             .build()
@@ -128,7 +129,7 @@ open class GitLab @JvmOverloads constructor(
                             result.complete(decodeFromString)
                         }
                         else {
-                            result.completeExceptionally(RuntimeException("Exception when calling linter!"))
+                            result.completeExceptionally(RuntimeException(it.body?.string() ?: "Request was unsuccessful!"))
                         }
                     }
                 }
