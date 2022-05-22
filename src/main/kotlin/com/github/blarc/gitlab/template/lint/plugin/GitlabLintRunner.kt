@@ -2,24 +2,18 @@ package com.github.blarc.gitlab.template.lint.plugin
 
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitLabFactory
 import com.intellij.dvcs.DvcsUtil
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import git4idea.GitUtil
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import org.yaml.snakeyaml.Yaml
 
 
 @Service
 class GitlabLintRunner(private val project: Project) {
 
     fun run(content: String, filePath: String): GitlabLintResponse? {
-
-        try {
-            val load = Yaml().load<Map<String, Any>>(content)
-        }
-        catch (e: Exception) {
-            return null
-        }
 
         val repositoryManager = GitUtil.getRepositoryManager(project)
         val repository = DvcsUtil.guessCurrentRepositoryQuick(project, repositoryManager, filePath)
@@ -39,6 +33,11 @@ class GitlabLintRunner(private val project: Project) {
 
             return result
         }
+
+        NotificationGroupManager.getInstance()
+            .getNotificationGroup("GitlabLint")
+            .createNotification("Gitlab Lint", "Project is not a gitlab repo.", NotificationType.ERROR)
+            .notify(project)
 
         return null
     }
