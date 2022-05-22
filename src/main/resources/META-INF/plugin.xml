@@ -28,10 +28,6 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <externalAnnotator
-                language="yaml"
-                implementationClass="com.github.blarc.gitlab.template.lint.plugin.GitlabLintExternalAnnotator"
-        />
 
         <applicationService
                 serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"/>
@@ -45,6 +41,17 @@
                 instance="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsConfigurable"
                 id="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsConfigurable"
                 displayName="Gitlab Template Lint"/>
+
+        <localInspection
+                language="yaml"
+                groupPath="GitlabLint"
+                groupBundle="messages.InspectionsBundle"
+                groupKey="group.names.probable.bugs"
+                enabledByDefault="true"
+                implementationClass="com.github.blarc.gitlab.template.lint.plugin.GitlabLintInspector"
+                displayName="Linting"
+                shortName="GitlabLint"
+                runForWholeFile="true" />
 
     </extensions>
 </idea-plugin>
