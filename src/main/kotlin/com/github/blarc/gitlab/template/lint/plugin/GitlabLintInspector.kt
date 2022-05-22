@@ -13,15 +13,17 @@ class GitlabLintInspector : LocalInspectionTool() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : PsiElementVisitor() {
             override fun visitFile(file: PsiFile) {
-                val gitlabToken = AppSettingsState.instance.gitlabToken
-                if (gitlabToken != null && gitlabToken.isNotEmpty()) {
-                    val linter = file.project.service<GitlabLintRunner>()
-                    val gitlabLintResponse = linter.run(file.text, file.virtualFile.path)
+                if (Regex(".*gitlab-ci\\.(yaml|yml)$").matches(file.name)) {
+                    val gitlabToken = AppSettingsState.instance.gitlabToken
+                    if (gitlabToken != null && gitlabToken.isNotEmpty()) {
+                        val linter = file.project.service<GitlabLintRunner>()
+                        val gitlabLintResponse = linter.run(file.text, file.virtualFile.path)
 
-                    if (gitlabLintResponse != null && !gitlabLintResponse.valid) {
-                        holder.registerProblem(
-                            file, gitlabLintResponse.errors.toString(), ProblemHighlightType.ERROR
-                        )
+                        if (gitlabLintResponse != null && !gitlabLintResponse.valid) {
+                            holder.registerProblem(
+                                file, gitlabLintResponse.errors.toString(), ProblemHighlightType.ERROR
+                            )
+                        }
                     }
                 }
             }
