@@ -18,14 +18,11 @@ class GitlabLintRunner(private val project: Project) {
             val load = Yaml().load<Map<String, Any>>(content)
         }
         catch (e: Exception) {
-            println("Invalid yaml!")
             return null
         }
 
         val repositoryManager = GitUtil.getRepositoryManager(project)
         val repository = DvcsUtil.guessCurrentRepositoryQuick(project, repositoryManager, filePath)
-
-
 
         if (repository != null) {
             val url = repository.remotes.first().urls[0].toHttpUrlOrNull()
@@ -42,12 +39,7 @@ class GitlabLintRunner(private val project: Project) {
 
             return result
         }
-        else {
-            println("Not a repository!")
-        }
 
         return null
     }
-
-
 }

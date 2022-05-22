@@ -53,5 +53,12 @@
                 shortName="GitlabLint"
                 runForWholeFile="true" />
 
+        <postStartupActivity implementation="com.github.blarc.gitlab.template.lint.plugin.GitlabPostStartupActivity" />
+
+        <notificationGroup
+                displayType="BALLOON"
+                id="GitlabLint"
+        />
+
     </extensions>
 </idea-plugin>
