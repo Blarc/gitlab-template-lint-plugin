@@ -2,8 +2,6 @@ package com.github.blarc.gitlab.template.lint.plugin
 
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitLabFactory
 import com.intellij.dvcs.DvcsUtil
-import com.intellij.notification.NotificationGroupManager
-import com.intellij.notification.NotificationType
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import git4idea.GitUtil
@@ -19,26 +17,28 @@ class GitlabLintRunner(private val project: Project) {
         val repository = DvcsUtil.guessCurrentRepositoryQuick(project, repositoryManager, filePath)
 
         if (repository != null) {
-            val url = repository.remotes.first().urls[0].toHttpUrlOrNull()
-            val projectName = repository.project.name
-            val gitlab = GitLabFactory.getInstance(project)!!.getGitLab("${url?.scheme}://${url?.host}")
-
             var result: GitlabLintResponse? = null
-            gitlab.searchProject(projectName).thenAccept {
-                val projectId = it[0].id
-                gitlab.lintContent(content, projectId).thenAccept { gitlabLintResponse ->
-                    result = gitlabLintResponse
+            try {
+
+                val url = repository.remotes.first().firstUrl?.toHttpUrlOrNull()
+                val gitlab = GitLabFactory.getInstance(project)!!.getGitLab("${url?.scheme}://${url?.host}")
+
+                gitlab.searchProject(url.toString().removeSuffix(".git")).thenAccept {
+                    val projectId = it.id
+                    val branch = repository.currentBranch!!.name
+                    gitlab.lintContent(content, projectId, branch).thenAccept { gitlabLintResponse ->
+                        result = gitlabLintResponse
+                    }.get()
                 }.get()
-            }.get()
+            }
+            catch (e: Exception) {
+                GitlabLintUtils.createNotification(project, e.localizedMessage)
+            }
 
             return result
         }
 
-        NotificationGroupManager.getInstance()
-            .getNotificationGroup("GitlabLint")
-            .createNotification("Gitlab Lint", "Project is not a gitlab repo.", NotificationType.ERROR)
-            .notify(project)
-
+        GitlabLintUtils.createNotification(project, "Project is not a gitlab repository.")
         return null
     }
 }

@@ -71,13 +71,14 @@ open class GitLab @JvmOverloads constructor(
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun searchProject(projectName: String): CompletableFuture<Array<GitlabProject>> {
+    fun searchProject(projectUrl: String): CompletableFuture<GitlabProject> {
 
+        val projectName = projectUrl.split("/").last()
         val request: Request = prepareRequest("/projects?search=$projectName")
             .get()
             .build()
 
-        val result = CompletableFuture<Array<GitlabProject>>()
+        val result = CompletableFuture<GitlabProject>()
 
         httpClient.newCall(request)
             .enqueue(object: Callback{
@@ -89,8 +90,9 @@ open class GitLab @JvmOverloads constructor(
                     response.use {
                         if (it.isSuccessful) {
                             val responseString = it.body!!.string()
-                            val decodeFromString = json.decodeFromString<Array<GitlabProject>>(responseString)
-                            result.complete(decodeFromString)
+                            val gitlabProjects = json.decodeFromString<Array<GitlabProject>>(responseString)
+                            val gitlabProject = gitlabProjects.find { gitlabProject -> gitlabProject.webUrl.equals(projectUrl, true) }
+                            result.complete(gitlabProject)
                         }
                         else {
                             result.completeExceptionally(RuntimeException(it.body?.string() ?: "Request was unsuccessful!"))
@@ -103,10 +105,12 @@ open class GitLab @JvmOverloads constructor(
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun lintContent(content: String, projectId: Long): CompletableFuture<GitlabLintResponse> {
+    fun lintContent(content: String, projectId: Long, branch: String): CompletableFuture<GitlabLintResponse> {
 
         val formBody = FormBody.Builder()
             .add("content", content)
+            .add("ref", branch)
+            .add("dry_run", "true")
             .build()
 
         val request = prepareRequest("/projects/${projectId}/ci/lint")
