@@ -57,3 +57,7 @@ tasks {
         token.set(System.getenv("PUBLISH_TOKEN"))
     }
 }
+
+dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+}
