@@ -11,7 +11,7 @@ import org.apache.http.client.HttpResponseException
 import java.io.IOException
 import java.util.concurrent.CompletableFuture
 
-open class GitLab @JvmOverloads constructor(
+open class Gitlab @JvmOverloads constructor(
     private val baseUri: String,
     private val privateToken: String,
     allowSelfSignedTls: Boolean = false
@@ -71,14 +71,14 @@ open class GitLab @JvmOverloads constructor(
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun searchProject(projectUrl: String): CompletableFuture<GitlabProject> {
+    fun searchProjectId(projectUrl: String): CompletableFuture<Long> {
 
         val projectName = projectUrl.split("/").last()
         val request: Request = prepareRequest("/projects?search=$projectName")
             .get()
             .build()
 
-        val result = CompletableFuture<GitlabProject>()
+        val result = CompletableFuture<Long>()
 
         httpClient.newCall(request)
             .enqueue(object: Callback{
@@ -92,7 +92,7 @@ open class GitLab @JvmOverloads constructor(
                             val responseString = it.body!!.string()
                             val gitlabProjects = json.decodeFromString<Array<GitlabProject>>(responseString)
                             val gitlabProject = gitlabProjects.find { gitlabProject -> gitlabProject.webUrl.equals(projectUrl, true) }
-                            result.complete(gitlabProject)
+                            result.complete(gitlabProject!!.id)
                         }
                         else {
                             result.completeExceptionally(RuntimeException(it.body?.string() ?: "Request was unsuccessful!"))
