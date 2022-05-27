@@ -33,10 +33,12 @@ class AppSettingsState : PersistentStateComponent<AppSettingsState> {
             PasswordSafe.instance.setPassword(getCredentialAttributes(), value.toString())
         }
         get() {
-            val credentialAttributes = getCredentialAttributes() ?: return null
+            val credentialAttributes = getCredentialAttributes()
             val credentials: Credentials = PasswordSafe.instance.get(credentialAttributes) ?: return null
             return credentials.getPasswordAsString()
         }
+
+    var remotesMap: MutableMap<String, Long> = mutableMapOf()
 
     private fun getCredentialAttributes(): CredentialAttributes {
         return CredentialAttributes(
