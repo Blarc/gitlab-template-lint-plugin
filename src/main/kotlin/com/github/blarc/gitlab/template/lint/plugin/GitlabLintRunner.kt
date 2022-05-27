@@ -5,6 +5,8 @@ import com.intellij.dvcs.DvcsUtil
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import git4idea.GitUtil
+import git4idea.repo.GitRepository
+import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 
@@ -20,7 +22,7 @@ class GitlabLintRunner(private val project: Project) {
             var result: GitlabLintResponse? = null
             try {
 
-                val url = repository.remotes.first().firstUrl?.toHttpUrlOrNull()
+                val url = getRemoteUrl(repository)
                 val gitlab = GitLabFactory.getInstance(project)!!.getGitLab("${url?.scheme}://${url?.host}")
 
                 gitlab.searchProject(url.toString().removeSuffix(".git")).thenAccept {
@@ -38,7 +40,25 @@ class GitlabLintRunner(private val project: Project) {
             return result
         }
 
-        GitlabLintUtils.createNotification(project, "Project is not a gitlab repository.")
+        GitlabLintUtils.createNotification(project, "Project is not a Gitlab repository.")
         return null
+    }
+
+    private fun getRemoteUrl(repository: GitRepository): HttpUrl? {
+        var urlString = repository.remotes.first().firstUrl
+
+        // git@github.com:facebook/react.git
+        if (urlString!!.startsWith("git@")) {
+            urlString = urlString.removePrefix("git@")
+            urlString = urlString.replaceFirst(":", "/")
+            urlString = "https://${urlString}"
+        }
+        // git://github.com/facebook/react.git#gh-pages
+        else if (urlString.startsWith("git:")) {
+            urlString = urlString.removePrefix("git")
+            urlString = "https${urlString}"
+        }
+
+        return urlString.toHttpUrlOrNull()
     }
 }
