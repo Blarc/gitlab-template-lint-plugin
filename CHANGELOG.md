@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.0.5]
 ### Added
 - Add [chore] tag to changelog commit.
 
