@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.0.4]
 ### Added
 - Added a basic table with remotes and project ids
 - Added GitHub actions workflows
@@ -23,4 +25,3 @@
 ### Added
 - Setting private Gitlab token
 - Error message on linting error
-
