@@ -2,7 +2,12 @@
 [![Build](https://github.com/Blarc/gitlab-lint-plugin/actions/workflows/build.yml/badge.svg)](https://github.com/Blarc/gitlab-lint-plugin/actions/workflows/build.yml)
 
 <!-- Plugin description -->
-Intellij plugin for linting Gitlab CI/CD templates.
+Gitlab Template Lint Plugin is a plugin for IntelliJ based IDEs/Android studio for linting 
+Gitlab CI/CD yaml configuration files. It uses the Gitlab lint API to check the currently
+open yaml configuration and shows the errors in the notification bar.
+
+To get started, install the plugin and set Gitlab private token in plugin's settings: 
+Settings -> Tools -> Gitlab Template Lint.
 <!-- Plugin description end -->
 
 ## Installation with zip
