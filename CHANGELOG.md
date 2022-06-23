@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.0.6]
 ### Added
 - Added basic plugin icon.
 
