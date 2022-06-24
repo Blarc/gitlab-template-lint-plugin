@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Changed icon size to 40x40 pixels.
 
 ## [0.0.6]
 ### Added
