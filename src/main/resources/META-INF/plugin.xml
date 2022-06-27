@@ -73,5 +73,14 @@
             implementationClass="com.github.blarc.gitlab.template.lint.plugin.language.GitlabYamlParserDefinition"
         />
 
+        <lang.syntaxHighlighterFactory
+            language="GitlabYaml"
+            implementationClass="com.github.blarc.gitlab.template.lint.plugin.language.highlighter.GitlabYamlSyntaxHighlighterFactory"
+        />
+
+        <colorSettingsPage
+            implementation="com.github.blarc.gitlab.template.lint.plugin.language.highlighter.GitlabYamlColorSettingsPage"
+       />
+
     </extensions>
 </idea-plugin>

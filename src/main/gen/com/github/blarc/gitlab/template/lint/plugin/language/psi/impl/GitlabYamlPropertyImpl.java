@@ -27,4 +27,16 @@ public class GitlabYamlPropertyImpl extends ASTWrapperPsiElement implements Gitl
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public String getKey() {
+    return GitlabYamlPsiImplUtil.getKey(this);
+  }
+
+  @Override
+  @Nullable
+  public String getValue() {
+    return GitlabYamlPsiImplUtil.getValue(this);
+  }
+
 }

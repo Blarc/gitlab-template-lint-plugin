@@ -11,10 +11,12 @@
   elementTypeHolderClass="com.github.blarc.gitlab.template.lint.plugin.language.psi.GitlabYamlTokenTypes"
   elementTypeClass="com.github.blarc.gitlab.template.lint.plugin.language.psi.GitlabYamlElementType"
   tokenTypeClass="com.github.blarc.gitlab.template.lint.plugin.language.psi.GitlabYamlTokenType"
+
+  psiImplUtilClass="com.github.blarc.gitlab.template.lint.plugin.language.psi.impl.GitlabYamlPsiImplUtil"
 }
 
 simpleFile ::= item_*
 
 private item_ ::= (property|COMMENT|CRLF)
 
-property ::= (KEY? SEPARATOR VALUE?) | KEY
+property ::= (KEY? SEPARATOR VALUE?) | KEY {methods=[getKey getValue]}
