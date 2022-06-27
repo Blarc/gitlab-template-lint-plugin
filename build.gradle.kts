@@ -10,6 +10,9 @@ plugins {
 
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
+
+    id("org.jetbrains.grammarkit") version "2021.2.2"
+
 }
 
 group = properties("pluginGroup")
@@ -93,3 +96,5 @@ tasks {
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
 }
+
+sourceSets["main"].java.srcDirs("src/main/gen")

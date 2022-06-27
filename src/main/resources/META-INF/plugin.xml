@@ -60,5 +60,18 @@
                 id="GitlabLint"
         />
 
+        <fileType name="Gitlab Yaml"
+                  implementationClass="com.github.blarc.gitlab.template.lint.plugin.language.GitlabYamlFileType"
+                  fieldName="INSTANCE"
+                  language="GitlabYaml"
+                  extensions="gitlab-ci.yml"
+                  patterns="*.gitlab-ci*.yml;*.gitlab-ci*.yaml"
+        />
+
+        <lang.parserDefinition
+            language="GitlabYaml"
+            implementationClass="com.github.blarc.gitlab.template.lint.plugin.language.GitlabYamlParserDefinition"
+        />
+
     </extensions>
 </idea-plugin>

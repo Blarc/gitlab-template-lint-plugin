@@ -1,0 +1,20 @@
+{
+  parserClass="com.github.blarc.gitlab.template.lint.plugin.language.GitlabYamlParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="GitlabYaml"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.github.blarc.gitlab.template.lint.plugin.language.psi"
+  psiImplPackage="com.github.blarc.gitlab.template.lint.plugin.language.psi.impl"
+
+  elementTypeHolderClass="com.github.blarc.gitlab.template.lint.plugin.language.psi.GitlabYamlTokenTypes"
+  elementTypeClass="com.github.blarc.gitlab.template.lint.plugin.language.psi.GitlabYamlElementType"
+  tokenTypeClass="com.github.blarc.gitlab.template.lint.plugin.language.psi.GitlabYamlTokenType"
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY
