@@ -23,14 +23,12 @@
 - [Demo](#demo)
 
 ## Description
-<!-- Plugin description -->
 Gitlab Template Lint Plugin is a plugin for IntelliJ based IDEs/Android studio for linting
 Gitlab CI/CD yaml configuration files. It uses the Gitlab lint API to check the currently
 open yaml configuration and shows the errors in the notification bar.
 
 To get started, install the plugin and set Gitlab private token with <kbd>read_api</kbd> and <kbd>api</kbd> scope in plugin's settings:
 <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Gitlab Template Lint</kbd>
-<!-- Plugin description end -->
 
 ## Compatibility
 IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, Gogland, DataGrip, Rider, MPS, Android Studio, DataSpell, Code With Me
@@ -55,8 +53,3 @@ For Mac: <kbd>IntelliJ IDEA</kbd> > <kbd>Preferences</kbd> > <kbd>Plugins</kbd> 
 ## Demo
 
 ![](./screenshots/plugin.gif)
-
-
-
-
-

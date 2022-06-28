@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Changed
 - Updated readme.
+- Updated plugin description.
 
 ## [0.0.7]
 ### Fixed
