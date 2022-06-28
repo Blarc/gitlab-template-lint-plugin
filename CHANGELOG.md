@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.0.8]
 ### Changed
 - Updated readme.
 - Updated plugin description.
