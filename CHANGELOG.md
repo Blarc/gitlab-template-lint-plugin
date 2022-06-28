@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Updated readme.
 
 ## [0.0.7]
 ### Fixed
