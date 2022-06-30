@@ -74,5 +74,11 @@
                 id="GitlabLint"
         />
 
+        <statusBarWidgetFactory
+                id="lintStatusWidget"
+                implementation="com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusWidgetFactory"
+                order="first"
+        />
+
     </extensions>
 </idea-plugin>
