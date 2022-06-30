@@ -45,13 +45,13 @@ class GitlabLintRunner(private val project: Project) {
                 }.get()
             }
             catch (e: Exception) {
-                GitlabLintUtils.createNotification(project, e.localizedMessage)
+                GitlabLintUtils.createNotification(project, e.localizedMessage?: "Unknown exception!")
             }
 
             return result
         }
 
-        GitlabLintUtils.createNotification(project, "Project is not a Gitlab repository.")
+        GitlabLintUtils.createNotification(project, "File is not part of a Gitlab repository.")
         return null
     }
 

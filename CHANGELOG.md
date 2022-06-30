@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Added null check to localizedMessage in GitlabLintRunner to prevent NPE.
 
 ## [0.0.8]
 ### Changed
