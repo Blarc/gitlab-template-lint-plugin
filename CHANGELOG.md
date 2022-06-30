@@ -4,6 +4,9 @@
 ### Fixed
 - Added null check to localizedMessage in GitlabLintRunner to prevent NPE.
 
+### Added
+- Added basic lint status widget to status bar.
+
 ## [0.0.8]
 ### Changed
 - Updated readme.

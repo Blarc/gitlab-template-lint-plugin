@@ -3,9 +3,12 @@ package com.github.blarc.gitlab.template.lint.plugin
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitLabFactory
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState
+import com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusWidget
 import com.intellij.dvcs.DvcsUtil
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.wm.WindowManager
 import git4idea.GitUtil
 import git4idea.repo.GitRepository
 import okhttp3.HttpUrl
@@ -16,7 +19,11 @@ import java.util.concurrent.CompletableFuture
 @Service
 class GitlabLintRunner(private val project: Project) {
 
+    var status: LintStatusEnum = LintStatusEnum.WAITING
+
     fun run(content: String, filePath: String): GitlabLintResponse? {
+
+        updateStatusWidget(LintStatusEnum.RUNNING)
 
         val repositoryManager = GitUtil.getRepositoryManager(project)
         val repository = DvcsUtil.guessCurrentRepositoryQuick(project, repositoryManager, filePath)
@@ -48,11 +55,18 @@ class GitlabLintRunner(private val project: Project) {
                 GitlabLintUtils.createNotification(project, e.localizedMessage?: "Unknown exception!")
             }
 
+            if (result?.valid == true) updateStatusWidget(LintStatusEnum.VALID) else updateStatusWidget(LintStatusEnum.INVALID)
             return result
         }
 
+        updateStatusWidget(LintStatusEnum.INVALID)
         GitlabLintUtils.createNotification(project, "File is not part of a Gitlab repository.")
         return null
+    }
+
+    private fun updateStatusWidget(lintingStatus: LintStatusEnum) {
+        status = lintingStatus
+        WindowManager.getInstance().getStatusBar(project)?.updateWidget(LintStatusWidget.ID)
     }
 
     private fun getProjectId(remoteUrl: String, gitlab: Gitlab) : CompletableFuture<Long> {
