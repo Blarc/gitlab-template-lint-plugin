@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Linting now runs in the background.
 
 ## [0.0.9]
 ### Fixed
