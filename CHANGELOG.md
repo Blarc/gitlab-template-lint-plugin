@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - Linting now runs in the background.
+- Linting status widget is now shown only for gitlab-ci.yml files.
 
 ## [0.0.9]
 ### Fixed
