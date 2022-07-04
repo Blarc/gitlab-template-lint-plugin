@@ -39,6 +39,13 @@
     <depends>org.jetbrains.plugins.yaml</depends>
     <depends>Git4Idea</depends>
 
+    <applicationListeners>
+        <listener
+                class="com.github.blarc.gitlab.template.lint.plugin.listeners.GitlabLintFileEditorManagerListener"
+                topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"
+        />
+    </applicationListeners>
+
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">

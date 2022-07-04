@@ -1,6 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.widgets
 
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.StatusBar
 import com.intellij.openapi.wm.StatusBarWidget
 import com.intellij.openapi.wm.WindowManager
@@ -13,6 +14,10 @@ class LintStatusWidget(project: Project) : StatusBarWidget {
         const val ID = "LintStatus"
     }
 
+    override fun dispose() {
+        Disposer.dispose(this)
+    }
+
     override fun ID(): String = ID
 
     override fun install(statusBar: StatusBar) {
@@ -21,10 +26,6 @@ class LintStatusWidget(project: Project) : StatusBarWidget {
 
     override fun getPresentation(): StatusBarWidget.WidgetPresentation {
         return LintStatusPresentation(statusBar)
-    }
-
-    override fun dispose() {
-        println("Hello")
     }
 
 }

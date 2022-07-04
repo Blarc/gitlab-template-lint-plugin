@@ -28,6 +28,8 @@ class AppSettingsState : PersistentStateComponent<AppSettingsState> {
             get() = ApplicationManager.getApplication().getService(AppSettingsState::class.java)
     }
 
+    var gitlabLintRegexString: String = ".*gitlab-ci\\.(yaml|yml)$"
+
     var gitlabToken: String?
         set(value) {
             PasswordSafe.instance.setPassword(getCredentialAttributes(), value.toString())
