@@ -12,5 +12,9 @@ class GitlabLintUtils {
                 .createNotification("Gitlab Lint", message, type)
                 .notify(project)
         }
+
+        fun matchesAny(input: String, regexes: List<String>): Boolean {
+            return Regex(regexes.joinToString("|")).matches(input)
+        }
     }
 }

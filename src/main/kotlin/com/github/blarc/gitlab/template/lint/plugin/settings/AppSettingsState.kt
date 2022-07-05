@@ -11,7 +11,6 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
 
-
 /**
  * Supports storing the application settings in a persistent way.
  * The [State] and [Storage] annotations define the name of the data and the file name where
@@ -28,7 +27,7 @@ class AppSettingsState : PersistentStateComponent<AppSettingsState> {
             get() = ApplicationManager.getApplication().getService(AppSettingsState::class.java)
     }
 
-    var gitlabLintRegexString: String = ".*gitlab-ci\\.(yaml|yml)$"
+    var gitlabLintRegexString: List<String> = listOf(".*gitlab-ci\\.yaml$", ".*gitlab-ci\\.yml$")
 
     var gitlabToken: String?
         set(value) {

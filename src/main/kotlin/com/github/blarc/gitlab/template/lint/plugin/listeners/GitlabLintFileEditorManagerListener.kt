@@ -1,5 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.listeners
 
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.Companion.matchesAny
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState
 import com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusWidgetFactory
 import com.intellij.openapi.application.ApplicationManager
@@ -17,7 +18,7 @@ class GitlabLintFileEditorManagerListener : FileEditorManagerListener {
 
         val project = event.manager.project
 
-        val matches = Regex(AppSettingsState.instance.gitlabLintRegexString).matches(event.newFile.name)
+        val matches = matchesAny(event.newFile.name, AppSettingsState.instance.gitlabLintRegexString)
 
         val lintStatusWidgetFactory = ApplicationManager.getApplication().getService<LintStatusWidgetFactory>()
         val statusBarWidgetSettings = ApplicationManager.getApplication().getService<StatusBarWidgetSettings>()

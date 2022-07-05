@@ -1,5 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin
 
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.Companion.matchesAny
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemHighlightType
@@ -14,8 +15,9 @@ class GitlabLintInspector : LocalInspectionTool() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : PsiElementVisitor() {
             override fun visitFile(file: PsiFile) {
-                if (Regex(".*gitlab-ci\\.(yaml|yml)$").matches(file.name)) {
-                    val gitlabToken = AppSettingsState.instance.gitlabToken
+                val appSettingsState = AppSettingsState.instance
+                if (matchesAny(file.name, appSettingsState.gitlabLintRegexString)) {
+                    val gitlabToken = appSettingsState.gitlabToken
                     if (gitlabToken != null && gitlabToken.isNotEmpty()) {
                         val linter = file.project.service<GitlabLintRunner>()
                         runBackgroundableTask("Linting Gitlab CI", file.project) {
