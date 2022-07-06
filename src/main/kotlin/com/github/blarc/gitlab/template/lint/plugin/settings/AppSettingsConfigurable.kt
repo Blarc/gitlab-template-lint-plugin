@@ -27,20 +27,27 @@ class AppSettingsConfigurable : Configurable {
     }
 
     override fun isModified(): Boolean {
-        val settings: AppSettingsState = AppSettingsState.instance
-        return !appSettingsForm!!.gitlabToken.contentEquals(settings.gitlabToken?.toCharArray()) || appSettingsForm!!.gitlabRemotesTable.isModified(settings)
+        val settings = AppSettingsState.instance
+        if (settings != null) {
+            return !appSettingsForm!!.gitlabToken.contentEquals(settings.gitlabToken?.toCharArray()) || appSettingsForm!!.gitlabRemotesTable.isModified(settings)
+        }
+        return false
     }
 
     override fun apply() {
-        val settings: AppSettingsState = AppSettingsState.instance
-        settings.gitlabToken = String(appSettingsForm!!.gitlabToken!!)
-        appSettingsForm!!.gitlabRemotesTable.commit(settings)
+        val settings = AppSettingsState.instance
+        if (settings != null) {
+            settings.gitlabToken = String(appSettingsForm!!.gitlabToken!!)
+            appSettingsForm!!.gitlabRemotesTable.commit(settings)
+        }
     }
 
     override fun reset() {
-        val settings: AppSettingsState = AppSettingsState.instance
-        appSettingsForm!!.gitlabToken = settings.gitlabToken?.toCharArray()
-        appSettingsForm!!.gitlabRemotesTable.tableModel.remotesList = settings.remotesMap.toList().toMutableList()
+        val settings = AppSettingsState.instance
+        if (settings != null) {
+            appSettingsForm!!.gitlabToken = settings.gitlabToken?.toCharArray()
+            appSettingsForm!!.gitlabRemotesTable.tableModel.remotesList = settings.remotesMap.toList().toMutableList()
+        }
     }
 
     override fun disposeUIResources() {

@@ -17,7 +17,16 @@ class GitlabLintFileEditorManagerListener : FileEditorManagerListener {
 
         val project = event.manager.project
 
-        val matches = Regex(AppSettingsState.instance.gitlabLintRegexString).matches(event.newFile.name)
+        var regex = ".*gitlab-ci\\.(yaml|yml)$"
+        val appSettingsState = AppSettingsState.instance
+        if (appSettingsState?.gitlabLintRegexString != null) {
+            regex = appSettingsState.gitlabLintRegexString!!
+        }
+
+        var matches = false
+        if (event.newFile != null) {
+            matches = Regex(regex).matches(event.newFile.name)
+        }
 
         val lintStatusWidgetFactory = ApplicationManager.getApplication().getService<LintStatusWidgetFactory>()
         val statusBarWidgetSettings = ApplicationManager.getApplication().getService<StatusBarWidgetSettings>()

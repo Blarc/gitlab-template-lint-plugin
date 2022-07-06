@@ -1,6 +1,12 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Changed instance of AppSettingsState to nullable and added missing null checks.
+- Linting error notification is now properly shown.
+
+### Removed
+- Removed linting in the background.
 
 ## [0.0.10]
 ### Added
