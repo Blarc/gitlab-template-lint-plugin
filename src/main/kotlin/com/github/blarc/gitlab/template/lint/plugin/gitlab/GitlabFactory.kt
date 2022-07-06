@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project
 class GitLabFactory() {
 
     fun getGitLab(url: String): Gitlab {
-        return Gitlab(url, AppSettingsState.instance.gitlabToken!!)
+        return Gitlab(url, AppSettingsState.instance?.gitlabToken!!)
     }
 
     companion object {

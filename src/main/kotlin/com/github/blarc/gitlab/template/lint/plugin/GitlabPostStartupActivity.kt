@@ -8,7 +8,7 @@ import com.intellij.openapi.startup.StartupActivity
 
 class GitlabPostStartupActivity: StartupActivity.Background {
     override fun runActivity(project: Project) {
-        val gitlabToken = AppSettingsState.instance.gitlabToken
+        val gitlabToken = AppSettingsState.instance?.gitlabToken
         if (gitlabToken == null || gitlabToken.isEmpty()) {
             NotificationGroupManager.getInstance()
                 .getNotificationGroup("GitlabLint")

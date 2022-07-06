@@ -39,8 +39,8 @@ class GitlabLintRunner(private val project: Project) {
                 getProjectId(remoteUrlString, gitlab).thenAccept { projectId ->
 
                     // Cache project id
-                    val remotesMap = AppSettingsState.instance.remotesMap
-                    if (!remotesMap.containsKey(remoteUrlString)) {
+                    val remotesMap = AppSettingsState.instance?.remotesMap
+                    if (remotesMap != null && !remotesMap.containsKey(remoteUrlString)) {
                         remotesMap[remoteUrlString] = projectId
                     }
 
@@ -70,8 +70,8 @@ class GitlabLintRunner(private val project: Project) {
     }
 
     private fun getProjectId(remoteUrl: String, gitlab: Gitlab) : CompletableFuture<Long> {
-        val remotesMap = AppSettingsState.instance.remotesMap
-        if (remotesMap.containsKey(remoteUrl)) {
+        val remotesMap = AppSettingsState.instance?.remotesMap
+        if (remotesMap != null && remotesMap.containsKey(remoteUrl)) {
             return CompletableFuture.completedFuture(remotesMap[remoteUrl])
         }
         return gitlab.searchProjectId(remoteUrl.removeSuffix(".git"))

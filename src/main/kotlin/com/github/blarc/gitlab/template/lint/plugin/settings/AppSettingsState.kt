@@ -24,11 +24,11 @@ import org.jetbrains.annotations.Nullable
 class AppSettingsState : PersistentStateComponent<AppSettingsState> {
     companion object {
         const val SERVICE_NAME = "org.intellij.sdk.settings.com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"
-        val instance: AppSettingsState
+        val instance: AppSettingsState?
             get() = ApplicationManager.getApplication().getService(AppSettingsState::class.java)
     }
 
-    var gitlabLintRegexString: String = ".*gitlab-ci\\.(yaml|yml)$"
+    var gitlabLintRegexString: String? = ".*gitlab-ci\\.(yaml|yml)$"
 
     var gitlabToken: String?
         set(value) {
