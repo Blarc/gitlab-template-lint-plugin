@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Throw exception when project id can not be retrieved.
 
 ## [0.0.11]
 ### Fixed

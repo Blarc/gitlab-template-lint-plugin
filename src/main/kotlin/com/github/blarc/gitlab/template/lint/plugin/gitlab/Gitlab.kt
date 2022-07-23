@@ -92,7 +92,11 @@ open class Gitlab @JvmOverloads constructor(
                             val responseString = it.body!!.string()
                             val gitlabProjects = json.decodeFromString<Array<GitlabProject>>(responseString)
                             val gitlabProject = gitlabProjects.find { gitlabProject -> gitlabProject.webUrl.equals(projectUrl, true) }
-                            result.complete(gitlabProject!!.id)
+                            if (gitlabProject?.id != null) {
+                                result.complete(gitlabProject.id)
+                            } else {
+                                result.completeExceptionally(RuntimeException("Could not retrieve project id. Please set it manually in settings!"))
+                            }
                         }
                         else {
                             result.completeExceptionally(RuntimeException(it.body?.string() ?: "Request was unsuccessful!"))
