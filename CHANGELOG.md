@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - Throw exception when project id can not be retrieved.
+- Run linting in the background.
 
 ## [0.0.11]
 ### Fixed
