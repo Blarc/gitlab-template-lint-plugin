@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.0.12]
 ### Added
 - Throw exception when project id can not be retrieved.
 - Run linting in the background.
