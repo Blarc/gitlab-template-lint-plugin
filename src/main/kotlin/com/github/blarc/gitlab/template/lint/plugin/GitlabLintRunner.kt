@@ -20,8 +20,9 @@ import java.util.concurrent.CompletableFuture
 class GitlabLintRunner(private val project: Project) {
 
     var status: LintStatusEnum = LintStatusEnum.WAITING
+    var gitlabLintResponse: GitlabLintResponse? = null
 
-    fun run(content: String, filePath: String): GitlabLintResponse? {
+    fun run(content: String, filePath: String){
 
         updateStatusWidget(LintStatusEnum.RUNNING)
 
@@ -29,7 +30,6 @@ class GitlabLintRunner(private val project: Project) {
         val repository = DvcsUtil.guessCurrentRepositoryQuick(project, repositoryManager, filePath)
 
         if (repository != null) {
-            var result: GitlabLintResponse? = null
             try {
 
                 val remoteUrl = getRemoteUrl(repository)
@@ -45,8 +45,8 @@ class GitlabLintRunner(private val project: Project) {
                     }
 
                     val branch = repository.currentBranch!!.name
-                    gitlab.lintContent(content, projectId, branch).thenAccept { gitlabLintResponse ->
-                        result = gitlabLintResponse
+                    gitlab.lintContent(content, projectId, branch).thenAccept {
+                        gitlabLintResponse = it
                     }.get()
 
                 }.get()
@@ -55,13 +55,13 @@ class GitlabLintRunner(private val project: Project) {
                 GitlabLintUtils.createNotification(project, e.localizedMessage?: "Unknown exception!")
             }
 
-            if (result?.valid == true) updateStatusWidget(LintStatusEnum.VALID) else updateStatusWidget(LintStatusEnum.INVALID)
-            return result
+            if (gitlabLintResponse?.valid == true) updateStatusWidget(LintStatusEnum.VALID) else updateStatusWidget(LintStatusEnum.INVALID)
         }
-
-        updateStatusWidget(LintStatusEnum.INVALID)
-        GitlabLintUtils.createNotification(project, "File is not part of a Gitlab repository.")
-        return null
+        else {
+            updateStatusWidget(LintStatusEnum.INVALID)
+            gitlabLintResponse = null
+            GitlabLintUtils.createNotification(project, "File is not part of a Gitlab repository.")
+        }
     }
 
     private fun updateStatusWidget(lintingStatus: LintStatusEnum) {

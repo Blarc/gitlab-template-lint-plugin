@@ -69,10 +69,12 @@
                 groupBundle="messages.InspectionsBundle"
                 groupKey="group.names.probable.bugs"
                 enabledByDefault="true"
-                implementationClass="com.github.blarc.gitlab.template.lint.plugin.GitlabLintInspector"
+                implementationClass="com.github.blarc.gitlab.template.lint.plugin.inspections.GitlabLintInspector"
                 displayName="Linting"
                 shortName="GitlabLint"
                 runForWholeFile="true" />
+
+        <editorNotificationProvider implementation="com.github.blarc.gitlab.template.lint.plugin.inspections.GitlabLintNotificationProvider"/>
 
         <postStartupActivity implementation="com.github.blarc.gitlab.template.lint.plugin.GitlabPostStartupActivity" />
 
