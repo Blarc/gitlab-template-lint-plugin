@@ -53,8 +53,16 @@
         <applicationService
                 serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"/>
 
+        <projectService serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings"/>
+
         <projectService
                 serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.gitlab.GitLabFactory"/>
+
+        <projectConfigurable
+                parentId="tools"
+                instance="com.github.blarc.gitlab.template.lint.plugin.gui.settings.ProjectSettingsConfigurable"
+                id="GitlabLint.ProjectSettings"
+        />
 
 
         <applicationConfigurable

@@ -52,9 +52,7 @@ class AppSettingsState : PersistentStateComponent<AppSettingsState> {
     }
 
     @Nullable
-    override fun getState(): AppSettingsState {
-        return this
-    }
+    override fun getState() = this
 
 
     override fun loadState(@NotNull state: AppSettingsState) {
