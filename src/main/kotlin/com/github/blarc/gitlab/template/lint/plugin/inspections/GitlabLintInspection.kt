@@ -1,6 +1,5 @@
 package com.github.blarc.gitlab.template.lint.plugin.inspections
 
-import com.github.blarc.gitlab.template.lint.plugin.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.Companion.matchesGitlabLintRegex
 import com.github.blarc.gitlab.template.lint.plugin.runLinting
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState
@@ -13,9 +12,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.ui.EditorNotifications
 
 @Service
-class GitlabLintInspector : LocalInspectionTool() {
-
-    var gitlabLintResponse: GitlabLintResponse? = null
+class GitlabLintInspection : LocalInspectionTool() {
 
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : PsiElementVisitor() {
@@ -26,9 +23,7 @@ class GitlabLintInspector : LocalInspectionTool() {
                     if (matchesGitlabLintRegex(file.name)) {
                         val gitlabToken = AppSettingsState.instance?.gitlabToken
                         if (!gitlabToken.isNullOrEmpty()) {
-                            runLinting(project, file) {
-                                gitlabLintResponse = it
-                            }
+                            runLinting(project, file)
                         }
                     }
                     EditorNotifications.getInstance(project).updateAllNotifications()

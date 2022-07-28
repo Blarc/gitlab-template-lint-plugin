@@ -19,11 +19,11 @@ import org.jetbrains.annotations.Nullable
  */
 @State(
     name = AppSettingsState.SERVICE_NAME,
-    storages = [Storage("SdkSettingsPlugin.xml")]
+    storages = [Storage("GitlabLint.xml")]
 )
 class AppSettingsState : PersistentStateComponent<AppSettingsState> {
     companion object {
-        const val SERVICE_NAME = "org.intellij.sdk.settings.com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"
+        const val SERVICE_NAME = "com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"
         val instance: AppSettingsState?
             get() = ApplicationManager.getApplication().getService(AppSettingsState::class.java)
     }

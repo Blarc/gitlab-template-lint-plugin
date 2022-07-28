@@ -1,4 +1,4 @@
-package com.github.blarc.gitlab.template.lint.plugin.gui;
+package com.github.blarc.gitlab.template.lint.plugin.ui;
 
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.components.JBTextField

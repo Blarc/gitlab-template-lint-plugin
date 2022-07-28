@@ -1,4 +1,4 @@
-package com.github.blarc.gitlab.template.lint.plugin.model
+package com.github.blarc.gitlab.template.lint.plugin.ui
 
 import javax.swing.table.AbstractTableModel
 

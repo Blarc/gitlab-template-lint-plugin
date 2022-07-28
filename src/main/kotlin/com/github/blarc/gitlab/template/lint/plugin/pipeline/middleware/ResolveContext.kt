@@ -1,9 +1,9 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
-import com.github.blarc.gitlab.template.lint.plugin.GitlabLintResponse
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.git.httpUrl
 import com.github.blarc.gitlab.template.lint.plugin.git.locateRemote
-import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitLabFactory
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabFactory
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.intellij.openapi.components.Service
@@ -20,7 +20,7 @@ class ResolveContext : Middleware {
         val repository = locateRepository(pass) ?: return null
         val remote = locateRemote(pass, repository) ?: return null
 
-        pass.gitlab = GitLabFactory.getInstance(pass.project)!!.getGitLab("${remote.httpUrl?.scheme}://${remote.httpUrl?.host}")
+        pass.gitlab = GitlabFactory.getInstance(pass.project)!!.getGitLab("${remote.httpUrl?.scheme}://${remote.httpUrl?.host}")
         pass.repository = repository
         pass.remote = remote
 

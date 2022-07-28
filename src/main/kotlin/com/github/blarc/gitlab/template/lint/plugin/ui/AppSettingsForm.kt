@@ -1,6 +1,5 @@
-package com.github.blarc.gitlab.template.lint.plugin.gui
+package com.github.blarc.gitlab.template.lint.plugin.ui
 
-import com.github.blarc.gitlab.template.lint.plugin.model.RemotesTableModel
 import com.intellij.ui.DoubleClickListener
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBPasswordField

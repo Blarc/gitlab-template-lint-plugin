@@ -5,6 +5,7 @@ import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
+import org.jetbrains.annotations.NotNull
 
 /**
  * Supports storing the application settings in a persistent way.
@@ -13,12 +14,12 @@ import com.intellij.util.xmlb.XmlSerializerUtil
  */
 @State(
     name = ProjectSettings.SERVICE_NAME,
-    storages = [Storage("GitLint.xml")]
+    storages = [Storage("GitlabLint.xml")]
 )
 class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
 
     companion object {
-        const val SERVICE_NAME = "org.intellij.sdk.settings.com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"
+        const val SERVICE_NAME = "com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings"
         val instance: ProjectSettings?
             get() = ApplicationManager.getApplication().getService(ProjectSettings::class.java)
     }
@@ -32,7 +33,7 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
 
     override fun getState() = this
 
-    override fun loadState(state: ProjectSettings) {
+    override fun loadState(@NotNull state: ProjectSettings) {
         XmlSerializerUtil.copyBean(state, this)
     }
 }

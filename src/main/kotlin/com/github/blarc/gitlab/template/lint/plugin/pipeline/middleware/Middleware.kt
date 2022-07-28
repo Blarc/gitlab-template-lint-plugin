@@ -1,6 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
-import com.github.blarc.gitlab.template.lint.plugin.GitlabLintResponse
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 
 interface Middleware : Comparable<Middleware> {

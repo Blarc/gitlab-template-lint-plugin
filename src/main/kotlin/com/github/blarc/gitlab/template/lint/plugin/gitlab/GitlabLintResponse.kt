@@ -1,4 +1,4 @@
-package com.github.blarc.gitlab.template.lint.plugin
+package com.github.blarc.gitlab.template.lint.plugin.gitlab
 
 import kotlinx.serialization.Serializable
 

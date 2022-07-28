@@ -41,7 +41,7 @@
 
     <applicationListeners>
         <listener
-                class="com.github.blarc.gitlab.template.lint.plugin.listeners.GitlabLintFileEditorManagerListener"
+                class="com.github.blarc.gitlab.template.lint.plugin.listeners.FileListener"
                 topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"
         />
     </applicationListeners>
@@ -53,16 +53,17 @@
         <applicationService
                 serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"/>
 
-        <projectService serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings"/>
+        <projectService
+                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings"/>
 
         <projectService
-                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.gitlab.GitLabFactory"/>
+                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabFactory"/>
 
-        <projectConfigurable
-                parentId="tools"
-                instance="com.github.blarc.gitlab.template.lint.plugin.gui.settings.ProjectSettingsConfigurable"
-                id="GitlabLint.ProjectSettings"
-        />
+<!--        <projectConfigurable-->
+<!--                parentId="tools"-->
+<!--                instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.ProjectSettingsConfigurable"-->
+<!--                id="GitlabLint.ProjectSettings"-->
+<!--        />-->
 
 
         <applicationConfigurable
@@ -77,14 +78,14 @@
                 groupBundle="messages.InspectionsBundle"
                 groupKey="group.names.probable.bugs"
                 enabledByDefault="true"
-                implementationClass="com.github.blarc.gitlab.template.lint.plugin.inspections.GitlabLintInspector"
+                implementationClass="com.github.blarc.gitlab.template.lint.plugin.inspections.GitlabLintInspection"
                 displayName="Linting"
                 shortName="GitlabLint"
                 runForWholeFile="true" />
 
-        <editorNotificationProvider implementation="com.github.blarc.gitlab.template.lint.plugin.inspections.GitlabLintNotificationProvider"/>
+        <editorNotificationProvider implementation="com.github.blarc.gitlab.template.lint.plugin.providers.LintNotificationProvider"/>
 
-        <postStartupActivity implementation="com.github.blarc.gitlab.template.lint.plugin.GitlabPostStartupActivity" />
+        <postStartupActivity implementation="com.github.blarc.gitlab.template.lint.plugin.listeners.ApplicationStartupListener" />
 
         <notificationGroup
                 displayType="BALLOON"

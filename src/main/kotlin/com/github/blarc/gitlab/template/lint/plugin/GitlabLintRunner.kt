@@ -1,27 +1,14 @@
 package com.github.blarc.gitlab.template.lint.plugin
 
-import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitLabFactory
-import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
-import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState
-import com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusEnum
-import com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusWidget
-import com.intellij.dvcs.DvcsUtil
-import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.wm.WindowManager
 import com.intellij.psi.PsiFile
-import git4idea.GitUtil
-import git4idea.repo.GitRepository
-import okhttp3.HttpUrl
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import java.util.concurrent.CompletableFuture
 
 
-fun runLinting(project: Project, file: PsiFile, handle: (GitlabLintResponse) -> Unit) {
+fun runLinting(project: Project, file: PsiFile) {
     val pipeline = project.service<Pipeline>()
-    pipeline.accept(file)?.let(handle)
+    pipeline.accept(file)
 }
 
 

@@ -12,7 +12,7 @@ import com.intellij.ui.EditorNotifications
 import org.jetbrains.kotlin.idea.util.application.getService
 
 @Service
-class GitlabLintFileEditorManagerListener : FileEditorManagerListener {
+class FileListener : FileEditorManagerListener {
 
     private val lintStatusWidgetFactory = ApplicationManager.getApplication().getService<LintStatusWidgetFactory>()
     private val statusBarWidgetSettings = ApplicationManager.getApplication().getService<StatusBarWidgetSettings>()

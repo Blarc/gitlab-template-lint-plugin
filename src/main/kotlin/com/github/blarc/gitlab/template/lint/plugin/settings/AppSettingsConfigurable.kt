@@ -1,6 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.settings
 
-import com.github.blarc.gitlab.template.lint.plugin.gui.AppSettingsForm
+import com.github.blarc.gitlab.template.lint.plugin.ui.AppSettingsForm
 import com.intellij.openapi.options.Configurable
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.Nullable

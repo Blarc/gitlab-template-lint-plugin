@@ -76,6 +76,10 @@ tasks {
     }
 }
 
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+}
+
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
 }

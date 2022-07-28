@@ -1,7 +1,7 @@
-package com.github.blarc.gitlab.template.lint.plugin.inspections
+package com.github.blarc.gitlab.template.lint.plugin.providers
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.Companion.matchesGitlabLintRegex
-import com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware.LintContext
+import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
 import com.intellij.codeInsight.hint.HintUtil
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditor
@@ -11,10 +11,10 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.EditorNotificationPanel
 import com.intellij.ui.EditorNotifications
 
-class GitlabLintNotificationProvider : EditorNotifications.Provider<EditorNotificationPanel>() {
+class LintNotificationProvider : EditorNotifications.Provider<EditorNotificationPanel>() {
 
     companion object {
-        private val KEY = Key.create<EditorNotificationPanel>("GitlabLintNotificationProvider")
+        private val KEY = Key.create<EditorNotificationPanel>("LintNotificationProvider")
     }
 
     override fun getKey(): Key<EditorNotificationPanel> = KEY
@@ -25,11 +25,11 @@ class GitlabLintNotificationProvider : EditorNotifications.Provider<EditorNotifi
         project: Project
     ): EditorNotificationPanel? {
 
-        val gitlabLintInspector = project.service<LintContext>()
+        val pipeline = project.service<Pipeline>()
 
-        if (gitlabLintInspector.gitlabLintResponse?.valid == false && matchesGitlabLintRegex(file.name)) {
+        if (pipeline.gitlabLintResponse?.valid == false && matchesGitlabLintRegex(file.name)) {
             val panel = EditorNotificationPanel(HintUtil.ERROR_COLOR_KEY)
-            panel.text = gitlabLintInspector.gitlabLintResponse?.errors.toString()
+            panel.text = pipeline.gitlabLintResponse?.errors.toString()
 //            TODO @Blarc: Implement error ignoring.
 //            panel.createActionLabel("Ignore this error.") {
 //                EditorNotifications.getInstance(project).updateAllNotifications()

@@ -24,6 +24,6 @@ object GitlabLintBundle : DynamicBundle(BUNDLE) {
         getLazyMessage(key, *params)
 
     fun openPluginSettings(project: Project) {
-        ShowSettingsUtil.getInstance().showSettingsDialog(project, message("settings.general.group.title"))
+        ShowSettingsUtil.getInstance().showSettingsDialog(project, message("TODO"))
     }
 }

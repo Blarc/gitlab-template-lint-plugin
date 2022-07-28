@@ -1,6 +1,5 @@
 package com.github.blarc.gitlab.template.lint.plugin.gitlab
 
-import com.github.blarc.gitlab.template.lint.plugin.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.http.HttpClientFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
