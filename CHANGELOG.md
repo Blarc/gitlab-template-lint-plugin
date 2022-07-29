@@ -1,6 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Notifications on start up.
+
+### Changed
+- Refactor linting to pipeline with middlewares.
 
 ## [0.0.12]
 ### Added
