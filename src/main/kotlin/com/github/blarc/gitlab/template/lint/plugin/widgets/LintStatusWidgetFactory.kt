@@ -1,5 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.widgets
 
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
@@ -12,7 +13,7 @@ class LintStatusWidgetFactory : StatusBarWidgetFactory {
 
     override fun getId(): String = LintStatusWidget.ID
 
-    override fun getDisplayName(): String = "Lint Status"
+    override fun getDisplayName(): String = message("widgets.lint.status.display.name")
 
     override fun isAvailable(project: Project): Boolean = true
 

@@ -46,12 +46,15 @@
         />
     </applicationListeners>
 
+    <resource-bundle>messages.ActionsBundle</resource-bundle>
+
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
 
+
         <applicationService
-                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"/>
+                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings"/>
 
         <projectService
                 serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings"/>
@@ -87,10 +90,18 @@
 
         <postStartupActivity implementation="com.github.blarc.gitlab.template.lint.plugin.listeners.ApplicationStartupListener" />
 
+        <notification.parentGroup id="gitlab.lint.notifications"/>
         <notificationGroup
+                id="gitlab.lint.notification.general"
                 displayType="BALLOON"
-                id="GitlabLint"
+                key="notification.group.general.name"
         />
+        <notificationGroup
+                id="gitlab.lint.notification.important"
+                displayType="STICKY_BALLOON"
+                key="notification.group.important.name"
+        />
+
 
         <statusBarWidgetFactory
                 id="lintStatusWidget"

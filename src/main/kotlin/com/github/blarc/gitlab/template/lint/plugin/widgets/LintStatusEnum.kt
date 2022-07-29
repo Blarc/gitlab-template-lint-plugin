@@ -1,8 +1,10 @@
 package com.github.blarc.gitlab.template.lint.plugin.widgets
 
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
+
 enum class LintStatusEnum(val text: String, val tooltip: String) {
-    INVALID("Invalid", "Gitlab CI yaml is invalid!"),
-    VALID("Valid", "Gitlab CI yaml is valid."),
-    RUNNING("Running", "Gitlab CI linter is running."),
-    WAITING("Waiting", "Gitlab CI linter is waiting.")
+    INVALID(message("lint.status.invalid"), message("lint.status.invalid.tooltip")),
+    VALID(message("lint.status.valid"), message("lint.status.valid.tooltip")),
+    RUNNING(message("lint.status.running"), message("lint.status.running.tooltip")),
+    WAITING(message("lint.status.waiting"), message("lint.status.waiting.tooltip"))
 }

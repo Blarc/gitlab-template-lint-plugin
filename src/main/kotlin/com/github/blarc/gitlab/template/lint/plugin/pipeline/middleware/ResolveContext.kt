@@ -4,6 +4,8 @@ import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.git.httpUrl
 import com.github.blarc.gitlab.template.lint.plugin.git.locateRemote
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabFactory
+import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
+import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.intellij.openapi.components.Service
@@ -30,7 +32,7 @@ class ResolveContext : Middleware {
     private fun locateRepository(pass: Pass): GitRepository? {
         val repository = GitRepositoryManager.getInstance(pass.project).getRepositoryForFile(pass.file.virtualFile)
 
-//        repository ?: sendNotification(Notification.repositoryNotFound(), pass.project)
+        repository ?: sendNotification(Notification.repositoryNotFound(), pass.project)
 
         return repository
     }
@@ -38,7 +40,7 @@ class ResolveContext : Middleware {
     private fun locateRemote(pass: Pass, repository: GitRepository): GitRemote? {
         val remote = repository.locateRemote(pass.project.service<ProjectSettings>().remote)
 
-//        remote ?: sendNotification(Notification.remoteNotFound(), pass.project)
+        remote ?: sendNotification(Notification.remoteNotFound(), pass.project)
 
         return remote
     }

@@ -2,7 +2,7 @@ package com.github.blarc.gitlab.template.lint.plugin.inspections
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.Companion.matchesGitlabLintRegex
 import com.github.blarc.gitlab.template.lint.plugin.runLinting
-import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState
+import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.components.Service
@@ -21,7 +21,7 @@ class GitlabLintInspection : LocalInspectionTool() {
                     indicator.isIndeterminate = true
                     val project = file.project
                     if (matchesGitlabLintRegex(file.name)) {
-                        val gitlabToken = AppSettingsState.instance?.gitlabToken
+                        val gitlabToken = AppSettings.instance?.gitlabToken
                         if (!gitlabToken.isNullOrEmpty()) {
                             runLinting(project, file)
                         }

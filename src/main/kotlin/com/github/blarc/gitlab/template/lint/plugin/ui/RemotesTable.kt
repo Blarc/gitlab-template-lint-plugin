@@ -1,6 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.ui
 
-import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState
+import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.ui.table.JBTable
 import javax.swing.ListSelectionModel
 
@@ -29,7 +29,7 @@ class RemotesTable(val tableModel: RemotesTableModel) : JBTable() {
         tableModel.fireTableDataChanged()
     }
 
-    fun commit(settings: AppSettingsState) {
+    fun commit(settings: AppSettings) {
         settings.remotesMap = tableModel.remotesList.toMap().toMutableMap()
     }
     fun addRemote() {
@@ -55,7 +55,7 @@ class RemotesTable(val tableModel: RemotesTableModel) : JBTable() {
         return true
     }
 
-    fun isModified(settings: AppSettingsState): Boolean {
+    fun isModified(settings: AppSettings): Boolean {
         return tableModel.remotesList != settings.remotesMap.toList()
     }
 }

@@ -18,17 +18,20 @@ import org.jetbrains.annotations.Nullable
  * these persistent application settings are stored.
  */
 @State(
-    name = AppSettingsState.SERVICE_NAME,
+    name = AppSettings.SERVICE_NAME,
     storages = [Storage("GitlabLint.xml")]
 )
-class AppSettingsState : PersistentStateComponent<AppSettingsState> {
+class AppSettings : PersistentStateComponent<AppSettings> {
     companion object {
         const val SERVICE_NAME = "com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"
-        val instance: AppSettingsState?
-            get() = ApplicationManager.getApplication().getService(AppSettingsState::class.java)
+        val instance: AppSettings?
+            get() = ApplicationManager.getApplication().getService(AppSettings::class.java)
     }
 
     var gitlabLintRegexString: String? = ".*gitlab-ci\\.(yaml|yml)$"
+    var lastVersion: String? = null
+    var hits = 0
+    var requestSupport = true;
 
     var gitlabToken: String?
         set(value) {
@@ -40,7 +43,7 @@ class AppSettingsState : PersistentStateComponent<AppSettingsState> {
             return credentials.getPasswordAsString()
         }
 
-    var remotesMap: MutableMap<String, Long> = mutableMapOf()
+    var remotesMap: MutableMap<String, Long?> = mutableMapOf()
 
     private fun getCredentialAttributes(): CredentialAttributes {
         return CredentialAttributes(
@@ -55,7 +58,7 @@ class AppSettingsState : PersistentStateComponent<AppSettingsState> {
     override fun getState() = this
 
 
-    override fun loadState(@NotNull state: AppSettingsState) {
+    override fun loadState(@NotNull state: AppSettings) {
         XmlSerializerUtil.copyBean(state, this)
     }
 }

@@ -1,12 +1,12 @@
 package com.github.blarc.gitlab.template.lint.plugin.gitlab
 
-import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState
+import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.openapi.project.Project
 
 class GitlabFactory() {
 
     fun getGitLab(url: String): Gitlab {
-        return Gitlab(url, AppSettingsState.instance?.gitlabToken!!)
+        return Gitlab(url, AppSettings.instance?.gitlabToken!!)
     }
 
     companion object {

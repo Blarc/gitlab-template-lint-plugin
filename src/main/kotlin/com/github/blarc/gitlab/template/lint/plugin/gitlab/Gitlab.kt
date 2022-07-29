@@ -70,14 +70,14 @@ open class Gitlab @JvmOverloads constructor(
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun searchProjectId(projectUrl: String): CompletableFuture<Long> {
+    fun searchProjectId(projectUrl: String): CompletableFuture<Long?> {
 
         val projectName = projectUrl.split("/").last()
         val request: Request = prepareRequest("/projects?search=$projectName")
             .get()
             .build()
 
-        val result = CompletableFuture<Long>()
+        val result = CompletableFuture<Long?>()
 
         httpClient.newCall(request)
             .enqueue(object: Callback{
@@ -91,19 +91,13 @@ open class Gitlab @JvmOverloads constructor(
                             val responseString = it.body!!.string()
                             val gitlabProjects = json.decodeFromString<Array<GitlabProject>>(responseString)
                             val gitlabProject = gitlabProjects.find { gitlabProject -> gitlabProject.webUrl.equals(projectUrl, true) }
-                            if (gitlabProject?.id != null) {
-                                result.complete(gitlabProject.id)
-                            } else {
-                                result.completeExceptionally(RuntimeException("Could not retrieve project id. Please set it manually in settings!"))
-                            }
-                        }
-                        else {
-                            result.completeExceptionally(RuntimeException(it.body?.string() ?: "Request was unsuccessful!"))
+                            result.complete(gitlabProject?.id)
                         }
                     }
                 }
 
             })
+
         return result
     }
 

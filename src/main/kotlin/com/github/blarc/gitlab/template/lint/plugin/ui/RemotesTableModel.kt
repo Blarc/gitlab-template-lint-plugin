@@ -2,7 +2,7 @@ package com.github.blarc.gitlab.template.lint.plugin.ui
 
 import javax.swing.table.AbstractTableModel
 
-class RemotesTableModel(var remotesList: MutableList<Pair<String, Long>>): AbstractTableModel() {
+class RemotesTableModel(var remotesList: MutableList<Pair<String, Long?>>): AbstractTableModel() {
 
     private val columnNames = arrayOf(
         "remoteUrl",
@@ -18,7 +18,7 @@ class RemotesTableModel(var remotesList: MutableList<Pair<String, Long>>): Abstr
 
     override fun getColumnCount() = columnNames.size
 
-    override fun getValueAt(row: Int, column: Int): Any {
+    override fun getValueAt(row: Int, column: Int): Any? {
         return when(column) {
             0 -> {
                 remotesList[row].first

@@ -27,7 +27,7 @@ class AppSettingsConfigurable : Configurable {
     }
 
     override fun isModified(): Boolean {
-        val settings = AppSettingsState.instance
+        val settings = AppSettings.instance
         if (settings != null) {
             return !appSettingsForm!!.gitlabToken.contentEquals(settings.gitlabToken?.toCharArray()) || appSettingsForm!!.gitlabRemotesTable.isModified(settings)
         }
@@ -35,7 +35,7 @@ class AppSettingsConfigurable : Configurable {
     }
 
     override fun apply() {
-        val settings = AppSettingsState.instance
+        val settings = AppSettings.instance
         if (settings != null) {
             settings.gitlabToken = String(appSettingsForm!!.gitlabToken!!)
             appSettingsForm!!.gitlabRemotesTable.commit(settings)
@@ -43,7 +43,7 @@ class AppSettingsConfigurable : Configurable {
     }
 
     override fun reset() {
-        val settings = AppSettingsState.instance
+        val settings = AppSettings.instance
         if (settings != null) {
             appSettingsForm!!.gitlabToken = settings.gitlabToken?.toCharArray()
             appSettingsForm!!.gitlabRemotesTable.tableModel.remotesList = settings.remotesMap.toList().toMutableList()

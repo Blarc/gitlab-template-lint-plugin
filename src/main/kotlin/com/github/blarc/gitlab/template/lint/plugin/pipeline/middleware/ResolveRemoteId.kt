@@ -2,8 +2,10 @@ package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.git.httpUrl
+import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
+import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
-import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState
+import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.openapi.components.Service
 
 @Service
@@ -14,18 +16,21 @@ class ResolveRemoteId : Middleware {
         val remoteUrl = pass.remoteOrThrow().httpUrl ?: return null
         val gitlab = pass.gitlabOrThrow()
 
-        val remotesMap = AppSettingsState.instance?.remotesMap
+        val remotesMap = AppSettings.instance?.remotesMap
         val remoteUrlString = remoteUrl.toString()
         if (remotesMap != null && remotesMap.containsKey(remoteUrlString)) {
             pass.remoteId = remotesMap[remoteUrlString]
         }
         else {
-            gitlab.searchProjectId(remoteUrlString).get().let {
+            gitlab.searchProjectId(remoteUrlString).get().let { remoteId ->
+
+                remoteId ?: sendNotification(Notification.remoteIdNotFound(), pass.project)
+
                 // Cache project's ID
                 if (remotesMap != null && !remotesMap.containsKey(remoteUrlString)) {
-                    remotesMap[remoteUrlString] = it
+                    remotesMap[remoteUrlString] = remoteId
                 }
-                pass.remoteId = it
+                pass.remoteId = remoteId
             }
         }
 

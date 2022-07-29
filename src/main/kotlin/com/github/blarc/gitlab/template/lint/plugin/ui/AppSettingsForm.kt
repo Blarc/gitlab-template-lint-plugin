@@ -14,7 +14,7 @@ class AppSettingsForm {
     private var gitlabTokenField: JBPasswordField? = null
     private var remotesTablePanel: JPanel? = null
 
-    var remotesList = mutableListOf<Pair<String, Long>>()
+    var remotesList = mutableListOf<Pair<String, Long?>>()
     private val tableModel = RemotesTableModel(remotesList)
     val gitlabRemotesTable = RemotesTable(tableModel)
 
