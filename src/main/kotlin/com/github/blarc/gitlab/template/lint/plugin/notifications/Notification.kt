@@ -30,7 +30,11 @@ data class Notification(
 
         fun remoteNotFound() = Notification(DEFAULT_TITLE, message("notifications.remote-not-found"))
 
-        fun remoteIdNotFound() = Notification(DEFAULT_TITLE, message("notifications.remote-id-not-found"))
+        fun remoteIdNotFound(project: Project) = Notification(
+            DEFAULT_TITLE,
+            message = message("notifications.remote-id-not-found"),
+            actions = setOf(NotificationAction.settings(project, message("actions.set-remote-id")))
+        )
 
         fun star() = Notification(
             message = """
@@ -50,6 +54,13 @@ data class Notification(
             message = message("notifications.gitlab-token-not-set"),
             actions = setOf(NotificationAction.settings(project, message("actions.set-gitlab-token")))
         )
+
+        fun unauthorizedRequest(project: Project) = Notification(
+            message = message("notifications.unauthorized-request"),
+            actions = setOf(NotificationAction.settings(project, message("actions.set-gitlab-token")))
+        )
+
+        fun unsuccessfulRequest(message: String) = Notification(message = message("notifications.unsuccessful-request", message))
 
     }
 

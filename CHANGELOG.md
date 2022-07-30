@@ -3,9 +3,13 @@
 ## [Unreleased]
 ### Added
 - Notifications on start up.
+- Error notifications.
 
 ### Changed
 - Refactor linting to pipeline with middlewares.
+
+### Fixed
+- Gitlab token is now properly saved when changing remotes.
 
 ## [0.0.12]
 ### Added

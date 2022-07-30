@@ -35,6 +35,7 @@ class LintStatusPresentation(private val statusBar: StatusBar) : StatusBarWidget
     override fun getIcon(): Icon {
         return when (statusBar.project?.service<Pipeline>()?.lintStatus) {
             LintStatusEnum.INVALID -> AllIcons.General.ExclMark
+            LintStatusEnum.INVALID_ID -> AllIcons.General.ExclMark
             LintStatusEnum.VALID -> AllIcons.General.InspectionsOK
             LintStatusEnum.RUNNING -> AllIcons.General.InlineRefreshHover
             else -> {

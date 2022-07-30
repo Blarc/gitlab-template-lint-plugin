@@ -1,5 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.ui
 
+import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.ui.DoubleClickListener
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBPasswordField
@@ -14,11 +15,13 @@ class AppSettingsForm {
     private var gitlabTokenField: JBPasswordField? = null
     private var remotesTablePanel: JPanel? = null
 
-    var remotesList = mutableListOf<Pair<String, Long?>>()
+    private var remotesList = mutableListOf<Pair<String, Long?>>()
     private val tableModel = RemotesTableModel(remotesList)
     val gitlabRemotesTable = RemotesTable(tableModel)
 
     init {
+        gitlabTokenField?.text = AppSettings.instance?.gitlabToken
+
         remotesTablePanel!!.add(
             ToolbarDecorator.createDecorator(gitlabRemotesTable)
                 .setAddAction { gitlabRemotesTable.addRemote() }
@@ -41,9 +44,11 @@ class AppSettingsForm {
 
     @get:NotNull
     var gitlabToken: CharArray?
-        get() = gitlabTokenField?.password
-        set(newText) {
-            gitlabTokenField?.text = newText.toString()
+        get() {
+            return gitlabTokenField?.password
+        }
+        set(newGitlabToken) {
+            gitlabTokenField?.text = newGitlabToken?.let { String(newGitlabToken) }
         }
 }
 

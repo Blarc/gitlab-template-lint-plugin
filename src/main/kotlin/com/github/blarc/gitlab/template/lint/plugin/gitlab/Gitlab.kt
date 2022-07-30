@@ -1,6 +1,10 @@
 package com.github.blarc.gitlab.template.lint.plugin.gitlab
 
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.http.HttpClientFactory
+import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
+import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
+import com.intellij.openapi.project.Project
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -70,7 +74,7 @@ open class Gitlab @JvmOverloads constructor(
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun searchProjectId(projectUrl: String): CompletableFuture<Long?> {
+    fun searchProjectId(projectUrl: String, project: Project): CompletableFuture<Long?> {
 
         val projectName = projectUrl.split("/").last()
         val request: Request = prepareRequest("/projects?search=$projectName")
@@ -78,11 +82,11 @@ open class Gitlab @JvmOverloads constructor(
             .build()
 
         val result = CompletableFuture<Long?>()
-
         httpClient.newCall(request)
             .enqueue(object: Callback{
                 override fun onFailure(call: Call, e: IOException) {
-                    result.completeExceptionally(e)
+                    sendNotification(Notification.remoteIdNotFound(project), project)
+                    result.complete(null)
                 }
 
                 override fun onResponse(call: Call, response: Response) {
@@ -93,6 +97,18 @@ open class Gitlab @JvmOverloads constructor(
                             val gitlabProject = gitlabProjects.find { gitlabProject -> gitlabProject.webUrl.equals(projectUrl, true) }
                             result.complete(gitlabProject?.id)
                         }
+                        else {
+                            when(it.code) {
+                                401 -> {
+                                    sendNotification(Notification.unauthorizedRequest(project), project)
+                                    result.complete(null)
+                                }
+                                else -> {
+                                    sendNotification(Notification.remoteIdNotFound(project), project)
+                                    result.complete(null)
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -102,7 +118,7 @@ open class Gitlab @JvmOverloads constructor(
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun lintContent(content: String, projectId: Long, branch: String): CompletableFuture<GitlabLintResponse> {
+    fun lintContent(content: String, projectId: Long, branch: String, project: Project, showGitlabTokenNotification: Boolean): CompletableFuture<GitlabLintResponse?> {
 
         val formBody = FormBody.Builder()
             .add("content", content)
@@ -115,11 +131,14 @@ open class Gitlab @JvmOverloads constructor(
             .post(formBody)
             .build()
 
-        val result = CompletableFuture<GitlabLintResponse>()
+        val result = CompletableFuture<GitlabLintResponse?>()
         httpClient.newCall(request)
             .enqueue(object: Callback{
                 override fun onFailure(call: Call, e: IOException) {
-                    result.completeExceptionally(e)
+                    if (showGitlabTokenNotification) {
+                        sendNotification(Notification.unsuccessfulRequest(e.localizedMessage))
+                    }
+                    result.complete(null)
                 }
 
                 override fun onResponse(call: Call, response: Response) {
@@ -130,7 +149,20 @@ open class Gitlab @JvmOverloads constructor(
                             result.complete(decodeFromString)
                         }
                         else {
-                            result.completeExceptionally(RuntimeException(it.body?.string() ?: "Request was unsuccessful!"))
+                            when(it.code) {
+                                401 -> {
+                                    if (showGitlabTokenNotification) {
+                                        sendNotification(Notification.unauthorizedRequest(project), project)
+                                    }
+                                    result.complete(null)
+                                }
+                                else -> {
+                                    if (showGitlabTokenNotification) {
+                                        sendNotification(Notification.unsuccessfulRequest(it.body?.string() ?: message("notifications.unknown-error")))
+                                    }
+                                    result.complete(null)
+                                }
+                            }
                         }
                     }
                 }

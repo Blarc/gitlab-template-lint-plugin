@@ -11,7 +11,6 @@ import com.intellij.openapi.startup.StartupActivity
 class ApplicationStartupListener: StartupActivity.DumbAware {
     override fun runActivity(project: Project) {
         showVersionNotification(project)
-        checkGitlabToken(project)
     }
 
     private fun showVersionNotification(project: Project) {
@@ -24,13 +23,5 @@ class ApplicationStartupListener: StartupActivity.DumbAware {
 
         settings.lastVersion = version
         sendNotification(Notification.welcome(version ?: "Unknown"), project)
-    }
-
-    private fun checkGitlabToken(project: Project) {
-        val gitlabToken = AppSettings.instance?.gitlabToken
-
-        if (gitlabToken.isNullOrEmpty()) {
-            sendNotification(Notification.gitlabTokenNotSet(project), project)
-        }
     }
 }

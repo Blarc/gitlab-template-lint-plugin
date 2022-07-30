@@ -32,11 +32,13 @@ class Pipeline(private val project: Project) {
         val queue = PriorityQueue(middlewares)
 
         updateStatusWidget(LintStatusEnum.RUNNING)
-        gitlabLintResponse = next(queue, Pass(project, file))
-        updateStatusWidget(if (gitlabLintResponse?.valid == true) LintStatusEnum.VALID else LintStatusEnum.INVALID)
+        val result = next(queue, Pass(project, file))
+
+        gitlabLintResponse = result?.first
+        updateStatusWidget(result?.second ?: LintStatusEnum.INVALID)
     }
 
-    private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : GitlabLintResponse? {
+    private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : Pair<GitlabLintResponse?, LintStatusEnum>? {
         val middleware = queue.remove()
 
         return middleware(pass) {
