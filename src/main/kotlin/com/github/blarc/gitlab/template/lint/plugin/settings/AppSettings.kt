@@ -61,4 +61,8 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     override fun loadState(@NotNull state: AppSettings) {
         XmlSerializerUtil.copyBean(state, this)
     }
+
+    fun recordHit() {
+        hits++
+    }
 }

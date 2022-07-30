@@ -10,7 +10,7 @@ import com.intellij.openapi.components.Service
 
 @Service
 class ResolveRemoteId : Middleware {
-    override val priority = 10
+    override val priority = 30
 
     override fun invoke(pass: Pass, next: () -> GitlabLintResponse?): GitlabLintResponse? {
         val remoteUrl = pass.remoteOrThrow().httpUrl ?: return null
