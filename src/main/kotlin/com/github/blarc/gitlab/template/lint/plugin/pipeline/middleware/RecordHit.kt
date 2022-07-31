@@ -3,7 +3,7 @@ package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
-import com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 

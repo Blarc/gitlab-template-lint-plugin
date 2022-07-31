@@ -2,7 +2,7 @@ package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
-import com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 
 interface Middleware : Comparable<Middleware> {
     val priority: Int

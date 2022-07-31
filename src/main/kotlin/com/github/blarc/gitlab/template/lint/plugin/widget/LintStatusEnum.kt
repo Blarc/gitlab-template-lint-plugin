@@ -1,4 +1,4 @@
-package com.github.blarc.gitlab.template.lint.plugin.widgets
+package com.github.blarc.gitlab.template.lint.plugin.widget
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 

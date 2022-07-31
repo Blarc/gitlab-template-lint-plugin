@@ -1,6 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.inspections
 
-import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.Companion.matchesGitlabLintRegex
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.matchesGitlabLintRegex
 import com.github.blarc.gitlab.template.lint.plugin.runLinting
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemsHolder
@@ -16,7 +17,7 @@ class GitlabLintInspection : LocalInspectionTool() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : PsiElementVisitor() {
             override fun visitFile(file: PsiFile) {
-                runBackgroundableTask("Gitlab Lint", file.project) { indicator ->
+                runBackgroundableTask(message("inspection.title"), file.project) { indicator ->
                     indicator.isIndeterminate = true
                     val project = file.project
                     if (matchesGitlabLintRegex(file.name)) {

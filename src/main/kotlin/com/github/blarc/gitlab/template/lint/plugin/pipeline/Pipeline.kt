@@ -2,8 +2,8 @@ package com.github.blarc.gitlab.template.lint.plugin.pipeline
 
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware.*
-import com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusEnum
-import com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusWidget
+import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidget
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -15,16 +15,20 @@ import java.util.*
 class Pipeline(private val project: Project) {
     var gitlabLintResponse: GitlabLintResponse? = null
     var lintStatus: LintStatusEnum = LintStatusEnum.WAITING
+    var lastFile: PsiFile? = null
 
     private val middlewares: Set<Middleware> = setOf(
         project.service<ResolveContext>(),
-        project.service<ResolveRemoteId>(),
-        project.service<LintContext>(),
+        project.service<ResolveGitlabToken>(),
+        project.service<ShowSupportNotification>(),
         project.service<RecordHit>(),
-        project.service<ShowSupportNotification>()
+        project.service<ResolveRemoteId>(),
+        project.service<LintContext>()
     )
 
     fun accept(file: PsiFile) {
+        lastFile = file
+
         if (middlewares.isEmpty()) {
             throw IllegalStateException("No middleware registered")
         }
@@ -36,6 +40,10 @@ class Pipeline(private val project: Project) {
 
         gitlabLintResponse = result?.first
         updateStatusWidget(result?.second ?: LintStatusEnum.INVALID)
+    }
+
+    fun rerun() {
+        lastFile?.let { accept(it) }
     }
 
     private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : Pair<GitlabLintResponse?, LintStatusEnum>? {

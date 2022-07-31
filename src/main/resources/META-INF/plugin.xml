@@ -105,9 +105,17 @@
 
         <statusBarWidgetFactory
                 id="lintStatusWidget"
-                implementation="com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusWidgetFactory"
+                implementation="com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidgetFactory"
                 order="first"
         />
 
     </extensions>
+
+    <actions>
+        <action
+                id="com.github.blarc.gitlab.template.lint.plugin.widget.actions.RefreshAction"
+                class="com.github.blarc.gitlab.template.lint.plugin.widget.actions.RefreshAction"
+                text="RefreshAction"
+        />
+    </actions>
 </idea-plugin>

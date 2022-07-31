@@ -1,11 +1,19 @@
-package com.github.blarc.gitlab.template.lint.plugin.widgets
+package com.github.blarc.gitlab.template.lint.plugin.widget
 
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
+import com.github.blarc.gitlab.template.lint.plugin.widget.actions.OpenSettingsAction
+import com.github.blarc.gitlab.template.lint.plugin.widget.actions.RefreshAction
+import com.intellij.dvcs.ui.LightActionGroup
 import com.intellij.icons.AllIcons
+import com.intellij.ide.DataManager
+import com.intellij.openapi.actionSystem.ActionGroup
 import com.intellij.openapi.components.service
 import com.intellij.openapi.ui.popup.ListPopup
+import com.intellij.openapi.util.Conditions
 import com.intellij.openapi.wm.StatusBar
 import com.intellij.openapi.wm.StatusBarWidget
+import com.intellij.ui.popup.PopupFactoryImpl.ActionGroupPopup
 import com.intellij.util.Consumer
 import org.jetbrains.annotations.Nullable
 import java.awt.event.MouseEvent
@@ -22,8 +30,21 @@ class LintStatusPresentation(private val statusBar: StatusBar) : StatusBarWidget
     }
 
     @Nullable("Null means the widget is unable to show the popup.")
-    override fun getPopupStep(): ListPopup? {
-        return null
+    override fun getPopupStep(): ListPopup {
+        return ActionGroupPopup(
+            GitlabLintBundle.message("lint.status.popup.title"),
+            createActions(),
+            DataManager.getInstance().getDataContext(statusBar.component),
+            false,
+            false,
+            true,
+            false,
+            null,
+            -1,
+            Conditions.alwaysTrue(),
+            null
+
+        )
     }
 
     override fun getSelectedValue(): String {
@@ -42,6 +63,13 @@ class LintStatusPresentation(private val statusBar: StatusBar) : StatusBarWidget
                 AllIcons.General.InspectionsPause
             }
         }
+    }
+
+    private fun createActions() : ActionGroup {
+        val actionGroup = LightActionGroup()
+        actionGroup.add(OpenSettingsAction())
+        actionGroup.add(RefreshAction())
+        return actionGroup
     }
 
 }

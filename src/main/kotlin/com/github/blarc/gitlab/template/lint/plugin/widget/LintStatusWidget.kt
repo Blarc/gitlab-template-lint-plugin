@@ -1,4 +1,4 @@
-package com.github.blarc.gitlab.template.lint.plugin.widgets
+package com.github.blarc.gitlab.template.lint.plugin.widget
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
@@ -6,7 +6,7 @@ import com.intellij.openapi.wm.StatusBar
 import com.intellij.openapi.wm.StatusBarWidget
 import com.intellij.openapi.wm.WindowManager
 
-class LintStatusWidget(project: Project) : StatusBarWidget {
+class LintStatusWidget(val project: Project) : StatusBarWidget {
 
     private var statusBar = WindowManager.getInstance().getStatusBar(project)
 
@@ -27,5 +27,4 @@ class LintStatusWidget(project: Project) : StatusBarWidget {
     override fun getPresentation(): StatusBarWidget.WidgetPresentation {
         return LintStatusPresentation(statusBar)
     }
-
 }

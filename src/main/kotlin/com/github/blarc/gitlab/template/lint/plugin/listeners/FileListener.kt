@@ -1,7 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.listeners
 
-import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.Companion.matchesGitlabLintRegex
-import com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusWidgetFactory
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.matchesGitlabLintRegex
+import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidgetFactory
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent

@@ -1,6 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.providers
 
-import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.Companion.matchesGitlabLintRegex
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.matchesGitlabLintRegex
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
 import com.intellij.codeInsight.hint.HintUtil
 import com.intellij.openapi.components.service

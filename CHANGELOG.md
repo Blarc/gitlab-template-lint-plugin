@@ -4,6 +4,7 @@
 ### Added
 - Notifications on start up.
 - Error notifications.
+- Add Open Settings and Refresh actions to actions group popup in widget.
 
 ### Changed
 - Refactor linting to pipeline with middlewares.
