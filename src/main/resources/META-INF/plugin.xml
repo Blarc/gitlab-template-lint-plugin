@@ -46,7 +46,7 @@
         />
     </applicationListeners>
 
-    <resource-bundle>messages.ActionsBundle</resource-bundle>
+    <resource-bundle>messages.MyBundle</resource-bundle>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
@@ -60,7 +60,7 @@
                 serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings"/>
 
         <projectService
-                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabFactory"/>
+                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab"/>
 
 <!--        <projectConfigurable-->
 <!--                parentId="tools"-->
@@ -69,11 +69,11 @@
 <!--        />-->
 
 
-        <applicationConfigurable
+        <projectConfigurable
                 parentId="tools"
-                instance="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsConfigurable"
-                id="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsConfigurable"
-                displayName="Gitlab Template Lint"/>
+                instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
+                id="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
+                key="settings.general.group.title"/>
 
         <localInspection
                 language="yaml"

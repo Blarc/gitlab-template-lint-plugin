@@ -31,24 +31,20 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var gitlabLintRegexString: String? = ".*gitlab-ci\\.(yaml|yml)$"
     var lastVersion: String? = null
     var hits = 0
-    var requestSupport = true;
-
-    var gitlabToken: String?
-        set(value) {
-            PasswordSafe.instance.setPassword(getCredentialAttributes(), value.toString())
-        }
-        get() {
-            val credentialAttributes = getCredentialAttributes()
-            val credentials: Credentials = PasswordSafe.instance.get(credentialAttributes) ?: return null
-            return credentials.getPasswordAsString()
-        }
-
+    var requestSupport = true
     var remotesMap: MutableMap<String, Long?> = mutableMapOf()
-
-    private fun getCredentialAttributes(): CredentialAttributes {
+    fun saveGitlabToken(token: String, gitlabUrl: String) {
+        PasswordSafe.instance.setPassword(getCredentialAttributes(gitlabUrl), token)
+    }
+    fun getGitlabToken(gitlabUrl: String): String? {
+        val credentialAttributes = getCredentialAttributes(gitlabUrl)
+        val credentials: Credentials = PasswordSafe.instance.get(credentialAttributes) ?: return null
+        return credentials.getPasswordAsString()
+    }
+    private fun getCredentialAttributes(username: String): CredentialAttributes {
         return CredentialAttributes(
             SERVICE_NAME,
-            "gitlabToken",
+            username,
             this.javaClass,
             false
         )

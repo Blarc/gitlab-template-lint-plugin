@@ -4,48 +4,45 @@ import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.http.HttpClientFactory
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
+import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
+import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import okhttp3.*
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import org.apache.http.client.HttpResponseException
 import java.io.IOException
 import java.util.concurrent.CompletableFuture
 
-open class Gitlab @JvmOverloads constructor(
-    private val baseUri: String,
-    private val privateToken: String,
-    allowSelfSignedTls: Boolean = false
-) {
+@Service
+open class Gitlab (project: Project) {
+    private val allowSelfSignedTls: Boolean = false
     private val httpClient: OkHttpClient
     private val json: Json
+    private val privateToken: String
+    private val baseUrl: String
 
     init {
         val httpClientFactory: HttpClientFactory = HttpClientFactory.instance
         httpClient = if (allowSelfSignedTls) httpClientFactory.insecureHttpClient else httpClientFactory.httpClient
         json = Json { ignoreUnknownKeys = true }
+
+        baseUrl = project.service<ProjectSettings>().gitlabUrl!!
+        privateToken = AppSettings.instance?.getGitlabToken(baseUrl)!!
     }
 
     private fun prepareRequest(urlSuffix: String): Request.Builder {
         return Request.Builder()
-            .url("${baseUri}/api/v4${urlSuffix}")
+            .url("${baseUrl}${urlSuffix}")
             .addHeader("Private-Token", privateToken)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
     fun getVersion(): CompletableFuture<GitlabVersion> {
-        val url = "$baseUri/version"
         val result: CompletableFuture<GitlabVersion> = CompletableFuture<GitlabVersion>()
-        if (url.toHttpUrlOrNull() == null) {
-            result.completeExceptionally(HttpResponseException(500, "Incorrect GitLab URL"))
-            return result
-        }
-        if (baseUri.endsWith("/")) {
-            result.completeExceptionally(HttpResponseException(500, "Remove last slash from URL"))
-            return result
-        }
+
         val request: Request = prepareRequest("/version")
             .get()
             .build()

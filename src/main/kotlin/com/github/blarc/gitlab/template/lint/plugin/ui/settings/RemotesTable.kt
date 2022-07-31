@@ -1,6 +1,7 @@
-package com.github.blarc.gitlab.template.lint.plugin.ui
+package com.github.blarc.gitlab.template.lint.plugin.ui.settings
 
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
+import com.github.blarc.gitlab.template.lint.plugin.ui.RemoteEditor
 import com.intellij.ui.table.JBTable
 import javax.swing.ListSelectionModel
 

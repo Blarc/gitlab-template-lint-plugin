@@ -1,6 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
 import com.github.blarc.gitlab.template.lint.plugin.git.locateRemote
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabDetector
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
@@ -22,9 +23,12 @@ class ResolveContext : Middleware {
     override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
         val repository = locateRepository(pass) ?: return null
         val remote = locateRemote(pass, repository) ?: return null
+        val gitlabUrl = resolveGitlabUrl(pass) ?: return null
+
 
         pass.repository = repository
         pass.remote = remote
+        pass.gitlabUrl = gitlabUrl
 
         return next()
     }
@@ -53,5 +57,9 @@ class ResolveContext : Middleware {
         }
 
         return remote
+    }
+
+    private fun resolveGitlabUrl(pass: Pass): String {
+        return pass.project.service<ProjectSettings>().gitlabUrl ?: pass.project.service<GitlabDetector>().detect().toString()
     }
 }

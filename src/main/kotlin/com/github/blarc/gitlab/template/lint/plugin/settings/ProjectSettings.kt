@@ -1,6 +1,5 @@
 package com.github.blarc.gitlab.template.lint.plugin.settings
 
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
@@ -20,11 +19,9 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
 
     companion object {
         const val SERVICE_NAME = "com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings"
-        val instance: ProjectSettings?
-            get() = ApplicationManager.getApplication().getService(ProjectSettings::class.java)
     }
 
-    var host: String? = null
+    var gitlabUrl: String? = null
     var fallbackBranch = "main"
     var remote = "origin"
     var forceHttps = true
