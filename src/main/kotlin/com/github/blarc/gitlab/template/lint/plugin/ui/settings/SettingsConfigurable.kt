@@ -32,27 +32,27 @@ class SettingsConfigurable(val project: Project) : Configurable {
 
     override fun isModified(): Boolean {
         val settings = AppSettings.instance
-        val gitlabUrl = settingsForm?.gitlabUrl
+        val gitlabUrl = settingsForm?.gitlabUrlTF
         if (settings != null && gitlabUrl != null) {
-            return !settingsForm!!.gitlabToken.contentEquals(settings.getGitlabToken(gitlabUrl)?.toCharArray()) || settingsForm!!.gitlabRemotesTable.isModified(settings)
+            return !settingsForm!!.gitlabTokenTF.contentEquals(settings.getGitlabToken(gitlabUrl)) || settingsForm!!.gitlabRemotesTable.isModified(settings)
         }
         return false
     }
 
     override fun apply() {
         val settings = AppSettings.instance
-        val gitlabUrl = settingsForm?.gitlabUrl
+        val gitlabUrl = settingsForm?.gitlabUrlTF
         if (settings != null && gitlabUrl != null) {
-            settings.saveGitlabToken(String(settingsForm!!.gitlabToken!!), gitlabUrl)
+            settings.saveGitlabToken(settingsForm!!.gitlabTokenTF!!, gitlabUrl)
             settingsForm!!.gitlabRemotesTable.commit(settings)
         }
     }
 
     override fun reset() {
         val settings = AppSettings.instance
-        val gitlabUrl = settingsForm?.gitlabUrl
+        val gitlabUrl = settingsForm?.gitlabUrlTF
         if (settings != null && gitlabUrl != null) {
-            settingsForm!!.gitlabToken = settings.getGitlabToken(gitlabUrl)?.toCharArray()
+            settingsForm!!.gitlabTokenTF = settings.getGitlabToken(gitlabUrl)
             settingsForm!!.gitlabRemotesTable.tableModel.remotesList = settings.remotesMap.toList().toMutableList()
         }
     }

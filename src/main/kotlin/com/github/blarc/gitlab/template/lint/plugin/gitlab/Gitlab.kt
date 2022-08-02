@@ -33,17 +33,17 @@ open class Gitlab (project: Project) {
         privateToken = AppSettings.instance?.getGitlabToken(baseUrl)!!
     }
 
-    private fun prepareRequest(urlSuffix: String): Request.Builder {
+    private fun prepareRequest(urlSuffix: String, privateToken: String = this.privateToken): Request.Builder {
         return Request.Builder()
             .url("${baseUrl}${urlSuffix}")
             .addHeader("Private-Token", privateToken)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun getVersion(): CompletableFuture<GitlabVersion> {
+    fun getVersion(privateToken: String = this.privateToken): CompletableFuture<GitlabVersion> {
         val result: CompletableFuture<GitlabVersion> = CompletableFuture<GitlabVersion>()
 
-        val request: Request = prepareRequest("/version")
+        val request: Request = prepareRequest("/version", privateToken)
             .get()
             .build()
 
