@@ -5,6 +5,7 @@
 - Notifications on start up.
 - Error notifications.
 - Add Open Settings and Refresh actions to actions group popup in widget.
+- Add remote field to settings.
 
 ### Changed
 - Refactor linting to pipeline with middlewares.

@@ -1,4 +1,4 @@
-package com.github.blarc.gitlab.template.lint.plugin.ui
+package com.github.blarc.gitlab.template.lint.plugin.ui.settings
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
@@ -6,8 +6,6 @@ import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabDetector
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
-import com.github.blarc.gitlab.template.lint.plugin.ui.settings.RemotesTable
-import com.github.blarc.gitlab.template.lint.plugin.ui.settings.RemotesTableModel
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.runBackgroundableTask
@@ -28,6 +26,7 @@ import javax.swing.JPanel
 class SettingsForm(val project: Project) {
     var basePanel: JPanel? = null
     private var gitlabUrlTextField: JBTextField? = null
+    private var gitlabRemoteTextField: JBTextField? = null
     private var gitlabTokenField: JBPasswordField? = null
     private var remotesTablePanel: JPanel? = null
     private var reportBugLink: BrowserLink? = null
@@ -44,6 +43,7 @@ class SettingsForm(val project: Project) {
         initGitlabUrlField()
         initResolveButton()
         initVerifyButton()
+        initRemoteField()
         initRemotesTable()
 
     }
@@ -54,6 +54,11 @@ class SettingsForm(val project: Project) {
         if (gitlabUrl != null) {
             gitlabTokenField?.text = AppSettings.instance?.getGitlabToken(gitlabUrl)
         }
+    }
+
+    private fun initRemoteField() {
+        val gitlabRemote = project.service<ProjectSettings>().remote
+        gitlabRemoteTextField?.text = gitlabRemote
     }
 
     private fun initResolveButton() {
@@ -140,6 +145,14 @@ class SettingsForm(val project: Project) {
         }
         set(newGitlabUrl) {
             gitlabUrlTextField?.text = newGitlabUrl
+        }
+
+    var gitlabRemoteTF: String?
+        get() {
+            return gitlabRemoteTextField?.text
+        }
+        set(newRemote) {
+            gitlabRemoteTextField?.text = newRemote
         }
 }
 
