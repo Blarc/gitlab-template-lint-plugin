@@ -13,7 +13,6 @@ import com.intellij.openapi.startup.StartupActivity
 class ApplicationStartupListener: StartupActivity.DumbAware {
     override fun runActivity(project: Project) {
         showVersionNotification(project)
-        detectGitlabUrl(project)
     }
 
     private fun showVersionNotification(project: Project) {
@@ -26,24 +25,5 @@ class ApplicationStartupListener: StartupActivity.DumbAware {
 
         settings.lastVersion = version
         sendNotification(Notification.welcome(version ?: "Unknown"), project)
-    }
-
-    private fun detectGitlabUrl(project: Project) {
-        val projectSettings = project.service<ProjectSettings>()
-
-        if (projectSettings.gitlabUrl != null) {
-            return
-        }
-
-        val gitlabUrl = project.service<GitlabDetector>().detect()
-
-        if (gitlabUrl == null) {
-            sendNotification(Notification.couldNotDetectGitlabUrl(project), project)
-            return
-        }
-
-        sendNotification(Notification.gitlabUrlAutoDetected(gitlabUrl.toString(), project), project)
-
-        projectSettings.gitlabUrl = gitlabUrl.toString()
     }
 }

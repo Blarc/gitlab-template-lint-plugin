@@ -46,6 +46,11 @@
         />
     </applicationListeners>
 
+    <projectListeners>
+        <listener class="com.github.blarc.gitlab.template.lint.plugin.listeners.VcsMappingChangedListener"
+                  topic="com.intellij.dvcs.repo.VcsRepositoryMappingListener"/>
+    </projectListeners>
+
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <!-- Extension points defined by the plugin.
