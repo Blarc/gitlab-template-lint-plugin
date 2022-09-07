@@ -7,6 +7,7 @@
 - Open Settings and Refresh actions to actions group popup in widget.
 - Remote field to settings.
 - VcsMappingChangedListener for detecting repositories.
+- Combobox with Gitlab urls in settings.
 
 ### Changed
 - Refactor linting to pipeline with middlewares.

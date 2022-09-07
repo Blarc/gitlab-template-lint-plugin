@@ -59,7 +59,7 @@ class ResolveContext : Middleware {
         return remote
     }
 
-    private fun resolveGitlabUrl(pass: Pass): String {
-        return pass.project.service<ProjectSettings>().gitlabUrl ?: pass.project.service<GitlabDetector>().detect().toString()
+    private fun resolveGitlabUrl(pass: Pass): String? {
+        return pass.project.service<ProjectSettings>().gitlabUrl ?: pass.project.service<GitlabDetector>().detect(pass.file.virtualFile)?.toString()
     }
 }

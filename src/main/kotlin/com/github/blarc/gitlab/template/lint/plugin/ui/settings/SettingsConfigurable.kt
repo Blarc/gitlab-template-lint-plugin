@@ -53,7 +53,7 @@ class SettingsConfigurable(val project: Project) : Configurable {
         if (settings != null && gitlabUrl != null) {
             settings.saveGitlabToken(settingsForm!!.gitlabTokenTF!!, gitlabUrl)
             settingsForm!!.gitlabRemotesTable.commit(settings)
-            projectSettings.gitlabUrl = settingsForm!!.gitlabUrlTF!!
+            projectSettings.gitlabUrl = gitlabUrl
             projectSettings.remote = settingsForm!!.gitlabRemoteTF!!
         }
     }
@@ -61,12 +61,12 @@ class SettingsConfigurable(val project: Project) : Configurable {
     override fun reset() {
         val settings = AppSettings.instance
         val projectSettings = project.service<ProjectSettings>()
-        val gitlabUrl = settingsForm?.gitlabUrlTF
+        val gitlabUrl = projectSettings.gitlabUrl
 
         if (settings != null && gitlabUrl != null) {
             settingsForm!!.gitlabTokenTF = settings.getGitlabToken(gitlabUrl)
             settingsForm!!.gitlabRemotesTable.tableModel.remotesList = settings.remotesMap.toList().toMutableList()
-            settingsForm!!.gitlabUrlTF = projectSettings.gitlabUrl
+            settingsForm!!.gitlabUrlTF = gitlabUrl
             settingsForm!!.gitlabRemoteTF = projectSettings.remote
         }
     }

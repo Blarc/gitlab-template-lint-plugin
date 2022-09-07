@@ -21,7 +21,7 @@ open class Gitlab (project: Project) {
     private val allowSelfSignedTls: Boolean = false
     private val httpClient: OkHttpClient
     private val json: Json
-    private val privateToken: String
+    private val privateToken: String?
     private val baseUrl: String
 
     init {
@@ -30,20 +30,20 @@ open class Gitlab (project: Project) {
         json = Json { ignoreUnknownKeys = true }
 
         baseUrl = project.service<ProjectSettings>().gitlabUrl!!
-        privateToken = AppSettings.instance?.getGitlabToken(baseUrl)!!
+        privateToken = AppSettings.instance?.getGitlabToken(baseUrl)
     }
 
-    private fun prepareRequest(urlSuffix: String, privateToken: String = this.privateToken): Request.Builder {
+    private fun prepareRequest(urlSuffix: String, baseUrl: String = this.baseUrl, privateToken: String? = this.privateToken): Request.Builder {
         return Request.Builder()
             .url("${baseUrl}${urlSuffix}")
-            .addHeader("Private-Token", privateToken)
+            .addHeader("Private-Token", privateToken!!)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun getVersion(privateToken: String = this.privateToken): CompletableFuture<GitlabVersion> {
+    fun getVersion(baseUrl: String = this.baseUrl, privateToken: String? = this.privateToken): CompletableFuture<GitlabVersion> {
         val result: CompletableFuture<GitlabVersion> = CompletableFuture<GitlabVersion>()
 
-        val request: Request = prepareRequest("/version", privateToken)
+        val request: Request = prepareRequest("/version", baseUrl, privateToken)
             .get()
             .build()
 
@@ -61,7 +61,7 @@ open class Gitlab (project: Project) {
                             result.complete(decodeFromString)
                         }
                         else {
-                            result.completeExceptionally(RuntimeException(it.body?.string() ?: "Request was unsuccessful!"))
+                            result.completeExceptionally(Throwable(it.message.ifEmpty { "Request was unsuccessful!" }))
                         }
                     }
                 }
@@ -155,7 +155,7 @@ open class Gitlab (project: Project) {
                                 }
                                 else -> {
                                     if (showGitlabTokenNotification) {
-                                        sendNotification(Notification.unsuccessfulRequest(it.body?.string() ?: message("notifications.unknown-error")))
+                                        sendNotification(Notification.unsuccessfulRequest(it.message.ifEmpty { message("notifications.unknown-error") }))
                                     }
                                     result.complete(null)
                                 }

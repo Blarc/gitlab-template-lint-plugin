@@ -41,10 +41,10 @@ class AppSettings : PersistentStateComponent<AppSettings> {
         val credentials: Credentials = PasswordSafe.instance.get(credentialAttributes) ?: return null
         return credentials.getPasswordAsString()
     }
-    private fun getCredentialAttributes(username: String): CredentialAttributes {
+    private fun getCredentialAttributes(title: String): CredentialAttributes {
         return CredentialAttributes(
-            SERVICE_NAME,
-            username,
+            title,
+            null,
             this.javaClass,
             false
         )

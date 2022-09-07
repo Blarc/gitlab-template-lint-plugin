@@ -15,17 +15,18 @@ class VcsMappingChangedListener(val project: Project) : VcsRepositoryMappingList
         val settings = project.service<ProjectSettings>()
         val projectSettings = project.service<ProjectSettings>()
 
-        val gitlabUrls = GitRepositoryManager.getInstance(project)
+        projectSettings.gitlabUrls = GitRepositoryManager.getInstance(project)
             .repositories
             .mapNotNull { it.locateRemote(settings.remote) }
             .mapNotNull { it.gitlabUrl }
             .map { it.toString() }
+            .toSet()
 
-        if (projectSettings.gitlabUrl != null && gitlabUrls.contains(projectSettings.gitlabUrl)) {
+        if (projectSettings.gitlabUrl != null && projectSettings.gitlabUrls.contains(projectSettings.gitlabUrl)) {
             return
         }
 
-        val gitlabUrl = gitlabUrls.firstOrNull()
+        val gitlabUrl = projectSettings.gitlabUrls.firstOrNull()
         if (gitlabUrl == null) {
             sendNotification(Notification.couldNotDetectGitlabUrl(project), project)
             return

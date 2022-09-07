@@ -3,7 +3,6 @@ package com.github.blarc.gitlab.template.lint.plugin.ui.settings
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
-import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabDetector
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.intellij.icons.AllIcons
@@ -18,20 +17,22 @@ import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import org.jetbrains.annotations.NotNull
 import java.awt.BorderLayout
+import java.awt.event.ItemEvent
 import java.awt.event.MouseEvent
+import javax.swing.DefaultComboBoxModel
 import javax.swing.JButton
+import javax.swing.JComboBox
 import javax.swing.JComponent
 import javax.swing.JPanel
 
 class SettingsForm(val project: Project) {
     var basePanel: JPanel? = null
-    private var gitlabUrlTextField: JBTextField? = null
+    private var gitlabUrlComboBox: JComboBox<String>? = null
     private var gitlabRemoteTextField: JBTextField? = null
     private var gitlabTokenField: JBPasswordField? = null
     private var remotesTablePanel: JPanel? = null
     private var reportBugLink: BrowserLink? = null
     private var verifyButton: JButton? = null
-    private var resolveButton: JButton? = null
     private var verifyLabel: JBLabel? = null
 
     private var remotesList = mutableListOf<Pair<String, Long?>>()
@@ -40,45 +41,33 @@ class SettingsForm(val project: Project) {
 
     init {
 
-        initGitlabUrlField()
-        initResolveButton()
+        initGitlabUrlAndTokenFields()
         initVerifyButton()
         initRemoteField()
         initRemotesTable()
 
     }
 
-    private fun initGitlabUrlField() {
-        val gitlabUrl = project.service<ProjectSettings>().gitlabUrl
-        gitlabUrlTextField?.text = gitlabUrl
-        if (gitlabUrl != null) {
-            gitlabTokenField?.text = AppSettings.instance?.getGitlabToken(gitlabUrl)
+    private fun initGitlabUrlAndTokenFields() {
+        val projectSettings = project.service<ProjectSettings>()
+        val gitlabUrl = projectSettings.gitlabUrl
+
+        gitlabUrlComboBox?.addItemListener {
+            if (it.stateChange == ItemEvent.SELECTED) {
+                val selectedGitlabUrl = it.item as String?
+                if (selectedGitlabUrl != null) {
+                    gitlabTokenField?.text = AppSettings.instance?.getGitlabToken(selectedGitlabUrl)
+                }
+            }
         }
+
+        gitlabUrlComboBox?.model = DefaultComboBoxModel(projectSettings.gitlabUrls.toTypedArray())
+        gitlabUrlComboBox?.selectedItem = gitlabUrl
     }
 
     private fun initRemoteField() {
         val gitlabRemote = project.service<ProjectSettings>().remote
         gitlabRemoteTextField?.text = gitlabRemote
-    }
-
-    private fun initResolveButton() {
-        resolveButton?.addActionListener {
-            runBackgroundableTask(message("settings.resolve.running")) {
-                verifyLabel?.icon = AllIcons.General.InlineRefreshHover
-                verifyLabel?.text = message("settings.resolve.running")
-                val gitlabUrl = project.service<GitlabDetector>().detect()
-                if (gitlabUrl == null) {
-                    verifyLabel?.icon = AllIcons.General.InspectionsError
-                    verifyLabel?.text = message("settings.resolve.invalid")
-                }
-                else {
-                    gitlabUrlTF = gitlabUrl.toString()
-                    gitlabTokenTF = AppSettings.instance?.getGitlabToken(gitlabUrl.toString())
-                    verifyLabel?.icon = AllIcons.General.InspectionsOK
-                    verifyLabel?.text = message("settings.resolve.valid")
-                }
-            }
-        }
     }
 
     private fun initVerifyButton() {
@@ -92,13 +81,13 @@ class SettingsForm(val project: Project) {
                     verifyLabel?.icon = AllIcons.General.InlineRefreshHover
                     verifyLabel?.text = message("settings.verify.running")
                     try {
-                        project.service<Gitlab>().getVersion(gitlabTokenTF!!).get()
+                        project.service<Gitlab>().getVersion(gitlabUrlTF!!, gitlabTokenTF!!).get()
                         verifyLabel?.icon = AllIcons.General.InspectionsOK
                         verifyLabel?.text = message("settings.verify.valid")
                     }
                     catch (e: Exception) {
                         verifyLabel?.icon = AllIcons.General.InspectionsError
-                        verifyLabel?.text = message("settings.verify.invalid")
+                        verifyLabel?.text = message("settings.verify.invalid", e.cause?.localizedMessage.orEmpty())
                     }
                 }
             }
@@ -141,10 +130,10 @@ class SettingsForm(val project: Project) {
 
     var gitlabUrlTF: String?
         get() {
-            return gitlabUrlTextField?.text
+            return gitlabUrlComboBox?.selectedItem as String?
         }
         set(newGitlabUrl) {
-            gitlabUrlTextField?.text = newGitlabUrl
+            gitlabUrlComboBox?.selectedItem = newGitlabUrl
         }
 
     var gitlabRemoteTF: String?
