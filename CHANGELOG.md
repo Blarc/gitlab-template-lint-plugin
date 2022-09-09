@@ -7,7 +7,8 @@
 - Open Settings and Refresh actions to actions group popup in widget.
 - Remote field to settings.
 - VcsMappingChangedListener for detecting repositories.
-- Combobox with Gitlab urls in settings.
+- ComboBox with Gitlab urls in settings.
+- Support for multiple Gitlab instances in one project.
 
 ### Changed
 - Refactor linting to pipeline with middlewares.

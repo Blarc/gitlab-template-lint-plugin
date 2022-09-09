@@ -4,10 +4,7 @@ import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.http.HttpClientFactory
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
-import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
-import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
@@ -17,33 +14,35 @@ import java.io.IOException
 import java.util.concurrent.CompletableFuture
 
 @Service
-open class Gitlab (project: Project) {
+open class Gitlab(val project: Project) {
     private val allowSelfSignedTls: Boolean = false
     private val httpClient: OkHttpClient
     private val json: Json
-    private val privateToken: String?
-    private val baseUrl: String
 
     init {
         val httpClientFactory: HttpClientFactory = HttpClientFactory.instance
         httpClient = if (allowSelfSignedTls) httpClientFactory.insecureHttpClient else httpClientFactory.httpClient
         json = Json { ignoreUnknownKeys = true }
-
-        baseUrl = project.service<ProjectSettings>().gitlabUrl!!
-        privateToken = AppSettings.instance?.getGitlabToken(baseUrl)
     }
 
-    private fun prepareRequest(urlSuffix: String, baseUrl: String = this.baseUrl, privateToken: String? = this.privateToken): Request.Builder {
+    private fun prepareRequest(
+        baseUrl: String,
+        gitlabToken: String,
+        urlSuffix: String
+    ): Request.Builder {
         return Request.Builder()
             .url("${baseUrl}${urlSuffix}")
-            .addHeader("Private-Token", privateToken!!)
+            .addHeader("Private-Token", gitlabToken)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun getVersion(baseUrl: String = this.baseUrl, privateToken: String? = this.privateToken): CompletableFuture<GitlabVersion> {
+    fun getVersion(
+        baseUrl: String,
+        gitlabToken: String
+    ): CompletableFuture<GitlabVersion> {
         val result: CompletableFuture<GitlabVersion> = CompletableFuture<GitlabVersion>()
 
-        val request: Request = prepareRequest("/version", baseUrl, privateToken)
+        val request: Request = prepareRequest(baseUrl, gitlabToken, "/version")
             .get()
             .build()
 
@@ -71,10 +70,14 @@ open class Gitlab (project: Project) {
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun searchProjectId(projectUrl: String, project: Project): CompletableFuture<Long?> {
+    fun searchProjectId(
+        baseUrl: String,
+        gitlabToken: String,
+        remoteUrl: String
+    ): CompletableFuture<Long?> {
 
-        val projectName = projectUrl.split("/").last()
-        val request: Request = prepareRequest("/projects?search=$projectName")
+        val projectName = remoteUrl.split("/").last()
+        val request: Request = prepareRequest(baseUrl, gitlabToken,"/projects?search=$projectName")
             .get()
             .build()
 
@@ -91,8 +94,15 @@ open class Gitlab (project: Project) {
                         if (it.isSuccessful) {
                             val responseString = it.body!!.string()
                             val gitlabProjects = json.decodeFromString<Array<GitlabProject>>(responseString)
-                            val gitlabProject = gitlabProjects.find { gitlabProject -> gitlabProject.webUrl.equals(projectUrl, true) }
-                            result.complete(gitlabProject?.id)
+                            val gitlabProject = gitlabProjects.find { gitlabProject -> gitlabProject.webUrl.equals(remoteUrl, true) }
+                            val gitlabProjectId = gitlabProject?.id
+
+                            if (gitlabProjectId == null) {
+                                sendNotification(Notification.remoteIdNotFound(project), project)
+                            }
+
+                            result.complete(gitlabProjectId)
+
                         }
                         else {
                             when(it.code) {
@@ -115,7 +125,14 @@ open class Gitlab (project: Project) {
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun lintContent(content: String, projectId: Long, branch: String, project: Project, showGitlabTokenNotification: Boolean): CompletableFuture<GitlabLintResponse?> {
+    fun lintContent(
+        baseUrl: String,
+        gitlabToken: String,
+        content: String,
+        remoteId: Long,
+        branch: String,
+        showGitlabTokenNotification: Boolean
+    ): CompletableFuture<GitlabLintResponse?> {
 
         val formBody = FormBody.Builder()
             .add("content", content)
@@ -123,7 +140,7 @@ open class Gitlab (project: Project) {
             .add("dry_run", "true")
             .build()
 
-        val request = prepareRequest("/projects/${projectId}/ci/lint")
+        val request = prepareRequest(baseUrl, gitlabToken,"/projects/${remoteId}/ci/lint")
             .header("Content-Type", "application/json")
             .post(formBody)
             .build()

@@ -25,7 +25,6 @@ class ResolveContext : Middleware {
         val remote = locateRemote(pass, repository) ?: return null
         val gitlabUrl = resolveGitlabUrl(pass) ?: return null
 
-
         pass.repository = repository
         pass.remote = remote
         pass.gitlabUrl = gitlabUrl
@@ -60,6 +59,6 @@ class ResolveContext : Middleware {
     }
 
     private fun resolveGitlabUrl(pass: Pass): String? {
-        return pass.project.service<ProjectSettings>().gitlabUrl ?: pass.project.service<GitlabDetector>().detect(pass.file.virtualFile)?.toString()
+        return pass.project.service<GitlabDetector>().detect(pass.file.virtualFile)?.toString()
     }
 }

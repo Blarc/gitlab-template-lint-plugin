@@ -9,13 +9,12 @@ import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.wm.impl.status.widget.StatusBarWidgetSettings
 import com.intellij.openapi.wm.impl.status.widget.StatusBarWidgetsManager
 import com.intellij.ui.EditorNotifications
-import org.jetbrains.kotlin.idea.util.application.getService
 
 @Service
 class FileListener : FileEditorManagerListener {
 
-    private val lintStatusWidgetFactory = ApplicationManager.getApplication().getService<LintStatusWidgetFactory>()
-    private val statusBarWidgetSettings = ApplicationManager.getApplication().getService<StatusBarWidgetSettings>()
+    private val lintStatusWidgetFactory = ApplicationManager.getApplication().getService(LintStatusWidgetFactory::class.java)
+    private val statusBarWidgetSettings = ApplicationManager.getApplication().getService(StatusBarWidgetSettings::class.java)
 
     var matches: Boolean = false
     override fun selectionChanged(event: FileEditorManagerEvent) {
@@ -31,7 +30,7 @@ class FileListener : FileEditorManagerListener {
         EditorNotifications.getInstance(project).updateAllNotifications()
 
         // Hide/show widget
-        val statusBarWidgetsManager = project.getService<StatusBarWidgetsManager>()
+        val statusBarWidgetsManager = project.getService(StatusBarWidgetsManager::class.java)
 
         if (lintStatusWidgetFactory != null) {
             statusBarWidgetSettings?.setEnabled(lintStatusWidgetFactory, matches)

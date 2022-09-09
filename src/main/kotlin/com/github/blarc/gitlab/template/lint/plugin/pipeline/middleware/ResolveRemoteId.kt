@@ -8,6 +8,7 @@ import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
+import com.intellij.openapi.project.Project
 import java.net.URI
 
 @Service
@@ -16,13 +17,15 @@ class ResolveRemoteId : Middleware {
 
     override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
         val remoteUrl = pass.remoteOrThrow().httpUrl ?: return null
+        val gitlabUrl = pass.gitlabUrlOrThrow()
+        val gitlabToken = pass.gitlabTokenOrThrow()
 
-        pass.remoteId = resolveRemoteId(pass, remoteUrl) ?: return Pair(null, LintStatusEnum.INVALID_ID)
+        pass.remoteId = resolveRemoteId(gitlabUrl, gitlabToken, remoteUrl, pass.project) ?: return Pair(null, LintStatusEnum.INVALID_ID)
 
         return next()
     }
 
-    private fun resolveRemoteId(pass: Pass, remoteUrl: URI): Long? {
+    private fun resolveRemoteId(gitlabUrl: String, gitlabToken: String, remoteUrl: URI, project: Project): Long? {
 
         val remotesMap = AppSettings.instance?.remotesMap
         val remoteUrlString = remoteUrl.toString()
@@ -31,8 +34,8 @@ class ResolveRemoteId : Middleware {
             remotesMap[remoteUrlString]
         }
         else {
-            val gitlab = pass.project.service<Gitlab>()
-            gitlab.searchProjectId(remoteUrlString, pass.project).get().let {
+            val gitlab = project.service<Gitlab>()
+            gitlab.searchProjectId(gitlabUrl, gitlabToken, remoteUrlString).get().let {
 
                 // Cache project's ID
                 if (remotesMap != null && !remotesMap.containsKey(remoteUrlString)) {
