@@ -1,30 +1,17 @@
 package com.github.blarc.gitlab.template.lint.plugin
 
-import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState
-import com.intellij.notification.NotificationGroupManager
-import com.intellij.notification.NotificationType
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
+import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 
-class GitlabLintUtils {
-    companion object{
-        fun createNotification(project: Project, message: String, type: NotificationType = NotificationType.ERROR) {
-            NotificationGroupManager.getInstance()
-                .getNotificationGroup("GitlabLint")
-                .createNotification("Gitlab Lint", message, type)
-                .notify(project)
+object GitlabLintUtils {
+    private fun getGitlabLintRegex(): Regex {
+        val appSettings = AppSettings.instance
+        if (appSettings?.gitlabLintRegexString != null) {
+            return Regex(appSettings.gitlabLintRegexString!!)
         }
+        return Regex(".*gitlab-ci\\.(yaml|yml)$")
+    }
 
-        fun getGitlabLintRegex(): Regex {
-            val appSettingsState = AppSettingsState.instance
-            if (appSettingsState?.gitlabLintRegexString != null) {
-                return Regex(appSettingsState.gitlabLintRegexString!!)
-            }
-            return Regex(".*gitlab-ci\\.(yaml|yml)$")
-        }
-
-        fun matchesGitlabLintRegex(text: String): Boolean {
-            return getGitlabLintRegex().matches(text)
-        }
+    fun matchesGitlabLintRegex(text: String): Boolean {
+        return getGitlabLintRegex().matches(text)
     }
 }

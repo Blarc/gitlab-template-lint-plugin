@@ -41,27 +41,44 @@
 
     <applicationListeners>
         <listener
-                class="com.github.blarc.gitlab.template.lint.plugin.listeners.GitlabLintFileEditorManagerListener"
+                class="com.github.blarc.gitlab.template.lint.plugin.listeners.FileListener"
                 topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"
         />
     </applicationListeners>
+
+    <projectListeners>
+        <listener class="com.github.blarc.gitlab.template.lint.plugin.listeners.VcsMappingChangedListener"
+                  topic="com.intellij.dvcs.repo.VcsRepositoryMappingListener"/>
+    </projectListeners>
+
+    <resource-bundle>messages.MyBundle</resource-bundle>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
 
+
         <applicationService
-                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"/>
+                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings"/>
 
         <projectService
-                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.gitlab.GitLabFactory"/>
+                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings"/>
+
+        <projectService
+                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab"/>
+
+<!--        <projectConfigurable-->
+<!--                parentId="tools"-->
+<!--                instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.ProjectSettingsConfigurable"-->
+<!--                id="GitlabLint.ProjectSettings"-->
+<!--        />-->
 
 
-        <applicationConfigurable
+        <projectConfigurable
                 parentId="tools"
-                instance="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsConfigurable"
-                id="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsConfigurable"
-                displayName="Gitlab Template Lint"/>
+                instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
+                id="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
+                key="settings.general.group.title"/>
 
         <localInspection
                 language="yaml"
@@ -69,25 +86,41 @@
                 groupBundle="messages.InspectionsBundle"
                 groupKey="group.names.probable.bugs"
                 enabledByDefault="true"
-                implementationClass="com.github.blarc.gitlab.template.lint.plugin.inspections.GitlabLintInspector"
+                implementationClass="com.github.blarc.gitlab.template.lint.plugin.inspections.GitlabLintInspection"
                 displayName="Linting"
                 shortName="GitlabLint"
                 runForWholeFile="true" />
 
-        <editorNotificationProvider implementation="com.github.blarc.gitlab.template.lint.plugin.inspections.GitlabLintNotificationProvider"/>
+        <editorNotificationProvider implementation="com.github.blarc.gitlab.template.lint.plugin.providers.LintNotificationProvider"/>
 
-        <postStartupActivity implementation="com.github.blarc.gitlab.template.lint.plugin.GitlabPostStartupActivity" />
+        <postStartupActivity implementation="com.github.blarc.gitlab.template.lint.plugin.listeners.ApplicationStartupListener" />
 
+        <notification.parentGroup id="gitlab.lint.notifications"/>
         <notificationGroup
+                id="gitlab.lint.notification.general"
                 displayType="BALLOON"
-                id="GitlabLint"
+                key="notification.group.general.name"
         />
+        <notificationGroup
+                id="gitlab.lint.notification.important"
+                displayType="STICKY_BALLOON"
+                key="notification.group.important.name"
+        />
+
 
         <statusBarWidgetFactory
                 id="lintStatusWidget"
-                implementation="com.github.blarc.gitlab.template.lint.plugin.widgets.LintStatusWidgetFactory"
+                implementation="com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidgetFactory"
                 order="first"
         />
 
     </extensions>
+
+    <actions>
+        <action
+                id="com.github.blarc.gitlab.template.lint.plugin.widget.actions.RefreshAction"
+                class="com.github.blarc.gitlab.template.lint.plugin.widget.actions.RefreshAction"
+                text="RefreshAction"
+        />
+    </actions>
 </idea-plugin>

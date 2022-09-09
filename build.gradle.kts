@@ -1,4 +1,3 @@
-import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
@@ -6,7 +5,7 @@ fun properties(key: String) = project.findProperty(key).toString()
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.20"
     id("org.jetbrains.intellij") version "1.5.2"
-    kotlin("plugin.serialization") version "1.4.21"
+    kotlin("plugin.serialization") version "1.6.21"
 
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
@@ -77,6 +76,10 @@ tasks {
     }
 }
 
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+}
+
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 }

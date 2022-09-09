@@ -17,7 +17,7 @@ class HttpClientFactory private constructor() {
             val sslSocketFactory = sslContext.socketFactory
             OkHttpClient.Builder()
                 .sslSocketFactory(sslSocketFactory, InsecureTrustManager.asList()[0] as X509TrustManager)
-                .hostnameVerifier { s, sslSession -> true }
+                .hostnameVerifier { _, _ -> true }
                 .build()
         } catch (e: NoSuchAlgorithmException) {
             throw HttpClientException("Cannot create insecure HTTP client: " + e.message, e)

@@ -1,6 +1,20 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Notifications on start up.
+- Error notifications.
+- Open Settings and Refresh actions to actions group popup in widget.
+- Remote field to settings.
+- VcsMappingChangedListener for detecting repositories.
+- ComboBox with Gitlab urls in settings.
+- Support for multiple Gitlab instances in one project.
+
+### Changed
+- Refactor linting to pipeline with middlewares.
+
+### Fixed
+- Gitlab token is now properly saved when changing remotes.
 
 ## [0.0.12]
 ### Added
