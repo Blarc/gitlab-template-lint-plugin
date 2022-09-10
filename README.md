@@ -53,3 +53,22 @@ For Mac: <kbd>IntelliJ IDEA</kbd> > <kbd>Preferences</kbd> > <kbd>Plugins</kbd> 
 ## Demo
 
 ![](./screenshots/plugin.gif)
+
+## Support
+
+* Star the repository
+* [Rate the plugin](https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint)
+* [Share the plugin](https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint)
+
+
+## Change log
+
+Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## License
+
+Please see [LICENSE](LICENSE) for details.
