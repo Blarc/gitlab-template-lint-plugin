@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.0.0]
 ### Added
 - Notifications on start up.
 - Error notifications.
