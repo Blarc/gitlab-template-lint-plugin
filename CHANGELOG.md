@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.0.1]
 ### Added
 - Force HTTPS setting that is set by default.
 
