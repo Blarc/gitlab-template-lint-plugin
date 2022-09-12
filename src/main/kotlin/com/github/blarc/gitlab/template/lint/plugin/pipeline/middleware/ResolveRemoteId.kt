@@ -1,6 +1,5 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
-import com.github.blarc.gitlab.template.lint.plugin.git.httpUrl
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
@@ -9,14 +8,13 @@ import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import java.net.URI
 
 @Service
 class ResolveRemoteId : Middleware {
     override val priority = 30
 
     override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
-        val remoteUrl = pass.remoteOrThrow().httpUrl ?: return null
+        val remoteUrl = pass.remoteOrThrow()
         val gitlabUrl = pass.gitlabUrlOrThrow()
         val gitlabToken = pass.gitlabTokenOrThrow()
 
@@ -25,7 +23,7 @@ class ResolveRemoteId : Middleware {
         return next()
     }
 
-    private fun resolveRemoteId(gitlabUrl: String, gitlabToken: String, remoteUrl: URI, project: Project): Long? {
+    private fun resolveRemoteId(gitlabUrl: String, gitlabToken: String, remoteUrl: String, project: Project): Long? {
 
         val remotesMap = AppSettings.instance?.remotesMap
         val remoteUrlString = remoteUrl.toString()

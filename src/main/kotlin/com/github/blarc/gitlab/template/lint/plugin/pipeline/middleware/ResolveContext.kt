@@ -1,8 +1,10 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
+import com.github.blarc.gitlab.template.lint.plugin.git.gitlabUrl
+import com.github.blarc.gitlab.template.lint.plugin.git.httpUrl
 import com.github.blarc.gitlab.template.lint.plugin.git.locateRemote
-import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabDetector
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.http.toHttps
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
@@ -23,11 +25,19 @@ class ResolveContext : Middleware {
     override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
         val repository = locateRepository(pass) ?: return null
         val remote = locateRemote(pass, repository) ?: return null
-        val gitlabUrl = resolveGitlabUrl(pass) ?: return null
 
         pass.repository = repository
-        pass.remote = remote
-        pass.gitlabUrl = gitlabUrl
+
+        val settings = pass.project.service<ProjectSettings>()
+        if (settings.forceHttps) {
+            pass.remoteUrl = remote.httpUrl?.toHttps().toString()
+            pass.gitlabUrl = remote.gitlabUrl?.toHttps().toString()
+        }
+        else {
+            pass.remoteUrl = remote.httpUrl?.toString()
+            pass.gitlabUrl = remote.gitlabUrl?.toString()
+        }
+
 
         return next()
     }
@@ -56,9 +66,5 @@ class ResolveContext : Middleware {
         }
 
         return remote
-    }
-
-    private fun resolveGitlabUrl(pass: Pass): String? {
-        return pass.project.service<GitlabDetector>().detect(pass.file.virtualFile)?.toString()
     }
 }

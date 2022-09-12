@@ -21,6 +21,7 @@ import java.awt.event.ItemEvent
 import java.awt.event.MouseEvent
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JButton
+import javax.swing.JCheckBox
 import javax.swing.JComboBox
 import javax.swing.JComponent
 import javax.swing.JPanel
@@ -34,6 +35,7 @@ class SettingsForm(val project: Project) {
     private var reportBugLink: BrowserLink? = null
     private var verifyButton: JButton? = null
     private var verifyLabel: JBLabel? = null
+    private var forceHttpsCheckBox: JCheckBox? = null
 
     private var remotesList = mutableListOf<Pair<String, Long?>>()
     private val tableModel = RemotesTableModel(remotesList)
@@ -45,6 +47,7 @@ class SettingsForm(val project: Project) {
         initVerifyButton()
         initRemoteField()
         initRemotesTable()
+        initForceHttpsCheckBox()
 
     }
 
@@ -62,7 +65,7 @@ class SettingsForm(val project: Project) {
         }
 
         gitlabUrlComboBox?.model = DefaultComboBoxModel(projectSettings.gitlabUrls.toTypedArray())
-        gitlabUrlComboBox?.selectedItem = gitlabUrl
+        gitlabUrlCB = gitlabUrl
     }
 
     private fun initRemoteField() {
@@ -73,7 +76,7 @@ class SettingsForm(val project: Project) {
     private fun initVerifyButton() {
         verifyButton?.addActionListener {
             runBackgroundableTask(message("settings.verify.running")) {
-                if (gitlabUrlTF.isNullOrEmpty()) {
+                if (gitlabUrlCB.isNullOrEmpty()) {
                     verifyLabel?.icon = AllIcons.General.InspectionsError
                     verifyLabel?.text = message("settings.verify.gitlab-url-not-set")
                 }
@@ -81,7 +84,7 @@ class SettingsForm(val project: Project) {
                     verifyLabel?.icon = AllIcons.General.InlineRefreshHover
                     verifyLabel?.text = message("settings.verify.running")
                     try {
-                        project.service<Gitlab>().getVersion(gitlabUrlTF!!, gitlabTokenTF!!).get()
+                        project.service<Gitlab>().getVersion(gitlabUrlCB!!, gitlabTokenTF!!).get()
                         verifyLabel?.icon = AllIcons.General.InspectionsOK
                         verifyLabel?.text = message("settings.verify.valid")
                     }
@@ -111,6 +114,17 @@ class SettingsForm(val project: Project) {
         }.installOn(gitlabRemotesTable)
     }
 
+    private fun initForceHttpsCheckBox() {
+        val projectSettings = project.service<ProjectSettings>()
+        forceHttpsCheckBox?.addItemListener {
+            when (it.stateChange) {
+                ItemEvent.SELECTED -> projectSettings.forceHttps = true
+                ItemEvent.DESELECTED -> projectSettings.forceHttps = false
+            }
+        }
+        forceHttpsCB = projectSettings.forceHttps
+    }
+
     fun createUIComponents() {
         reportBugLink = BrowserLink(message("actions.report-bug.title"), GitlabLintBundle.URL_BUG_REPORT.toString())
     }
@@ -128,7 +142,7 @@ class SettingsForm(val project: Project) {
             gitlabTokenField?.text = newGitlabToken
         }
 
-    var gitlabUrlTF: String?
+    var gitlabUrlCB: String?
         get() {
             return gitlabUrlComboBox?.selectedItem as String?
         }
@@ -143,6 +157,13 @@ class SettingsForm(val project: Project) {
         set(newRemote) {
             gitlabRemoteTextField?.text = newRemote
         }
-}
 
+    var forceHttpsCB: Boolean
+        get() {
+            return forceHttpsCheckBox?.isSelected?: false
+        }
+        set(selected) {
+            forceHttpsCheckBox?.isSelected = selected
+        }
+}
 

@@ -34,13 +34,14 @@ class SettingsConfigurable(val project: Project) : Configurable {
     override fun isModified(): Boolean {
         val settings = AppSettings.instance
         val projectSettings = project.service<ProjectSettings>()
-        val gitlabUrl = settingsForm?.gitlabUrlTF
+        val gitlabUrl = settingsForm?.gitlabUrlCB
 
         if (settings != null && gitlabUrl != null) {
             return !settingsForm!!.gitlabTokenTF.contentEquals(settings.getGitlabToken(gitlabUrl)) ||
                     settingsForm!!.gitlabRemotesTable.isModified(settings) ||
-                    !settingsForm!!.gitlabUrlTF.contentEquals(projectSettings.gitlabUrl) ||
-                    !settingsForm!!.gitlabRemoteTF.contentEquals(projectSettings.remote)
+                    !settingsForm!!.gitlabUrlCB.contentEquals(projectSettings.gitlabUrl) ||
+                    !settingsForm!!.gitlabRemoteTF.contentEquals(projectSettings.remote) ||
+                    settingsForm!!.forceHttpsCB != projectSettings.forceHttps
         }
         return false
     }
@@ -48,13 +49,14 @@ class SettingsConfigurable(val project: Project) : Configurable {
     override fun apply() {
         val settings = AppSettings.instance
         val projectSettings = project.service<ProjectSettings>()
-        val gitlabUrl = settingsForm?.gitlabUrlTF
+        val gitlabUrl = settingsForm?.gitlabUrlCB
 
         if (settings != null && gitlabUrl != null) {
             settings.saveGitlabToken(settingsForm!!.gitlabTokenTF!!, gitlabUrl)
             settingsForm!!.gitlabRemotesTable.commit(settings)
             projectSettings.gitlabUrl = gitlabUrl
             projectSettings.remote = settingsForm!!.gitlabRemoteTF!!
+            projectSettings.forceHttps = settingsForm!!.forceHttpsCB
         }
     }
 
@@ -66,8 +68,9 @@ class SettingsConfigurable(val project: Project) : Configurable {
         if (settings != null && gitlabUrl != null) {
             settingsForm!!.gitlabTokenTF = settings.getGitlabToken(gitlabUrl)
             settingsForm!!.gitlabRemotesTable.tableModel.remotesList = settings.remotesMap.toList().toMutableList()
-            settingsForm!!.gitlabUrlTF = gitlabUrl
+            settingsForm!!.gitlabUrlCB = gitlabUrl
             settingsForm!!.gitlabRemoteTF = projectSettings.remote
+            settingsForm!!.forceHttpsCB = projectSettings.forceHttps
         }
     }
 
