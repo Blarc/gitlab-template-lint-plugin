@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Button in settings for creating Gitlab private token.
 
 ## [1.0.1]
 ### Added

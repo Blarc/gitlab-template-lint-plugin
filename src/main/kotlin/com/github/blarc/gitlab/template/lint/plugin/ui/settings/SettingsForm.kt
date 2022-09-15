@@ -17,8 +17,10 @@ import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import org.jetbrains.annotations.NotNull
 import java.awt.BorderLayout
+import java.awt.Desktop
 import java.awt.event.ItemEvent
 import java.awt.event.MouseEvent
+import java.net.URI
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JButton
 import javax.swing.JCheckBox
@@ -34,6 +36,7 @@ class SettingsForm(val project: Project) {
     private var remotesTablePanel: JPanel? = null
     private var reportBugLink: BrowserLink? = null
     private var verifyButton: JButton? = null
+    private var createButton: JButton? = null
     private var verifyLabel: JBLabel? = null
     private var forceHttpsCheckBox: JCheckBox? = null
 
@@ -45,6 +48,7 @@ class SettingsForm(val project: Project) {
 
         initGitlabUrlAndTokenFields()
         initVerifyButton()
+        initCreateButton()
         initRemoteField()
         initRemotesTable()
         initForceHttpsCheckBox()
@@ -93,6 +97,16 @@ class SettingsForm(val project: Project) {
                         verifyLabel?.text = message("settings.verify.invalid", e.cause?.localizedMessage.orEmpty())
                     }
                 }
+            }
+        }
+    }
+
+    private fun initCreateButton() {
+        createButton?.addActionListener {
+            val gitlabUrlText = gitlabUrlCB
+            if (gitlabUrlText != null) {
+                val gitlabUrl = URI.create(gitlabUrlText)
+                Desktop.getDesktop().browse(URI.create("${gitlabUrl.scheme}://${gitlabUrl.host}/-/profile/personal_access_tokens?name=Gitlab+Lint+Plugin&scopes=api,read_api"))
             }
         }
     }
