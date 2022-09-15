@@ -30,7 +30,7 @@ class RemotesTable(val tableModel: RemotesTableModel) : JBTable() {
     }
 
     fun commit(settings: AppSettings) {
-        settings.remotesMap = tableModel.remotesList.associateBy { it.remoteUrl }.toMutableMap()
+        settings.remotes = tableModel.remotesList.associateBy { it.remoteUrl }.toMutableMap()
     }
     fun addRemote() {
         val remoteEditor = RemoteEditor("Add remote", null)
@@ -58,6 +58,6 @@ class RemotesTable(val tableModel: RemotesTableModel) : JBTable() {
     }
 
     fun isModified(settings: AppSettings): Boolean {
-        return tableModel.remotesList != settings.remotesMap.toList()
+        return tableModel.remotesList != settings.remotes.toList()
     }
 }

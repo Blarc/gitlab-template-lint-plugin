@@ -25,7 +25,7 @@ class ResolveRemoteId : Middleware {
 
     private fun resolveRemoteId(gitlabUrl: String, gitlabToken: String, remoteUrl: String, project: Project): Long? {
 
-        val remotesMap = AppSettings.instance?.remotesMap
+        val remotesMap = AppSettings.instance?.remotes
 
         return if (remotesMap != null && remotesMap.containsKey(remoteUrl) && remotesMap[remoteUrl]?.remoteId != null) {
             remotesMap[remoteUrl]!!.remoteId

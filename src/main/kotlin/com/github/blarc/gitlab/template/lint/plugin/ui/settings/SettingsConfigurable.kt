@@ -67,7 +67,7 @@ class SettingsConfigurable(val project: Project) : Configurable {
 
         if (settings != null && gitlabUrl != null) {
             settingsForm!!.gitlabTokenTF = settings.getGitlabToken(gitlabUrl)
-            settingsForm!!.gitlabRemotesTable.tableModel.remotesList = settings.remotesMap.values.toMutableList()
+            settingsForm!!.gitlabRemotesTable.tableModel.remotesList = settings.remotes.values.toMutableList()
             settingsForm!!.gitlabUrlCB = gitlabUrl
             settingsForm!!.gitlabRemoteTF = projectSettings.remote
             settingsForm!!.forceHttpsCB = projectSettings.forceHttps

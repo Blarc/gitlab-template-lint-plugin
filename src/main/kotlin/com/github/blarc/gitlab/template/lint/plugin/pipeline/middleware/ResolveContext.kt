@@ -32,7 +32,7 @@ class ResolveContext : Middleware {
         pass.repository = repository
 
         val settings = pass.project.service<ProjectSettings>()
-        val remotesMap = AppSettings.instance?.remotesMap
+        val remotesMap = AppSettings.instance?.remotes
         if (settings.forceHttps) {
             pass.remoteUrl = remote.httpUrl?.toHttps().toString()
 

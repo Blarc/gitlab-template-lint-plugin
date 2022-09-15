@@ -33,15 +33,18 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var lastVersion: String? = null
     var hits = 0
     var requestSupport = true
-    var remotesMap: MutableMap<String, Remote> = mutableMapOf()
+    var remotes: MutableMap<String, Remote> = mutableMapOf()
+
     fun saveGitlabToken(token: String, gitlabUrl: String) {
         PasswordSafe.instance.setPassword(getCredentialAttributes(gitlabUrl), token)
     }
+
     fun getGitlabToken(gitlabUrl: String): String? {
         val credentialAttributes = getCredentialAttributes(gitlabUrl)
         val credentials: Credentials = PasswordSafe.instance.get(credentialAttributes) ?: return null
         return credentials.getPasswordAsString()
     }
+
     private fun getCredentialAttributes(title: String): CredentialAttributes {
         return CredentialAttributes(
             title,
