@@ -8,7 +8,9 @@ import com.github.blarc.gitlab.template.lint.plugin.gitlab.http.toHttps
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
+import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
+import com.github.blarc.gitlab.template.lint.plugin.ui.settings.Remote
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -23,21 +25,35 @@ class ResolveContext : Middleware {
     private var showRemoteNotification = true
 
     override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
+
         val repository = locateRepository(pass) ?: return null
         val remote = locateRemote(pass, repository) ?: return null
 
         pass.repository = repository
 
         val settings = pass.project.service<ProjectSettings>()
+        val remotesMap = AppSettings.instance?.remotesMap
         if (settings.forceHttps) {
             pass.remoteUrl = remote.httpUrl?.toHttps().toString()
-            pass.gitlabUrl = remote.gitlabUrl?.toHttps().toString()
+
+            if (remotesMap?.containsKey(pass.remoteUrl) == true) {
+                pass.gitlabUrl = remotesMap[pass.remoteUrl]?.gitlabUrl
+            }
+            else {
+                pass.gitlabUrl = remote.gitlabUrl?.toHttps().toString()
+                remotesMap?.set(pass.remoteUrl!!, Remote(pass.remoteUrl!!, pass.gitlabUrl, null))
+            }
         }
         else {
             pass.remoteUrl = remote.httpUrl?.toString()
-            pass.gitlabUrl = remote.gitlabUrl?.toString()
+            if (remotesMap?.containsKey(pass.remoteUrl) == true) {
+                pass.gitlabUrl = remotesMap[pass.remoteUrl]?.gitlabUrl
+            }
+            else {
+                pass.gitlabUrl = remote.gitlabUrl?.toString()
+                remotesMap?.set(pass.remoteUrl!!, Remote(pass.remoteUrl!!, pass.gitlabUrl, null))
+            }
         }
-
 
         return next()
     }

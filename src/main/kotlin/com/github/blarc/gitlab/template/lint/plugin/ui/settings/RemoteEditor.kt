@@ -5,16 +5,18 @@ import com.intellij.ui.components.JBTextField
 import javax.swing.JComponent
 import javax.swing.JPanel
 
-class RemoteEditor(title: String, remoteUrl: String?, remoteId: Long?) : DialogWrapper(true)
+class RemoteEditor(title: String, remote: Remote?) : DialogWrapper(true)
 {
     var basePanel: JPanel? = null
-    private var urlTextField: JBTextField? = null
-    private var idTextField: JBTextField? = null
+    private var remoteUrlTextField: JBTextField? = null
+    private var gitlabUrlTextField: JBTextField? = null
+    private var remoteIdTextField: JBTextField? = null
 
     init {
         this.title = title
-        urlTextField?.text = remoteUrl
-        idTextField?.text = remoteId?.toString()
+        remoteUrlTextField?.text = remote?.remoteUrl
+        gitlabUrlTextField?.text = remote?.gitlabUrl
+        remoteIdTextField?.text = remote?.remoteId?.toString()
         init()
     }
 
@@ -23,11 +25,15 @@ class RemoteEditor(title: String, remoteUrl: String?, remoteId: Long?) : DialogW
     }
 
     fun getRemoteUrl(): String? {
-        return urlTextField?.text
+        return remoteUrlTextField?.text
+    }
+
+    fun getGitlabUrl(): String? {
+        return gitlabUrlTextField?.text
     }
 
     fun getRemoteId(): Long? {
-        return idTextField?.text?.toLong()
+        return remoteIdTextField?.text?.toLong()
     }
 
 }

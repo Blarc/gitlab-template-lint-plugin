@@ -3,6 +3,8 @@
 ## [Unreleased]
 ### Added
 - Button in settings for creating Gitlab private token.
+- Gitlab API URL is now cached for each repository.
+- Gitlab API URL can be edited in remotes table.
 
 ## [1.0.1]
 ### Added

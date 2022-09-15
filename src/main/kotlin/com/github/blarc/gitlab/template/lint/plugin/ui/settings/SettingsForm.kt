@@ -40,9 +40,7 @@ class SettingsForm(val project: Project) {
     private var verifyLabel: JBLabel? = null
     private var forceHttpsCheckBox: JCheckBox? = null
 
-    private var remotesList = mutableListOf<Pair<String, Long?>>()
-    private val tableModel = RemotesTableModel(remotesList)
-    val gitlabRemotesTable = RemotesTable(tableModel)
+    val gitlabRemotesTable = RemotesTable(RemotesTableModel())
 
     init {
 
@@ -63,7 +61,7 @@ class SettingsForm(val project: Project) {
             if (it.stateChange == ItemEvent.SELECTED) {
                 val selectedGitlabUrl = it.item as String?
                 if (selectedGitlabUrl != null) {
-                    gitlabTokenField?.text = AppSettings.instance?.getGitlabToken(selectedGitlabUrl)
+                    gitlabTokenTF = AppSettings.instance?.getGitlabToken(selectedGitlabUrl)
                 }
             }
         }

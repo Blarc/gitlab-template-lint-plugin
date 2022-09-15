@@ -2,16 +2,13 @@ package com.github.blarc.gitlab.template.lint.plugin.ui.settings
 
 import javax.swing.table.AbstractTableModel
 
-class RemotesTableModel(var remotesList: MutableList<Pair<String, Long?>>): AbstractTableModel() {
+class RemotesTableModel(): AbstractTableModel() {
+    var remotesList: MutableList<Remote> = mutableListOf()
 
     private val columnNames = arrayOf(
         "remoteUrl",
+        "gitlabUrl",
         "gitlabProjectId"
-    )
-
-    private val columnClasses = arrayOf(
-        String::class.java,
-        Long::class.java
     )
 
     override fun getRowCount() = remotesList.size
@@ -21,10 +18,13 @@ class RemotesTableModel(var remotesList: MutableList<Pair<String, Long?>>): Abst
     override fun getValueAt(row: Int, column: Int): Any? {
         return when(column) {
             0 -> {
-                remotesList[row].first
+                remotesList[row].remoteUrl
             }
             1 -> {
-                remotesList[row].second
+                remotesList[row].gitlabUrl
+            }
+            2 -> {
+                remotesList[row].remoteId
             }
             else -> throw IllegalArgumentException("Unknown column name: $column")
         }
@@ -32,7 +32,8 @@ class RemotesTableModel(var remotesList: MutableList<Pair<String, Long?>>): Abst
     override fun getColumnName(columnIndex: Int): String {
         when (columnIndex) {
             0 -> return "Remote URL"
-            1 -> return "Remote ID"
+            1 -> return "Gitlab URL"
+            2 -> return "Remote ID"
         }
         return "Unknown column"
     }

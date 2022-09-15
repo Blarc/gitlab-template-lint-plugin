@@ -1,5 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.settings
 
+import com.github.blarc.gitlab.template.lint.plugin.ui.settings.Remote
 import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.Credentials
 import com.intellij.ide.passwordSafe.PasswordSafe
@@ -32,7 +33,7 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var lastVersion: String? = null
     var hits = 0
     var requestSupport = true
-    var remotesMap: MutableMap<String, Long?> = mutableMapOf()
+    var remotesMap: MutableMap<String, Remote> = mutableMapOf()
     fun saveGitlabToken(token: String, gitlabUrl: String) {
         PasswordSafe.instance.setPassword(getCredentialAttributes(gitlabUrl), token)
     }

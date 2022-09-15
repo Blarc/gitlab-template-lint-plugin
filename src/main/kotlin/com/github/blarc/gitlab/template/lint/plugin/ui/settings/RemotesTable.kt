@@ -30,12 +30,13 @@ class RemotesTable(val tableModel: RemotesTableModel) : JBTable() {
     }
 
     fun commit(settings: AppSettings) {
-        settings.remotesMap = tableModel.remotesList.toMap().toMutableMap()
+        settings.remotesMap = tableModel.remotesList.associateBy { it.remoteUrl }.toMutableMap()
     }
     fun addRemote() {
-        val remoteEditor = RemoteEditor("Add remote", null, null)
+        val remoteEditor = RemoteEditor("Add remote", null)
         if (remoteEditor.showAndGet()) {
-            tableModel.remotesList.add(Pair(remoteEditor.getRemoteUrl()!!, remoteEditor.getRemoteId()!!))
+            // TODO @Blarc: Input validation.
+            tableModel.remotesList.add(Remote(remoteEditor.getRemoteUrl()!!, remoteEditor.getGitlabUrl(), remoteEditor.getRemoteId()))
             tableModel.fireTableDataChanged()
         }
     }
@@ -46,9 +47,10 @@ class RemotesTable(val tableModel: RemotesTableModel) : JBTable() {
         }
 
         val selectedRemote = tableModel.remotesList[selectedRow]
-        val remoteEditor = RemoteEditor("Edit remote", selectedRemote.first, selectedRemote.second)
+        val remoteEditor = RemoteEditor("Edit remote", selectedRemote)
         if (remoteEditor.showAndGet()) {
-            tableModel.remotesList[selectedRow] = Pair(remoteEditor.getRemoteUrl()!!, remoteEditor.getRemoteId()!!)
+            // TODO @Blarc: Input validation.
+            tableModel.remotesList[selectedRow] = Remote(remoteEditor.getRemoteUrl()!!, remoteEditor.getGitlabUrl(), remoteEditor.getRemoteId())
             tableModel.fireTableDataChanged()
         }
 
