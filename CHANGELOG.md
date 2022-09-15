@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.1.0]
 ### Added
 - Button in settings for creating Gitlab private token.
 - Gitlab API URL is now cached for each repository.
