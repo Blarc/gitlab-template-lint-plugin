@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Field titles in remote editor.
+- Change Gitlab Lint to Gitlab Template Lint where applicable.
 
 ## [1.1.0]
 ### Added

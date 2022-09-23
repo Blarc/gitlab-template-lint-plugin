@@ -38,7 +38,7 @@ data class Notification(
 
         fun star() = Notification(
             message = """
-                Finding Gitlab Lint useful? Show your support 💖 and ⭐ the repository 🙏.
+                Finding Gitlab Template Lint useful? Show your support 💖 and ⭐ the repository 🙏.
             """.trimIndent(),
             actions = setOf(
                 NotificationAction.openRepository() {
