@@ -3,6 +3,7 @@ package com.github.blarc.gitlab.template.lint.plugin.ui.settings
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
+import com.github.blarc.gitlab.template.lint.plugin.ui.settings.gitlabUrlToken.GitlabUrlToken
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.project.Project
@@ -20,10 +21,6 @@ class SettingsConfigurable(val project: Project) : Configurable {
         return message("settings.general.group.title")
     }
 
-    override fun getPreferredFocusedComponent(): JComponent {
-        return settingsForm!!.preferredFocusedComponent!!
-    }
-
     @Nullable
     override fun createComponent(): JComponent {
         settingsForm = SettingsForm(project)
@@ -32,14 +29,12 @@ class SettingsConfigurable(val project: Project) : Configurable {
 
 
     override fun isModified(): Boolean {
-        val settings = AppSettings.instance
+        val appSettings = AppSettings.instance
         val projectSettings = project.service<ProjectSettings>()
-        val gitlabUrl = settingsForm?.gitlabUrlCB
 
-        if (settings != null && gitlabUrl != null) {
-            return !settingsForm!!.gitlabTokenTF.contentEquals(settings.getGitlabToken(gitlabUrl)) ||
-                    settingsForm!!.gitlabRemotesTable.isModified(settings) ||
-                    !settingsForm!!.gitlabUrlCB.contentEquals(projectSettings.gitlabUrl) ||
+        if (appSettings != null) {
+            return settingsForm!!.gitlabRemotesTable.isModified(appSettings) ||
+                    settingsForm!!.gitlabUrlTokenTable.isModified(projectSettings) ||
                     !settingsForm!!.gitlabRemoteTF.contentEquals(projectSettings.remote) ||
                     settingsForm!!.forceHttpsCB != projectSettings.forceHttps
         }
@@ -47,28 +42,26 @@ class SettingsConfigurable(val project: Project) : Configurable {
     }
 
     override fun apply() {
-        val settings = AppSettings.instance
+        val appSettings = AppSettings.instance
         val projectSettings = project.service<ProjectSettings>()
-        val gitlabUrl = settingsForm?.gitlabUrlCB
 
-        if (settings != null && gitlabUrl != null) {
-            settings.saveGitlabToken(settingsForm!!.gitlabTokenTF!!, gitlabUrl)
-            settingsForm!!.gitlabRemotesTable.commit(settings)
-            projectSettings.gitlabUrl = gitlabUrl
+        if (appSettings != null) {
+            settingsForm!!.gitlabRemotesTable.commit(appSettings)
+            settingsForm!!.gitlabUrlTokenTable.commit(appSettings)
             projectSettings.remote = settingsForm!!.gitlabRemoteTF!!
             projectSettings.forceHttps = settingsForm!!.forceHttpsCB
         }
     }
 
     override fun reset() {
-        val settings = AppSettings.instance
+        val appSettings = AppSettings.instance
         val projectSettings = project.service<ProjectSettings>()
         val gitlabUrl = projectSettings.gitlabUrl
 
-        if (settings != null && gitlabUrl != null) {
-            settingsForm!!.gitlabTokenTF = settings.getGitlabToken(gitlabUrl)
-            settingsForm!!.gitlabRemotesTable.tableModel.remotesList = settings.remotes.values.toMutableList()
-            settingsForm!!.gitlabUrlCB = gitlabUrl
+        if (appSettings != null && gitlabUrl != null) {
+            settingsForm!!.gitlabRemotesTable.tableModel.remotesList = appSettings.remotes.values.toMutableList()
+            settingsForm!!.gitlabUrlTokenTable.tableModel.gitlabUrlTokenList = projectSettings.gitlabUrls
+                .map { GitlabUrlToken(it, appSettings.getGitlabToken(it)) }.toMutableList()
             settingsForm!!.gitlabRemoteTF = projectSettings.remote
             settingsForm!!.forceHttpsCB = projectSettings.forceHttps
         }
