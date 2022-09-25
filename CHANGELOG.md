@@ -3,6 +3,8 @@
 ## [Unreleased]
 ### Added
 - More context to error notifications.
+- Separate Gitlab url and token table.
+  - Enables edit of gitlab urls and token used for authentication.
 
 ### Fixed
 - Do not duplicate notifications on start up.

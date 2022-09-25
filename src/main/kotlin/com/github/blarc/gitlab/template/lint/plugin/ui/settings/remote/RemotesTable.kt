@@ -1,11 +1,12 @@
-package com.github.blarc.gitlab.template.lint.plugin.ui.settings
+package com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote
 
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
+import com.intellij.openapi.project.Project
 import com.intellij.ui.table.JBTable
 import javax.swing.ListSelectionModel
 
-class RemotesTable(val tableModel: RemotesTableModel) : JBTable() {
-
+class RemotesTable(val project: Project, val tableModel: RemotesTableModel) : JBTable()
+{
     init {
         model = tableModel
         columnSelectionAllowed = false
@@ -33,7 +34,7 @@ class RemotesTable(val tableModel: RemotesTableModel) : JBTable() {
         settings.remotes = tableModel.remotesList.associateBy { it.remoteUrl }.toMutableMap()
     }
     fun addRemote() {
-        val remoteEditor = RemoteEditor("Add remote", null)
+        val remoteEditor = RemoteEditor(project, "Add remote", null)
         if (remoteEditor.showAndGet()) {
             // TODO @Blarc: Input validation.
             tableModel.remotesList.add(Remote(remoteEditor.getRemoteUrl()!!, remoteEditor.getGitlabUrl(), remoteEditor.getRemoteId()))
@@ -47,7 +48,7 @@ class RemotesTable(val tableModel: RemotesTableModel) : JBTable() {
         }
 
         val selectedRemote = tableModel.remotesList[selectedRow]
-        val remoteEditor = RemoteEditor("Edit remote", selectedRemote)
+        val remoteEditor = RemoteEditor(project, "Edit remote", selectedRemote)
         if (remoteEditor.showAndGet()) {
             // TODO @Blarc: Input validation.
             tableModel.remotesList[selectedRow] = Remote(remoteEditor.getRemoteUrl()!!, remoteEditor.getGitlabUrl(), remoteEditor.getRemoteId())
@@ -57,7 +58,7 @@ class RemotesTable(val tableModel: RemotesTableModel) : JBTable() {
         return true
     }
 
-    fun isModified(settings: AppSettings): Boolean {
-        return tableModel.remotesList != settings.remotes.toList()
+    fun isModified(appSettings: AppSettings): Boolean {
+        return tableModel.remotesList != appSettings.remotes.toList()
     }
 }
