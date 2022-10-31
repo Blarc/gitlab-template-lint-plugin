@@ -6,6 +6,7 @@
 
 ### Fixed
 - Do not duplicate notifications on start up.
+- NumberFormatException when remote id is empty string.
 
 ## [1.1.1]
 ### Fixed

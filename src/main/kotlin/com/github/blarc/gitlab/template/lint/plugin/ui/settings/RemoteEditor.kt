@@ -33,7 +33,7 @@ class RemoteEditor(title: String, remote: Remote?) : DialogWrapper(true)
     }
 
     fun getRemoteId(): Long? {
-        return remoteIdTextField?.text?.toLong()
+        return remoteIdTextField?.text?.ifEmpty { null }?.toLong()
     }
 
 }
