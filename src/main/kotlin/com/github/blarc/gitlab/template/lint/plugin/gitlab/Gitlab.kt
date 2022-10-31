@@ -163,19 +163,23 @@ open class Gitlab(val project: Project) {
                             result.complete(decodeFromString)
                         }
                         else {
-                            when(it.code) {
-                                401 -> {
-                                    if (showGitlabTokenNotification) {
-                                        sendNotification(Notification.unauthorizedRequest(project), project)
-                                    }
-                                    result.complete(null)
+                            if (it.code == 401) {
+                                if (showGitlabTokenNotification) {
+                                    sendNotification(Notification.unauthorizedRequest(project), project)
                                 }
-                                else -> {
-                                    if (showGitlabTokenNotification) {
-                                        sendNotification(Notification.unsuccessfulRequest(it.message.ifEmpty { message("notifications.unknown-error") }))
-                                    }
-                                    result.complete(null)
+                                result.complete(null)
+                            }
+                            else if (it.code >= 500) {
+                                if (showGitlabTokenNotification) {
+                                    sendNotification(Notification.unsuccessfulRequest(message("notifications.internal-server-error", it.code)))
                                 }
+                                result.complete(null)
+                            }
+                            else {
+                                if (showGitlabTokenNotification) {
+                                    sendNotification(Notification.unsuccessfulRequest(it.message.ifEmpty { message("notifications.unknown-error", it.code) }))
+                                }
+                                result.complete(null)
                             }
                         }
                     }

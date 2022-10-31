@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- More context to error notifications.
+
 ### Fixed
 - Do not duplicate notifications on start up.
 
