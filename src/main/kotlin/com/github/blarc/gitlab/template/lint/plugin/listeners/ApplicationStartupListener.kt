@@ -9,6 +9,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupActivity
 
 class ApplicationStartupListener: StartupActivity.DumbAware {
+
+    private var firstTime = true
     override fun runActivity(project: Project) {
         showVersionNotification(project)
     }
@@ -22,6 +24,10 @@ class ApplicationStartupListener: StartupActivity.DumbAware {
         }
 
         settings.lastVersion = version
-        sendNotification(Notification.welcome(version ?: "Unknown"), project)
+
+        if (firstTime) {
+            sendNotification(Notification.welcome(version ?: "Unknown"), project)
+        }
+        firstTime = false
     }
 }

@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Do not duplicate notifications on start up.
 
 ## [1.1.1]
 ### Fixed
