@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Notification section is now openable and shows notification settings correctly.
 
 ## [1.2.1]
 ### Added

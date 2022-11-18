@@ -95,7 +95,6 @@
 
         <postStartupActivity implementation="com.github.blarc.gitlab.template.lint.plugin.listeners.ApplicationStartupListener" />
 
-        <notification.parentGroup id="gitlab.lint.notifications"/>
         <notificationGroup
                 id="gitlab.lint.notification.general"
                 displayType="BALLOON"
