@@ -49,6 +49,9 @@
     <projectListeners>
         <listener class="com.github.blarc.gitlab.template.lint.plugin.listeners.VcsMappingChangedListener"
                   topic="com.intellij.dvcs.repo.VcsRepositoryMappingListener"/>
+        
+        <listener class="com.github.blarc.gitlab.template.lint.plugin.listeners.SaveActionListener"
+                  topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"/>
     </projectListeners>
 
     <resource-bundle>messages.MyBundle</resource-bundle>

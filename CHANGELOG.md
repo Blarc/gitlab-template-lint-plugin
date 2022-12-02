@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Lint frequency setting.
+
 ### Changed
 - Update github-actions set-output command
 - Update github-actions dependencies versions

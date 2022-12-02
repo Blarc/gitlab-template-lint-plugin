@@ -1,5 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.settings
 
+import com.github.blarc.gitlab.template.lint.plugin.ui.settings.LintFrequencyEnum
 import com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote.Remote
 import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.Credentials
@@ -34,6 +35,7 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var hits = 0
     var requestSupport = true
     var remotes: MutableMap<String, Remote> = mutableMapOf()
+    var lintFrequency: LintFrequencyEnum = LintFrequencyEnum.ON_SAVE
 
     fun saveGitlabToken(token: String, gitlabUrl: String) {
         PasswordSafe.instance.setPassword(getCredentialAttributes(gitlabUrl), token)

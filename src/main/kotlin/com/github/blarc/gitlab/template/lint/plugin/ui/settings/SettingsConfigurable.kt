@@ -36,7 +36,8 @@ class SettingsConfigurable(val project: Project) : Configurable {
             return settingsForm!!.gitlabRemotesTable.isModified(appSettings) ||
                     settingsForm!!.gitlabUrlTokenTable.isModified(projectSettings) ||
                     !settingsForm!!.gitlabRemoteTF.contentEquals(projectSettings.remote) ||
-                    settingsForm!!.forceHttpsCB != projectSettings.forceHttps
+                    settingsForm!!.forceHttpsCB != projectSettings.forceHttps ||
+                    settingsForm!!.lintFrequency != appSettings.lintFrequency
         }
         return false
     }
@@ -50,6 +51,7 @@ class SettingsConfigurable(val project: Project) : Configurable {
             settingsForm!!.gitlabUrlTokenTable.commit(appSettings)
             projectSettings.remote = settingsForm!!.gitlabRemoteTF!!
             projectSettings.forceHttps = settingsForm!!.forceHttpsCB
+            appSettings.lintFrequency = settingsForm!!.lintFrequency
         }
     }
 
@@ -64,6 +66,7 @@ class SettingsConfigurable(val project: Project) : Configurable {
                 .map { GitlabUrlToken(it, appSettings.getGitlabToken(it)) }.toMutableList()
             settingsForm!!.gitlabRemoteTF = projectSettings.remote
             settingsForm!!.forceHttpsCB = projectSettings.forceHttps
+            settingsForm!!.lintFrequency = appSettings.lintFrequency
         }
     }
 
