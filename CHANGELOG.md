@@ -1,6 +1,12 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Update github-actions set-output command
+- Update github-actions dependencies versions
+- Update dependencies in build.gradle.kts
+- Rename Gitlab URL to Gitlab API url
+- Rename Remote ID to Project ID
 
 ## [1.2.2]
 ### Fixed
