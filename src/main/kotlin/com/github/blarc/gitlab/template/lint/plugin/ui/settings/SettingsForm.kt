@@ -2,6 +2,7 @@ package com.github.blarc.gitlab.template.lint.plugin.ui.settings
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
+import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.github.blarc.gitlab.template.lint.plugin.ui.settings.gitlabUrlToken.GitlabUrlTokenTable
 import com.github.blarc.gitlab.template.lint.plugin.ui.settings.gitlabUrlToken.GitlabUrlTokenTableModel
@@ -16,11 +17,17 @@ import com.intellij.ui.components.JBTextField
 import java.awt.BorderLayout
 import java.awt.event.ItemEvent
 import java.awt.event.MouseEvent
+import javax.swing.DefaultComboBoxModel
 import javax.swing.JCheckBox
+import javax.swing.JComboBox
 import javax.swing.JPanel
+import javax.swing.JTextPane
 
 class SettingsForm(val project: Project) {
     var basePanel: JPanel? = null
+    private var lintFrequencyComboBox: JComboBox<String>? = null
+    // This prevents error when building SettingsForm
+    private var lintFrequencyTextPane: JTextPane? = null
     private var gitlabRemoteTextField: JBTextField? = null
     private var remotesTablePanel: JPanel? = null
     private var gitlabUrlTokenTablePanel: JPanel? = null
@@ -31,18 +38,25 @@ class SettingsForm(val project: Project) {
     val gitlabUrlTokenTable = GitlabUrlTokenTable(project, GitlabUrlTokenTableModel())
 
     init {
-
+        initLintFrequencyComboBox()
         initGitlabUrlTokenTable()
         initRemoteField()
         initRemotesTable()
         initForceHttpsCheckBox()
+    }
 
+    private fun initLintFrequencyComboBox() {
+        lintFrequencyComboBox?.model =
+            DefaultComboBoxModel(LintFrequencyEnum.values().map { it.message }.toTypedArray())
+
+        lintFrequencyComboBox?.selectedItem = AppSettings.instance?.lintFrequency?.message
     }
 
     private fun initRemoteField() {
         val gitlabRemote = project.service<ProjectSettings>().remote
         gitlabRemoteTextField?.text = gitlabRemote
     }
+
     private fun initRemotesTable() {
         remotesTablePanel!!.add(
             ToolbarDecorator.createDecorator(gitlabRemotesTable)
@@ -103,10 +117,20 @@ class SettingsForm(val project: Project) {
 
     var forceHttpsCB: Boolean
         get() {
-            return forceHttpsCheckBox?.isSelected?: false
+            return forceHttpsCheckBox?.isSelected ?: false
         }
         set(selected) {
             forceHttpsCheckBox?.isSelected = selected
+        }
+
+    var lintFrequency: LintFrequencyEnum
+        get() { val lintFrequencyString = (lintFrequencyComboBox?.selectedItem as String)
+            return LintFrequencyEnum.values().find {
+                    lintFrequencyEnum -> lintFrequencyEnum.message == lintFrequencyString
+            }!!
+        }
+        set (selected) {
+            lintFrequencyComboBox?.selectedItem = selected
         }
 }
 
