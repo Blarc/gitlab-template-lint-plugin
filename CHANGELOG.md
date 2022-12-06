@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - Lint frequency setting.
+- Support for 223.* IDE builds.
 
 ### Changed
 - Update github-actions set-output command
