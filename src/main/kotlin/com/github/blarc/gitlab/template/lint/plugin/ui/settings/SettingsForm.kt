@@ -21,13 +21,10 @@ import javax.swing.DefaultComboBoxModel
 import javax.swing.JCheckBox
 import javax.swing.JComboBox
 import javax.swing.JPanel
-import javax.swing.JTextPane
 
 class SettingsForm(val project: Project) {
     var basePanel: JPanel? = null
     private var lintFrequencyComboBox: JComboBox<String>? = null
-    // This prevents error when building SettingsForm
-    private var lintFrequencyTextPane: JTextPane? = null
     private var gitlabRemoteTextField: JBTextField? = null
     private var remotesTablePanel: JPanel? = null
     private var gitlabUrlTokenTablePanel: JPanel? = null
