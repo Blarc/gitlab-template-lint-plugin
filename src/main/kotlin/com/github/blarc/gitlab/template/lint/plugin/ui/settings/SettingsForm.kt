@@ -30,6 +30,7 @@ class SettingsForm(val project: Project) {
     private var gitlabUrlTokenTablePanel: JPanel? = null
     private var reportBugLink: BrowserLink? = null
     private var forceHttpsCheckBox: JCheckBox? = null
+    private var showMergedPreviewCheckBox: JCheckBox? = null
 
     val gitlabRemotesTable = RemotesTable(project, RemotesTableModel())
     val gitlabUrlTokenTable = GitlabUrlTokenTable(project, GitlabUrlTokenTableModel())
@@ -40,6 +41,7 @@ class SettingsForm(val project: Project) {
         initRemoteField()
         initRemotesTable()
         initForceHttpsCheckBox()
+        initShowMergedPreviewCheckBox()
     }
 
     private fun initLintFrequencyComboBox() {
@@ -90,14 +92,21 @@ class SettingsForm(val project: Project) {
     }
 
     private fun initForceHttpsCheckBox() {
-        val projectSettings = project.service<ProjectSettings>()
         forceHttpsCheckBox?.addItemListener {
             when (it.stateChange) {
-                ItemEvent.SELECTED -> projectSettings.forceHttps = true
-                ItemEvent.DESELECTED -> projectSettings.forceHttps = false
+                ItemEvent.SELECTED -> forceHttpsCB = true
+                ItemEvent.DESELECTED -> forceHttpsCB = false
             }
         }
-        forceHttpsCB = projectSettings.forceHttps
+    }
+
+    private fun initShowMergedPreviewCheckBox() {
+        showMergedPreviewCheckBox?.addItemListener {
+            when (it.stateChange) {
+                ItemEvent.SELECTED -> showMergedPreviewCB = true
+                ItemEvent.DESELECTED -> showMergedPreviewCB= false
+            }
+        }
     }
 
     fun createUIComponents() {
@@ -128,6 +137,14 @@ class SettingsForm(val project: Project) {
         }
         set (selected) {
             lintFrequencyComboBox?.selectedItem = selected
+        }
+
+    var showMergedPreviewCB: Boolean
+        get() {
+            return showMergedPreviewCheckBox?.isSelected ?: false
+        }
+        set(selected) {
+            showMergedPreviewCheckBox?.isSelected = selected
         }
 }
 

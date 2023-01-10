@@ -3,9 +3,12 @@ package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
+import com.github.blarc.gitlab.template.lint.plugin.providers.EditorWithMergedPreview
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
+import com.intellij.openapi.fileEditor.FileEditorManager
 
 @Service
 class LintContext : Middleware {
@@ -35,6 +38,14 @@ class LintContext : Middleware {
 
         val lintStatus = if (gitlabLintResponse?.valid == true) {
             showGitlabTokenNotification = true
+
+            WriteCommandAction.runWriteCommandAction(pass.project) {
+                val selectedEditor = FileEditorManager.getInstance(pass.project).getSelectedEditor(pass.file.virtualFile)
+                if (selectedEditor is EditorWithMergedPreview) {
+                    gitlabLintResponse?.mergedYaml?.let { selectedEditor.setPreviewText(it) }
+                }
+            }
+
             LintStatusEnum.VALID
         } else {
             showGitlabTokenNotification = false

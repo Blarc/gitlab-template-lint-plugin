@@ -5,8 +5,13 @@ import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.github.blarc.gitlab.template.lint.plugin.ui.settings.gitlabUrlToken.GitlabUrlToken
 import com.intellij.openapi.components.service
+import com.intellij.openapi.fileEditor.FileEditorManager
+import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx
+import com.intellij.openapi.fileEditor.impl.EditorWindow
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.Nullable
 import javax.swing.JComponent
@@ -37,7 +42,8 @@ class SettingsConfigurable(val project: Project) : Configurable {
                     settingsForm!!.gitlabUrlTokenTable.isModified(projectSettings) ||
                     !settingsForm!!.gitlabRemoteTF.contentEquals(projectSettings.remote) ||
                     settingsForm!!.forceHttpsCB != projectSettings.forceHttps ||
-                    settingsForm!!.lintFrequency != appSettings.lintFrequency
+                    settingsForm!!.lintFrequency != appSettings.lintFrequency ||
+                    settingsForm!!.showMergedPreviewCB != appSettings.showMergedPreview
         }
         return false
     }
@@ -52,6 +58,7 @@ class SettingsConfigurable(val project: Project) : Configurable {
             projectSettings.remote = settingsForm!!.gitlabRemoteTF!!
             projectSettings.forceHttps = settingsForm!!.forceHttpsCB
             appSettings.lintFrequency = settingsForm!!.lintFrequency
+            appSettings.showMergedPreview = settingsForm!!.showMergedPreviewCB
         }
     }
 
@@ -67,6 +74,7 @@ class SettingsConfigurable(val project: Project) : Configurable {
             settingsForm!!.gitlabRemoteTF = projectSettings.remote
             settingsForm!!.forceHttpsCB = projectSettings.forceHttps
             settingsForm!!.lintFrequency = appSettings.lintFrequency
+            settingsForm!!.showMergedPreviewCB = appSettings.showMergedPreview
         }
     }
 

@@ -49,7 +49,7 @@
     <projectListeners>
         <listener class="com.github.blarc.gitlab.template.lint.plugin.listeners.VcsMappingChangedListener"
                   topic="com.intellij.dvcs.repo.VcsRepositoryMappingListener"/>
-        
+
         <listener class="com.github.blarc.gitlab.template.lint.plugin.listeners.SaveActionListener"
                   topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"/>
     </projectListeners>
@@ -70,11 +70,11 @@
         <projectService
                 serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab"/>
 
-<!--        <projectConfigurable-->
-<!--                parentId="tools"-->
-<!--                instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.ProjectSettingsConfigurable"-->
-<!--                id="GitlabLint.ProjectSettings"-->
-<!--        />-->
+        <!--        <projectConfigurable-->
+        <!--                parentId="tools"-->
+        <!--                instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.ProjectSettingsConfigurable"-->
+        <!--                id="GitlabLint.ProjectSettings"-->
+        <!--        />-->
 
 
         <projectConfigurable
@@ -92,11 +92,13 @@
                 implementationClass="com.github.blarc.gitlab.template.lint.plugin.inspections.GitlabLintInspection"
                 displayName="Linting"
                 shortName="GitlabLint"
-                runForWholeFile="true" />
+                runForWholeFile="true"/>
 
-        <editorNotificationProvider implementation="com.github.blarc.gitlab.template.lint.plugin.providers.LintNotificationProvider"/>
+        <editorNotificationProvider
+                implementation="com.github.blarc.gitlab.template.lint.plugin.providers.LintNotificationProvider"/>
 
-        <postStartupActivity implementation="com.github.blarc.gitlab.template.lint.plugin.listeners.ApplicationStartupListener" />
+        <postStartupActivity
+                implementation="com.github.blarc.gitlab.template.lint.plugin.listeners.ApplicationStartupListener"/>
 
         <notificationGroup
                 id="gitlab.lint.notification.general"
@@ -113,6 +115,12 @@
         <statusBarWidgetFactory
                 id="lintStatusWidget"
                 implementation="com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidgetFactory"
+                order="first"
+        />
+
+        <fileEditorProvider
+                id="gitlabLintEditorProvider"
+                implementation="com.github.blarc.gitlab.template.lint.plugin.providers.GitlabLintEditorProvider"
                 order="first"
         />
 

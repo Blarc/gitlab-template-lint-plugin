@@ -36,6 +36,7 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var requestSupport = true
     var remotes: MutableMap<String, Remote> = mutableMapOf()
     var lintFrequency: LintFrequencyEnum = LintFrequencyEnum.ON_SAVE
+    var showMergedPreview = true
 
     fun saveGitlabToken(token: String, gitlabUrl: String) {
         PasswordSafe.instance.setPassword(getCredentialAttributes(gitlabUrl), token)
