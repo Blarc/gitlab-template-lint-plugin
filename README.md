@@ -52,7 +52,7 @@ For Mac: <kbd>IntelliJ IDEA</kbd> > <kbd>Preferences</kbd> > <kbd>Plugins</kbd> 
 
 ## Demo
 
-![](./screenshots/plugin.gif)
+![](./screenshots/plugin2.gif)
 
 ## Support
 

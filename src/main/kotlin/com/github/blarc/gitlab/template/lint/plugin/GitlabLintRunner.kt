@@ -3,7 +3,6 @@ package com.github.blarc.gitlab.template.lint.plugin
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
 import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.runBackgroundableTask
-import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import com.intellij.ui.EditorNotifications
 

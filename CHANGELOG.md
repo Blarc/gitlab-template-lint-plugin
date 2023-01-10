@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Added
+- Basic implementation of editor with merged preview.
+- Setting for enabling/disabling merged preview.
+
+### Fixed
+- Force HTTPS setting is now properly validated and saved.
+
 ## 1.3.0 - 2022-12-06
 
 ### Added
