@@ -2,7 +2,7 @@
 
 <div align="center">
     <a href="https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint">
-        <img src="./src/main/resources/META-INF/pluginIcon.svg" width="320" height="320" alt="logo"/>
+        <img src="./src/main/resources/META-INF/pluginIcon.svg" width="200" height="200" alt="logo"/>
     </a>
 </div>
 <h1 align="center">Gitlab Template Lint</h1>
@@ -31,7 +31,7 @@ To get started, install the plugin and set Gitlab private token with <kbd>read_a
 <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Gitlab Template Lint</kbd>
 
 ## Compatibility
-IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, Gogland, DataGrip, Rider, MPS, Android Studio, DataSpell, Code With Me
+IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, GoLand, DataGrip, Rider, MPS, Android Studio, DataSpell, Code With Me
 
 ## Install
 <a href="https://plugins.jetbrains.com/embeddable/install/19411">
