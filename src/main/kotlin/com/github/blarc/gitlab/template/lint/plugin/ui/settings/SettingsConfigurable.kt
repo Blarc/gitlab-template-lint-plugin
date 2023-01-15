@@ -43,7 +43,8 @@ class SettingsConfigurable(val project: Project) : Configurable {
                     !settingsForm!!.gitlabRemoteTF.contentEquals(projectSettings.remote) ||
                     settingsForm!!.forceHttpsCB != projectSettings.forceHttps ||
                     settingsForm!!.lintFrequency != appSettings.lintFrequency ||
-                    settingsForm!!.showMergedPreviewCB != appSettings.showMergedPreview
+                    settingsForm!!.showMergedPreviewCB != appSettings.showMergedPreview ||
+                    settingsForm!!.runLintOnFileChangeCB != appSettings.runLintOnFileChange
         }
         return false
     }
@@ -59,6 +60,7 @@ class SettingsConfigurable(val project: Project) : Configurable {
             projectSettings.forceHttps = settingsForm!!.forceHttpsCB
             appSettings.lintFrequency = settingsForm!!.lintFrequency
             appSettings.showMergedPreview = settingsForm!!.showMergedPreviewCB
+            appSettings.runLintOnFileChange = settingsForm!!.runLintOnFileChangeCB
         }
     }
 
@@ -75,6 +77,7 @@ class SettingsConfigurable(val project: Project) : Configurable {
             settingsForm!!.forceHttpsCB = projectSettings.forceHttps
             settingsForm!!.lintFrequency = appSettings.lintFrequency
             settingsForm!!.showMergedPreviewCB = appSettings.showMergedPreview
+            settingsForm!!.runLintOnFileChangeCB = appSettings.runLintOnFileChange
         }
     }
 

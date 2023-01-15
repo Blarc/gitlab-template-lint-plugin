@@ -5,6 +5,7 @@
 ### Added
 - Basic implementation of editor with merged preview.
 - Setting for enabling/disabling merged preview.
+- Option for running lint on file selection change.
 
 ### Fixed
 - Force HTTPS setting is now properly validated and saved.
