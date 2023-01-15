@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.4.0 - 2023-01-15
+
 ### Added
 - Basic implementation of editor with merged preview.
 - Setting for enabling/disabling merged preview.
