@@ -31,6 +31,7 @@ class SettingsForm(val project: Project) {
     private var reportBugLink: BrowserLink? = null
     private var forceHttpsCheckBox: JCheckBox? = null
     private var showMergedPreviewCheckBox: JCheckBox? = null
+    private var runLintOnFileChangeCheckBox: JCheckBox? = null
 
     val gitlabRemotesTable = RemotesTable(project, RemotesTableModel())
     val gitlabUrlTokenTable = GitlabUrlTokenTable(project, GitlabUrlTokenTableModel())
@@ -109,6 +110,15 @@ class SettingsForm(val project: Project) {
         }
     }
 
+    private fun initRunLintOnFileChangeCheckBox() {
+        runLintOnFileChangeCheckBox?.addItemListener {
+            when (it.stateChange) {
+                ItemEvent.SELECTED -> runLintOnFileChangeCB = true
+                ItemEvent.DESELECTED -> runLintOnFileChangeCB = false
+            }
+        }
+    }
+
     fun createUIComponents() {
         reportBugLink = BrowserLink(message("actions.report-bug.title"), GitlabLintBundle.URL_BUG_REPORT.toString())
     }
@@ -145,6 +155,14 @@ class SettingsForm(val project: Project) {
         }
         set(selected) {
             showMergedPreviewCheckBox?.isSelected = selected
+        }
+
+    var runLintOnFileChangeCB: Boolean
+        get() {
+            return runLintOnFileChangeCheckBox?.isSelected ?: false
+        }
+        set(selected) {
+            runLintOnFileChangeCheckBox?.isSelected = selected
         }
 }
 
