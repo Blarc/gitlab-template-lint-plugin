@@ -7,6 +7,9 @@
 - Setting for enabling/disabling merged preview.
 - Option for running lint on file selection change.
 
+### Changed
+- Updated plugin icon and description.
+
 ### Fixed
 - Force HTTPS setting is now properly validated and saved.
 

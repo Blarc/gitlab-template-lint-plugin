@@ -17,6 +17,7 @@
 <br>
 
 - [Description](#description)
+- [Functionalities](#functionalities)
 - [Compatibility](#compatibility)
 - [Install](#install)
 - [Installation from zip](#installation-from-zip)
@@ -29,6 +30,10 @@ open yaml configuration and shows the errors in the notification bar.
 
 To get started, install the plugin and set Gitlab private token with <kbd>read_api</kbd> and <kbd>api</kbd> scope in plugin's settings:
 <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Gitlab Template Lint</kbd>
+
+## Features
+- Linting of Gitlab CI/CD yaml configuration files
+- Preview of the merged Gitlab CI/CD yaml configuration files
 
 ## Compatibility
 IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, GoLand, DataGrip, Rider, MPS, Android Studio, DataSpell, Code With Me
@@ -47,18 +52,19 @@ For Mac: <kbd>IntelliJ IDEA</kbd> > <kbd>Preferences</kbd> > <kbd>Plugins</kbd> 
 
 ## Installation from zip
 1. Download zip from [releases](https://github.com/Blarc/gitlab-lint-plugin/releases)
-2. Import to IntelliJ: Settings -> Plugins -> Cog -> Install plugin from disk...
-3. Set Gitlab private token in plugin's settings: Settings -> Tools -> Gitlab Template Lint
+2. Import to IntelliJ: <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Cog</kbd> > <kbd>Install plugin from disk...</kbd>
+3. Set Gitlab private token in plugin's settings: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Gitlab Template Lint</kbd>
 
 ## Demo
 
-![](./screenshots/plugin2.gif)
+![demo.gif](./screenshots/plugin2.gif)
 
 ## Support
 
 * Star the repository
 * [Rate the plugin](https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint)
 * [Share the plugin](https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint)
+* [Buy me a coffee](https://ko-fi.com/blarc)
 
 
 ## Change log
