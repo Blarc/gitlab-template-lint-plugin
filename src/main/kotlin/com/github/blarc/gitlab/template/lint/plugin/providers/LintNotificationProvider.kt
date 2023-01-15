@@ -6,38 +6,26 @@ import com.intellij.codeInsight.hint.HintUtil
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.Key
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.EditorNotificationPanel
-import com.intellij.ui.EditorNotifications
+import com.intellij.ui.EditorNotificationProvider
+import java.util.function.Function
 
-class LintNotificationProvider : EditorNotifications.Provider<EditorNotificationPanel>() {
+class LintNotificationProvider : EditorNotificationProvider {
 
-    companion object {
-        private val KEY = Key.create<EditorNotificationPanel>("LintNotificationProvider")
-    }
+    override fun collectNotificationData(
+        project: Project,
+        file: VirtualFile
+    ) = Function { _: FileEditor ->
+            val pipeline = project.service<Pipeline>()
 
-    override fun getKey(): Key<EditorNotificationPanel> = KEY
+            if (pipeline.gitlabLintResponse?.valid == false && matchesGitlabLintRegex(file.name)) {
+                val panel = EditorNotificationPanel(HintUtil.ERROR_COLOR_KEY)
+                panel.text = pipeline.gitlabLintResponse?.errors.toString()
+                return@Function panel
+            }
 
-    override fun createNotificationPanel(
-        file: VirtualFile,
-        fileEditor: FileEditor,
-        project: Project
-    ): EditorNotificationPanel? {
-
-        val pipeline = project.service<Pipeline>()
-
-        if (pipeline.gitlabLintResponse?.valid == false && matchesGitlabLintRegex(file.name)) {
-            val panel = EditorNotificationPanel(HintUtil.ERROR_COLOR_KEY)
-            panel.text = pipeline.gitlabLintResponse?.errors.toString()
-//            TODO @Blarc: Implement error ignoring.
-//            panel.createActionLabel("Ignore this error.") {
-//                EditorNotifications.getInstance(project).updateAllNotifications()
-//            }
-
-            return panel
+            return@Function null
         }
 
-        return null
-    }
 }

@@ -95,7 +95,9 @@
                 runForWholeFile="true"/>
 
         <editorNotificationProvider
-                implementation="com.github.blarc.gitlab.template.lint.plugin.providers.LintNotificationProvider"/>
+                implementation="com.github.blarc.gitlab.template.lint.plugin.providers.LintNotificationProvider"
+                id="GitlabLint.LintNotificationProvider"/>
+        />
 
         <postStartupActivity
                 implementation="com.github.blarc.gitlab.template.lint.plugin.listeners.ApplicationStartupListener"/>
