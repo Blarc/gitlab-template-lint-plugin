@@ -15,6 +15,7 @@ plugins {
 group = properties("pluginGroup")
 version = properties("pluginVersion")
 
+// Configure project's dependencies
 repositories {
     mavenCentral()
 }
@@ -31,8 +32,9 @@ intellij {
 }
 
 changelog {
-    version.set(properties("pluginVersion"))
+    // version.set(properties("pluginVersion"))
     groups.set(emptyList())
+    repositoryUrl.set(properties("pluginRepositoryUrl"))
 }
 
 tasks {
@@ -58,9 +60,13 @@ tasks {
 
         // Get the latest available change notes from the changelog file
         changeNotes.set(provider {
-            changelog.renderItem(changelog.run {
-                getOrNull(properties("pluginVersion")) ?: getLatest()
-            }, Changelog.OutputType.HTML)
+            with(changelog) {
+                renderItem(
+                    getOrNull(properties("pluginVersion"))
+                        ?: runCatching { getLatest() }.getOrElse { getUnreleased() },
+                    Changelog.OutputType.HTML,
+                )
+            }
         })
     }
 
