@@ -30,7 +30,7 @@ class AppSettings : PersistentStateComponent<AppSettings> {
             get() = ApplicationManager.getApplication().getService(AppSettings::class.java)
     }
 
-    var gitlabLintRegexString: String? = ".*gitlab-ci\\.(yaml|yml)$"
+    var gitlabLintGlobStrings: List<String> = listOf("**/*.gitlab-ci.yml", "**/*.gitlab-ci.yaml")
     var lastVersion: String? = null
     var hits = 0
     var requestSupport = true

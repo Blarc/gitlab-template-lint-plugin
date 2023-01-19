@@ -2,7 +2,7 @@ package com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote
 
 import javax.swing.table.AbstractTableModel
 
-class RemotesTableModel(): AbstractTableModel() {
+class RemotesTableModel : AbstractTableModel() {
     var remotesList: MutableList<Remote> = mutableListOf()
 
     private val columnNames = arrayOf(

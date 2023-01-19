@@ -19,7 +19,7 @@ class GitlabLintEditorProvider : FileEditorProvider, DumbAware {
     override fun accept(project: Project, file: VirtualFile): Boolean {
         if (!file.isValid) return false
         PsiManager.getInstance(project).findFile(file) ?: return false
-        return GitlabLintUtils.matchesGitlabLintRegex(file.name) && AppSettings.instance?.showMergedPreview ?: false
+        return GitlabLintUtils.matchesGitlabLintGlob(file.path) && AppSettings.instance?.showMergedPreview ?: false
     }
 
     override fun createEditor(project: Project, file: VirtualFile): FileEditor {

@@ -90,6 +90,13 @@
                 id="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
                 key="settings.general.group.title"/>
 
+        <applicationConfigurable
+            parentId="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
+            instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.GlobsConfigurable"
+            id="com.github.blarc.gitlab.template.lint.plugin.ui.settings.GlobsConfigurable"
+            key="settings.globs.group.title" />
+
+
         <localInspection
                 language="yaml"
                 groupPath="GitlabLint"

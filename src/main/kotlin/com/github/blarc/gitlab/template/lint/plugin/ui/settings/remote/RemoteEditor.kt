@@ -1,6 +1,5 @@
 package com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote;
 
-import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
