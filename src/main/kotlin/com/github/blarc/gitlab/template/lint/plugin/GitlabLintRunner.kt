@@ -11,7 +11,7 @@ fun runLinting(file: PsiFile) {
     runBackgroundableTask(GitlabLintBundle.message("inspection.title"), file.project) { indicator ->
         indicator.isIndeterminate = true
         val project = file.project
-        if (GitlabLintUtils.matchesGitlabLintRegex(file.name)) {
+        if (GitlabLintUtils.matchesGitlabLintGlob(file.virtualFile.path)) {
             val pipeline = project.service<Pipeline>()
             pipeline.accept(file)
         }

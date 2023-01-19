@@ -1,6 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.listeners
 
-import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.matchesGitlabLintRegex
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.runLinting
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidgetFactory
@@ -26,7 +26,7 @@ class FileListener : FileEditorManagerListener {
 
         // Check if file matches regex
         val matches = if (event.newFile != null) {
-            matchesGitlabLintRegex(event.newFile.name)
+            GitlabLintUtils.matchesGitlabLintGlob(event.newFile.path)
         } else {
             false
         }

@@ -1,17 +1,25 @@
 package com.github.blarc.gitlab.template.lint.plugin
 
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
+import java.nio.file.FileSystems
 
 object GitlabLintUtils {
-    private fun getGitlabLintRegex(): Regex {
+    private fun getGitlabLintGlobStrings(): List<String> {
         val appSettings = AppSettings.instance
-        if (appSettings?.gitlabLintRegexString != null) {
-            return Regex(appSettings.gitlabLintRegexString!!)
+        if (appSettings?.gitlabLintGlobStrings != null) {
+            return appSettings.gitlabLintGlobStrings!!
         }
-        return Regex(".*gitlab-ci\\.(yaml|yml)$")
+        return listOf("*.gitlab-ci.yml", "*.gitlab-ci.yaml")
     }
-
-    fun matchesGitlabLintRegex(text: String): Boolean {
-        return getGitlabLintRegex().matches(text)
+    fun matchesGitlabLintGlob(text: String): Boolean {
+        val globStrings = getGitlabLintGlobStrings()
+        val fileSystem = FileSystems.getDefault()
+        for (globString in globStrings) {
+            val glob = fileSystem.getPathMatcher("glob:$globString")
+            if (glob.matches(fileSystem.getPath(text))) {
+                return true
+            }
+        }
+        return false
     }
 }

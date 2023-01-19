@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+- Option for setting file path glob patterns for linting.
+
 ## 1.4.0 - 2023-01-15
 
 ### Added
