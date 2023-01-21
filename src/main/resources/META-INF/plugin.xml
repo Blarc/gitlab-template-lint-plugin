@@ -90,6 +90,13 @@
                 id="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
                 key="settings.general.group.title"/>
 
+
+        <projectConfigurable
+                parentId="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
+                instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote.RemotesConfigurable"
+                id="com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote.RemotesConfigurable"
+                key="settings.remotes.group.title" />
+
         <applicationConfigurable
             parentId="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
             instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.GlobsConfigurable"

@@ -5,9 +5,9 @@ import kotlinx.serialization.Serializable
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
 data class Remote(
-    val remoteUrl: String,
-    var gitlabUrl: String?,
-    var remoteId: Long?
+    var remoteUrl: String = "",
+    var gitlabUrl: String? = null,
+    var remoteId: Long? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

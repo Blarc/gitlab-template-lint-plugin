@@ -12,7 +12,7 @@ class SaveActionListener(val project: Project) : FileDocumentManagerListener {
 
     override fun beforeDocumentSaving(document: Document) {
         val file = PsiDocumentManager.getInstance(project).getPsiFile(document)
-        if (file != null && AppSettings.instance?.lintFrequency == LintFrequencyEnum.ON_SAVE) {
+        if (file != null && AppSettings.instance.lintFrequency == LintFrequencyEnum.ON_SAVE) {
             runLinting(file)
         }
         super.beforeDocumentSaving(document)

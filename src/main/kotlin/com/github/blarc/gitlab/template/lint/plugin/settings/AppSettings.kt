@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable
 class AppSettings : PersistentStateComponent<AppSettings> {
     companion object {
         const val SERVICE_NAME = "com.github.blarc.gitlab.template.lint.plugin.settings.AppSettingsState"
-        val instance: AppSettings?
+        val instance: AppSettings
             get() = ApplicationManager.getApplication().getService(AppSettings::class.java)
     }
 
