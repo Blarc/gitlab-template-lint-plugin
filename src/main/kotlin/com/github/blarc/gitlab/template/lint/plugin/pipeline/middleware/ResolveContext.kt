@@ -32,26 +32,26 @@ class ResolveContext : Middleware {
         pass.repository = repository
 
         val settings = pass.project.service<ProjectSettings>()
-        val remotesMap = AppSettings.instance?.remotes
+        val remotesMap = AppSettings.instance.remotes
         if (settings.forceHttps) {
             pass.remoteUrl = remote.httpUrl?.toHttps().toString()
 
-            if (remotesMap?.containsKey(pass.remoteUrl) == true) {
+            if (remotesMap.containsKey(pass.remoteUrl)) {
                 pass.gitlabUrl = remotesMap[pass.remoteUrl]?.gitlabUrl
             }
             else {
                 pass.gitlabUrl = remote.gitlabUrl?.toHttps().toString()
-                remotesMap?.set(pass.remoteUrl!!, Remote(pass.remoteUrl!!, pass.gitlabUrl, null))
+                remotesMap[pass.remoteUrl!!] = Remote(pass.remoteUrl!!, pass.gitlabUrl, null)
             }
         }
         else {
             pass.remoteUrl = remote.httpUrl?.toString()
-            if (remotesMap?.containsKey(pass.remoteUrl) == true) {
+            if (remotesMap.containsKey(pass.remoteUrl)) {
                 pass.gitlabUrl = remotesMap[pass.remoteUrl]?.gitlabUrl
             }
             else {
                 pass.gitlabUrl = remote.gitlabUrl?.toString()
-                remotesMap?.set(pass.remoteUrl!!, Remote(pass.remoteUrl!!, pass.gitlabUrl, null))
+                remotesMap[pass.remoteUrl!!] = Remote(pass.remoteUrl!!, pass.gitlabUrl, null)
             }
         }
 

@@ -15,7 +15,7 @@ class GitlabLintInspection : LocalInspectionTool() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : PsiElementVisitor() {
             override fun visitFile(file: PsiFile) {
-                if (AppSettings.instance?.lintFrequency == LintFrequencyEnum.ON_CHANGE) {
+                if (AppSettings.instance.lintFrequency == LintFrequencyEnum.ON_CHANGE) {
                     runLinting(file)
                 }
             }

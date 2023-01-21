@@ -3,7 +3,6 @@ package com.github.blarc.gitlab.template.lint.plugin.providers
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.openapi.editor.EditorFactory
-import com.intellij.openapi.editor.colors.EditorColors
 import com.intellij.openapi.fileEditor.*
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider
 import com.intellij.openapi.project.DumbAware
@@ -19,7 +18,7 @@ class GitlabLintEditorProvider : FileEditorProvider, DumbAware {
     override fun accept(project: Project, file: VirtualFile): Boolean {
         if (!file.isValid) return false
         PsiManager.getInstance(project).findFile(file) ?: return false
-        return GitlabLintUtils.matchesGitlabLintGlob(file.path) && AppSettings.instance?.showMergedPreview ?: false
+        return GitlabLintUtils.matchesGitlabLintGlob(file.path) && AppSettings.instance.showMergedPreview
     }
 
     override fun createEditor(project: Project, file: VirtualFile): FileEditor {

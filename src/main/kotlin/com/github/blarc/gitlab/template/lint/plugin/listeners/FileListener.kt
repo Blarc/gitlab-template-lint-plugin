@@ -41,7 +41,7 @@ class FileListener : FileEditorManagerListener {
             statusBarWidgetSettings?.setEnabled(lintStatusWidgetFactory, true)
             statusBarWidgetsManager?.updateWidget(LintStatusWidgetFactory::class.java)
 
-            if (!firstTime && AppSettings.instance?.runLintOnFileChange == true) {
+            if (!firstTime && AppSettings.instance.runLintOnFileChange) {
                 // If we can get the psi file, run linting
                 PsiManager.getInstance(project).findFile(event.newFile)?.let {
                     runLinting(it)

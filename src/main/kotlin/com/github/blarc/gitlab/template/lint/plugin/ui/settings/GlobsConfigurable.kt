@@ -1,6 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.ui.settings
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
+import com.github.blarc.gitlab.template.lint.plugin.extensions.createColumn
 import com.github.blarc.gitlab.template.lint.plugin.extensions.replaceAt
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.openapi.options.BoundConfigurable
@@ -11,19 +12,17 @@ import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.text
 import com.intellij.ui.table.TableView
-import com.intellij.util.ui.ColumnInfo
 import com.intellij.util.ui.ListTableModel
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 
 class GlobsConfigurable : BoundConfigurable(message("settings.globs.group.title")) {
-    private var globs = AppSettings.instance?.gitlabLintGlobStrings ?: emptyList()
+    private var globs = AppSettings.instance.gitlabLintGlobStrings
 
     private val tableModel = createTableModel()
 
     private val table = TableView(tableModel).apply {
         setShowColumns(false)
         setSelectionMode(SINGLE_SELECTION)
-        emptyText.text = "test"
     }
 
     override fun createPanel() = panel {
@@ -43,11 +42,7 @@ class GlobsConfigurable : BoundConfigurable(message("settings.globs.group.title"
 
     private fun createTableModel(): ListTableModel<String> = ListTableModel(
         arrayOf(
-            object : ColumnInfo<String, String>("Glob") {
-                override fun valueOf(item: String?): String? {
-                    return item
-                }
-            }
+            createColumn<String>("Glob") { glob -> glob }
         ),
         globs
     )
@@ -89,17 +84,17 @@ class GlobsConfigurable : BoundConfigurable(message("settings.globs.group.title"
     override fun reset() {
         super.reset()
 
-        globs = AppSettings.instance?.gitlabLintGlobStrings ?: emptyList()
+        globs = AppSettings.instance.gitlabLintGlobStrings
         refreshTableModel()
     }
 
     override fun isModified(): Boolean {
-        return super.isModified() || globs != AppSettings.instance?.gitlabLintGlobStrings
+        return super.isModified() || globs != AppSettings.instance.gitlabLintGlobStrings
     }
 
     override fun apply() {
         super.apply()
-        AppSettings.instance?.gitlabLintGlobStrings = globs
+        AppSettings.instance.gitlabLintGlobStrings = globs
     }
 }
 

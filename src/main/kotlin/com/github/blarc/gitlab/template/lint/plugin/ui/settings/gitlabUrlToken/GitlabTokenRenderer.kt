@@ -5,7 +5,7 @@ import javax.swing.JTable
 import javax.swing.table.DefaultTableCellRenderer
 
 
-class GitlabTokenRenderer : DefaultTableCellRenderer() {
+class GitlabTokenRenderer(private val columnIndex: Int) : DefaultTableCellRenderer() {
 
     companion object {
         private const val MAX_LENGTH = 25
@@ -19,7 +19,7 @@ class GitlabTokenRenderer : DefaultTableCellRenderer() {
         row: Int,
         column: Int
     ): Component {
-        if (column == 1 && value is String? && !value.isNullOrBlank()) {
+        if (column == columnIndex && value is String? && !value.isNullOrBlank()) {
             var maskedValue = ""
             for (index in 0 until value.toString().length + 1) {
                 maskedValue += "•"

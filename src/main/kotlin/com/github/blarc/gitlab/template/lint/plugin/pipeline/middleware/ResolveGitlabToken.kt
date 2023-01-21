@@ -1,6 +1,5 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
-import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
@@ -8,7 +7,6 @@ import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
 
 @Service
 class ResolveGitlabToken : Middleware {
@@ -26,7 +24,7 @@ class ResolveGitlabToken : Middleware {
 
     private fun resolveGitlabToken(pass: Pass) : String? {
         val gitlabUrl = pass.gitlabUrlOrThrow()
-        val gitlabToken = AppSettings.instance?.getGitlabToken(gitlabUrl)
+        val gitlabToken = AppSettings.instance.getGitlabToken(gitlabUrl)
 
         if (gitlabToken.isNullOrEmpty() && showGitlabTokenNotification) {
             sendNotification(Notification.gitlabTokenNotSet(pass.project), pass.project)
