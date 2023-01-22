@@ -5,6 +5,8 @@
 ### Added
 - Option for setting file path glob patterns for linting.
 - Move remotes table to separate tab.
+
+### Changed
 - Refactor settings ui.
 
 ## 1.4.0 - 2023-01-15
