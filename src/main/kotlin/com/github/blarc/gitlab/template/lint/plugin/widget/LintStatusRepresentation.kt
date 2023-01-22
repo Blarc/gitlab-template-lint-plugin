@@ -14,9 +14,6 @@ import com.intellij.openapi.util.Conditions
 import com.intellij.openapi.wm.StatusBar
 import com.intellij.openapi.wm.StatusBarWidget
 import com.intellij.ui.popup.PopupFactoryImpl.ActionGroupPopup
-import com.intellij.util.Consumer
-import org.jetbrains.annotations.Nullable
-import java.awt.event.MouseEvent
 import javax.swing.Icon
 
 class LintStatusPresentation(private val statusBar: StatusBar) : StatusBarWidget.MultipleTextValuesPresentation {
@@ -25,12 +22,7 @@ class LintStatusPresentation(private val statusBar: StatusBar) : StatusBarWidget
         return status.tooltip
     }
 
-    override fun getClickConsumer(): Consumer<MouseEvent>? {
-        return null
-    }
-
-    @Nullable("Null means the widget is unable to show the popup.")
-    override fun getPopupStep(): ListPopup {
+    override fun getPopup(): ListPopup {
         return ActionGroupPopup(
             GitlabLintBundle.message("lint.status.popup.title"),
             createActions(),
@@ -43,7 +35,6 @@ class LintStatusPresentation(private val statusBar: StatusBar) : StatusBarWidget
             -1,
             Conditions.alwaysTrue(),
             null
-
         )
     }
 
@@ -65,7 +56,7 @@ class LintStatusPresentation(private val statusBar: StatusBar) : StatusBarWidget
         }
     }
 
-    private fun createActions() : ActionGroup {
+    private fun createActions(): ActionGroup {
         val actionGroup = LightActionGroup()
         actionGroup.add(OpenSettingsAction())
         actionGroup.add(RefreshAction())
