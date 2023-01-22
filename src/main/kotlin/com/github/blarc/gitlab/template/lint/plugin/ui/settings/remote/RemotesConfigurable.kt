@@ -1,10 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
-import com.github.blarc.gitlab.template.lint.plugin.extensions.createColumn
-import com.github.blarc.gitlab.template.lint.plugin.extensions.isLong
-import com.github.blarc.gitlab.template.lint.plugin.extensions.notBlank
-import com.github.blarc.gitlab.template.lint.plugin.extensions.replaceAt
+import com.github.blarc.gitlab.template.lint.plugin.extensions.*
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.intellij.openapi.components.service
@@ -41,6 +38,9 @@ class RemotesConfigurable(project: Project) : BoundConfigurable(message("setting
                     .createPanel()
             ).align(Align.FILL)
         }.resizableRow()
+        row {
+            reportBugLink()
+        }
     }
 
     private fun createTableModel(): ListTableModel<Remote> = ListTableModel(

@@ -3,6 +3,7 @@ package com.github.blarc.gitlab.template.lint.plugin.ui.settings
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.extensions.createColumn
 import com.github.blarc.gitlab.template.lint.plugin.extensions.replaceAt
+import com.github.blarc.gitlab.template.lint.plugin.extensions.reportBugLink
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.ui.DialogWrapper
@@ -37,6 +38,9 @@ class GlobsConfigurable : BoundConfigurable(message("settings.globs.group.title"
                     .createPanel()
             ).align(Align.FILL)
         }.resizableRow()
+        row {
+            reportBugLink()
+        }
     }
 
 

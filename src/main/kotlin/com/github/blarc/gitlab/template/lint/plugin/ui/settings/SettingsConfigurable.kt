@@ -2,6 +2,7 @@ package com.github.blarc.gitlab.template.lint.plugin.ui.settings
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.extensions.notBlank
+import com.github.blarc.gitlab.template.lint.plugin.extensions.reportBugLink
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.github.blarc.gitlab.template.lint.plugin.ui.settings.gitlabUrlToken.GitlabUrlTokenTable
@@ -55,6 +56,9 @@ class SettingsConfigurable(val project: Project) : BoundConfigurable(message("se
                     .createPanel()
             ).align(Align.FILL)
         }.resizableRow()
+        row {
+            reportBugLink()
+        }
     }
 
     override fun isModified(): Boolean {
