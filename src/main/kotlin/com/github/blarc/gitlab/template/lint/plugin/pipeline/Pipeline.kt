@@ -15,7 +15,6 @@ import java.util.*
 class Pipeline(private val project: Project) {
     var gitlabLintResponse: GitlabLintResponse? = null
     var lintStatus: LintStatusEnum = LintStatusEnum.WAITING
-    var lastFile: PsiFile? = null
 
     private val middlewares: Set<Middleware> = setOf(
         project.service<ResolveContext>(),
@@ -27,7 +26,6 @@ class Pipeline(private val project: Project) {
     )
 
     fun accept(file: PsiFile) {
-        lastFile = file
 
         if (middlewares.isEmpty()) {
             throw IllegalStateException("No middleware registered")
@@ -40,10 +38,6 @@ class Pipeline(private val project: Project) {
 
         gitlabLintResponse = result?.first
         updateStatusWidget(result?.second ?: LintStatusEnum.INVALID)
-    }
-
-    fun rerun() {
-        lastFile?.let { accept(it) }
     }
 
     private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : Pair<GitlabLintResponse?, LintStatusEnum>? {

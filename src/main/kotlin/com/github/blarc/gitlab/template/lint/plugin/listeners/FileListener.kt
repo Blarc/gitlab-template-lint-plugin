@@ -8,6 +8,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
+import com.intellij.openapi.startup.StartupManager
 import com.intellij.openapi.wm.impl.status.widget.StatusBarWidgetSettings
 import com.intellij.openapi.wm.impl.status.widget.StatusBarWidgetsManager
 import com.intellij.psi.PsiManager
@@ -15,8 +16,6 @@ import com.intellij.ui.EditorNotifications
 
 @Service
 class FileListener : FileEditorManagerListener {
-
-    private var firstTime = true
 
     private val lintStatusWidgetFactory = ApplicationManager.getApplication().getService(LintStatusWidgetFactory::class.java)
     private val statusBarWidgetSettings = ApplicationManager.getApplication().getService(StatusBarWidgetSettings::class.java)
@@ -41,14 +40,13 @@ class FileListener : FileEditorManagerListener {
             statusBarWidgetSettings?.setEnabled(lintStatusWidgetFactory, matches)
             statusBarWidgetsManager?.updateWidget(LintStatusWidgetFactory::class.java)
 
-            if (!firstTime && AppSettings.instance.runLintOnFileChange && matches) {
+            val startupFinished = StartupManager.getInstance(project).postStartupActivityPassed()
+            if (startupFinished && AppSettings.instance.runLintOnFileChange && matches) {
                 // If we can get the psi file, run linting
                 PsiManager.getInstance(project).findFile(event.newFile)?.let {
                     runLinting(it)
                 }
             }
         }
-
-        firstTime = false
     }
 }

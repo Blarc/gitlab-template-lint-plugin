@@ -6,7 +6,6 @@ import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import okhttp3.*
@@ -35,7 +34,6 @@ open class Gitlab(val project: Project) {
             .addHeader("Private-Token", gitlabToken)
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     fun getVersion(
         baseUrl: String,
         gitlabToken: String
@@ -69,7 +67,6 @@ open class Gitlab(val project: Project) {
         return result
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     fun searchProjectId(
         baseUrl: String,
         gitlabToken: String,
@@ -124,7 +121,6 @@ open class Gitlab(val project: Project) {
         return result
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     fun lintContent(
         baseUrl: String,
         gitlabToken: String,

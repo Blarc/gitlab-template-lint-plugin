@@ -37,6 +37,7 @@ class GlobsConfigurable : BoundConfigurable(message("settings.globs.group.title"
                     .disableDownAction()
                     .createPanel()
             ).align(Align.FILL)
+                .comment(message("settings.globs.comment"))
         }.resizableRow()
         row {
             reportBugLink()

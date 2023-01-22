@@ -9,6 +9,10 @@
 ### Changed
 - Refactor settings ui.
 
+### Fixed
+- Refresh actions now properly runs on currently opened file.
+- File listener waits for project to be initialized.
+
 ## 1.4.0 - 2023-01-15
 
 ### Added
