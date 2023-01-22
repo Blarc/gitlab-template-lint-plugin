@@ -26,13 +26,15 @@ intellij {
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
 
-    plugins.set(properties("platformPlugins").split(',')
-        .map(String::trim)
-        .filter(String::isNotEmpty))
+    plugins.set(
+        properties("platformPlugins").split(',')
+            .map(String::trim)
+            .filter(String::isNotEmpty)
+    )
 }
 
 changelog {
-    // version.set(properties("pluginVersion"))
+//    version.set(properties("pluginVersion"))
     groups.set(emptyList())
     repositoryUrl.set(properties("pluginRepositoryUrl"))
 }
@@ -62,8 +64,9 @@ tasks {
         changeNotes.set(provider {
             with(changelog) {
                 renderItem(
-                    getOrNull(properties("pluginVersion"))
-                        ?: runCatching { getLatest() }.getOrElse { getUnreleased() },
+                    getOrNull(properties("pluginVersion")) ?: getUnreleased()
+                        .withHeader(false)
+                        .withEmptySections(false),
                     Changelog.OutputType.HTML,
                 )
             }

@@ -17,6 +17,14 @@ jobs:
       version: ${{ steps.properties.outputs.version }}
       changelog: ${{ steps.properties.outputs.changelog }}
     steps:
+
+      # Free GitHub Actions Environment Disk Space
+      - name: Maximize Build Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+
       # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v3.3.0
@@ -30,7 +38,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: adopt
-          java-version: 14
+          java-version: 17
           cache: gradle
 
       # Set environment variables
@@ -50,7 +58,7 @@ jobs:
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGELOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-          
+
           ./gradlew listProductsReleases # prepare list of IDEs for Plugin Verifier
 
       # Run tests
@@ -109,6 +117,8 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
 
       # Check out current repository

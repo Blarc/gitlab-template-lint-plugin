@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [Unreleased]
 
 ### Added
 - Option for setting file path glob patterns for linting.
