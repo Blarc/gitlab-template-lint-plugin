@@ -4,9 +4,12 @@ import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.extensions.createColumn
 import com.github.blarc.gitlab.template.lint.plugin.extensions.notBlank
 import com.github.blarc.gitlab.template.lint.plugin.extensions.replaceAt
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
+import com.intellij.openapi.progress.runBackgroundableTask
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.dsl.builder.Align
@@ -14,6 +17,10 @@ import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ListTableModel
+import java.awt.event.ActionEvent
+import javax.swing.Action
+import javax.swing.JLabel
+import javax.swing.JTextField
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 
 class GitlabUrlTokenTable(val project: Project) {
@@ -38,7 +45,7 @@ class GitlabUrlTokenTable(val project: Project) {
     )
 
     fun addGitlabUrlToken() {
-        val dialog = GitlabUrlTokenDialog()
+        val dialog = GitlabUrlTokenDialog(project)
 
         if (dialog.showAndGet()) {
             gitlabUrlTokens = gitlabUrlTokens.plus(dialog.gitlabUrlToken)
@@ -56,7 +63,7 @@ class GitlabUrlTokenTable(val project: Project) {
     fun editGitlabUrlToken() {
         val row = table.selectedObject ?: return
 
-        val dialog = GitlabUrlTokenDialog(row.copy())
+        val dialog = GitlabUrlTokenDialog(project, row.copy())
 
         if (dialog.showAndGet()) {
             gitlabUrlTokens = gitlabUrlTokens.replaceAt(table.selectedRow, dialog.gitlabUrlToken)
@@ -88,8 +95,12 @@ class GitlabUrlTokenTable(val project: Project) {
         project.service<ProjectSettings>().gitlabUrls = gitlabUrlTokens.map { it.gitlabUrl }.toSet()
     }
 
-    private class GitlabUrlTokenDialog(newGitlabUrlToken: GitlabUrlToken? = null) : DialogWrapper(true) {
+    private class GitlabUrlTokenDialog(val project: Project, newGitlabUrlToken: GitlabUrlToken? = null) :
+        DialogWrapper(true) {
         var gitlabUrlToken = newGitlabUrlToken ?: GitlabUrlToken()
+        val gitlabUrlTextField = JTextField()
+        val gitlabTokenTextField = JTextField()
+        val verifyLabel = JLabel()
 
         init {
             title = message("settings.gitlabUrlToken.dialog")
@@ -98,21 +109,54 @@ class GitlabUrlTokenTable(val project: Project) {
             init()
         }
 
+        override fun createActions(): Array<Action> {
+            super.createActions()
+            return arrayOf(createVerifyAction(), okAction, cancelAction)
+        }
+
         override fun createCenterPanel() = panel {
             row(message("settings.gitlabUrlToken.gitlab-url")) {
-                textField()
+                cell(gitlabUrlTextField)
                     .align(Align.FILL)
                     .bindText({ gitlabUrlToken.gitlabUrl }, { gitlabUrlToken.gitlabUrl = it })
                     .focused()
                     .validationOnApply { notBlank(it.text) }
-
             }
             row(message("settings.gitlabUrlToken.gitlab-token")) {
-                textField()
+                cell(gitlabTokenTextField)
                     .align(Align.FILL)
                     .bindText({ gitlabUrlToken.gitlabToken.orEmpty() }, { gitlabUrlToken.gitlabToken = it })
                     .validationOnApply { notBlank(it.text) }
+            }
+            row {
+                cell(verifyLabel)
+            }
+        }
 
+        private fun createVerifyAction(): DialogWrapperAction {
+            return object : DialogWrapperAction(message("settings.verify")) {
+                override fun doAction(e: ActionEvent?) {
+                    runBackgroundableTask(message("settings.verify.running")) {
+                        if (gitlabUrlTextField.text.isEmpty()) {
+                            verifyLabel.icon = AllIcons.General.InspectionsError
+                            verifyLabel.text = message("settings.verify.gitlab-url-not-set")
+                        } else {
+                            verifyLabel.icon = AllIcons.General.InlineRefreshHover
+                            verifyLabel.text = message("settings.verify.running")
+                            try {
+                                project.service<Gitlab>()
+                                    .getVersion(gitlabUrlTextField.text, gitlabTokenTextField.text.orEmpty())
+                                    .get()
+                                verifyLabel.icon = AllIcons.General.InspectionsOK
+                                verifyLabel.text = message("settings.verify.valid")
+                            } catch (e: Exception) {
+                                verifyLabel.icon = AllIcons.General.InspectionsError
+                                verifyLabel.text =
+                                    message("settings.verify.invalid", e.cause?.localizedMessage.orEmpty())
+                            }
+                        }
+                    }
+                }
             }
         }
     }
