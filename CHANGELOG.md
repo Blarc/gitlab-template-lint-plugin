@@ -4,10 +4,10 @@
 
 ### Added
 - Option for setting file path glob patterns for linting.
-- Move remotes table to separate tab.
 
 ### Changed
 - Refactor settings ui.
+- Move remotes table to separate tab.
 
 ### Fixed
 - Refresh actions now properly runs on currently opened file.
