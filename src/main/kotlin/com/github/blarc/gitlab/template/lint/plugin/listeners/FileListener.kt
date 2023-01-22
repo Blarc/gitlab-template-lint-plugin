@@ -36,12 +36,12 @@ class FileListener : FileEditorManagerListener {
 
         // Hide/show widget
         val statusBarWidgetsManager = project.getService(StatusBarWidgetsManager::class.java)
-        if (lintStatusWidgetFactory != null && matches) {
+        if (lintStatusWidgetFactory != null) {
 
-            statusBarWidgetSettings?.setEnabled(lintStatusWidgetFactory, true)
+            statusBarWidgetSettings?.setEnabled(lintStatusWidgetFactory, matches)
             statusBarWidgetsManager?.updateWidget(LintStatusWidgetFactory::class.java)
 
-            if (!firstTime && AppSettings.instance.runLintOnFileChange) {
+            if (!firstTime && AppSettings.instance.runLintOnFileChange && matches) {
                 // If we can get the psi file, run linting
                 PsiManager.getInstance(project).findFile(event.newFile)?.let {
                     runLinting(it)

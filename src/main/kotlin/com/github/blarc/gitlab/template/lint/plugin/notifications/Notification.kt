@@ -6,6 +6,7 @@ import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.openPluginS
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.ide.browsers.BrowserLauncher
 import com.intellij.openapi.components.service
+import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 import java.net.URI
 
@@ -33,7 +34,7 @@ data class Notification(
         fun remoteIdNotFound(project: Project) = Notification(
             DEFAULT_TITLE,
             message = message("notifications.remote-id-not-found"),
-            actions = setOf(NotificationAction.settings(project, message("actions.set-remote-id")))
+            actions = setOf(NotificationAction.settingsRemote(project, message("actions.set-remote-id")))
         )
 
         fun star() = Notification(
@@ -67,7 +68,7 @@ data class Notification(
 
         fun gitlabUrlAutoDetected(url: String, project: Project) = Notification(
             message =  message("notifications.gitlab-url-detected.message", url),
-            actions = setOf(NotificationAction.settings(project, message("notifications.gitlab-url-detected.action")))
+            actions = setOf(NotificationAction.settingsRemote(project, message("notifications.gitlab-url-detected.action")))
         )
 
         fun unsuccessfulRequest(message: String) = Notification(message = message("notifications.unsuccessful-request", message))
@@ -83,6 +84,10 @@ data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) 
         fun settings(project: Project, title: String = message("settings.title")) = NotificationAction(title) { dismiss ->
             dismiss()
             openPluginSettings(project)
+        }
+        fun settingsRemote(project: Project, title: String = message("settings.remotes.dialog.title")) = NotificationAction(title) { dismiss ->
+            dismiss()
+            ShowSettingsUtil.getInstance().showSettingsDialog(project, message("settings.remotes.group.title"))
         }
 
         fun openRepository(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) { dismiss ->
