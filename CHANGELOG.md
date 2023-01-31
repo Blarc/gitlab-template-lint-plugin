@@ -1,8 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.5.2] - 2023-01-31
+
 ### Fixed
-- Remotes are now property saved after updating Gitlab url or remote id. 
+- Remotes are now property saved after updating Gitlab url or remote id.
 
 ## [1.5.1] - 2023-01-22
 
@@ -174,7 +177,8 @@
 - Setting private Gitlab token
 - Error message on linting error
 
-[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.1...HEAD
+[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.2...HEAD
+[1.5.2]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.4.0...v1.5.1
 [1.4.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.2.2...v1.3.0
