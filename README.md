@@ -17,7 +17,7 @@
 <br>
 
 - [Description](#description)
-- [Functionalities](#functionalities)
+- [Features](#features)
 - [Compatibility](#compatibility)
 - [Install](#install)
 - [Installation from zip](#installation-from-zip)
