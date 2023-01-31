@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Remotes are now property saved after updating Gitlab url or remote id. 
 
 ## [1.5.1] - 2023-01-22
 
