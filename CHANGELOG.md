@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.5.3] - 2023-03-29
+
 ### Added
 - Refactor null checking in FileListener.
 
@@ -183,7 +185,8 @@
 - Setting private Gitlab token
 - Error message on linting error
 
-[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.2...HEAD
+[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.3...HEAD
+[1.5.3]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.2...v1.5.3
 [1.5.2]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.4.0...v1.5.1
 [1.4.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.3.0...v1.4.0
