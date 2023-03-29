@@ -21,14 +21,11 @@ class FileListener : FileEditorManagerListener {
     private val statusBarWidgetSettings = ApplicationManager.getApplication().getService(StatusBarWidgetSettings::class.java)
     override fun selectionChanged(event: FileEditorManagerEvent) {
 
+        val file = event.newFile ?: return
         val project = event.manager.project
 
         // Check if file matches regex
-        val matches = if (event.newFile != null) {
-            GitlabLintUtils.matchesGitlabLintGlob(event.newFile.path)
-        } else {
-            false
-        }
+        val matches = GitlabLintUtils.matchesGitlabLintGlob(file.path)
 
         // Hide/show error notification
         EditorNotifications.getInstance(project).updateAllNotifications()
@@ -43,7 +40,7 @@ class FileListener : FileEditorManagerListener {
             val startupFinished = StartupManager.getInstance(project).postStartupActivityPassed()
             if (startupFinished && AppSettings.instance.runLintOnFileChange && matches) {
                 // If we can get the psi file, run linting
-                PsiManager.getInstance(project).findFile(event.newFile)?.let {
+                PsiManager.getInstance(project).findFile(file)?.let {
                     runLinting(it)
                 }
             }

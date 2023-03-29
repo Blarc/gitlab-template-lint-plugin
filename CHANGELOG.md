@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+- Refactor null checking in FileListener.
+
 ## [1.5.2] - 2023-01-31
 
 ### Fixed
