@@ -5,6 +5,9 @@
 ### Added
 - Refactor null checking in FileListener.
 
+### Fixed
+- Plugin should not have until build number.
+
 ## [1.5.2] - 2023-01-31
 
 ### Fixed
