@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- Null value for gitlab token preventing saving settings.
+
 ## [1.5.3] - 2023-03-29
 
 ### Added

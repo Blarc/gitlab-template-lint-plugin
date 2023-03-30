@@ -91,7 +91,7 @@ class GitlabUrlTokenTable(val project: Project) {
     }
 
     fun apply() {
-        gitlabUrlTokens.forEach { AppSettings.instance.saveGitlabToken(it.gitlabToken!!, it.gitlabUrl) }
+        gitlabUrlTokens.forEach { AppSettings.instance.saveGitlabToken(it.gitlabToken.orEmpty(), it.gitlabUrl) }
         project.service<ProjectSettings>().gitlabUrls = gitlabUrlTokens.map { it.gitlabUrl }.toSet()
     }
 
