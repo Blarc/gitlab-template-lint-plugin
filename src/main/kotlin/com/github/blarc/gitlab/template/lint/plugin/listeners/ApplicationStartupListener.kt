@@ -3,16 +3,24 @@ package com.github.blarc.gitlab.template.lint.plugin.listeners
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
+import com.github.blarc.gitlab.template.lint.plugin.runLinting
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
+import com.intellij.ide.DataManager
+import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.startup.StartupActivity
+import com.intellij.openapi.startup.ProjectActivity
 
-class ApplicationStartupListener: StartupActivity.DumbAware {
+class ApplicationStartupListener : ProjectActivity {
 
     private var firstTime = true
-    override fun runActivity(project: Project) {
+    override suspend fun execute(project: Project) {
         showVersionNotification(project)
+        DataManager.getInstance().dataContextFromFocusAsync.onSuccess {
+            it.getData(PlatformDataKeys.PSI_FILE)?.let { file ->
+                runLinting(file)
+            }
+        }
     }
 
     private fun showVersionNotification(project: Project) {
@@ -24,7 +32,6 @@ class ApplicationStartupListener: StartupActivity.DumbAware {
         }
 
         settings.lastVersion = version
-
         if (firstTime) {
             sendNotification(Notification.welcome(version ?: "Unknown"), project)
         }

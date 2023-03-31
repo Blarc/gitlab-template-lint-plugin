@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Run linting on startup if the opened file matches the glob patterns.
 
 ### Changed
 - Replace StatusBarWidgetSettings by controlling the widget visibility in LintStatusPresentation.
