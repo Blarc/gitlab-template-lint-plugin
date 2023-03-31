@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.6.0] - 2023-03-31
+
 ### Added
 - Run linting on startup if the opened file matches the glob patterns.
 - Update lint status widget whenever the file changes, so it properly shows whether the file is linted or not.
@@ -194,7 +197,8 @@
 - Setting private Gitlab token
 - Error message on linting error
 
-[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.3...HEAD
+[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.3...v1.6.0
 [1.5.3]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.2...v1.5.3
 [1.5.2]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.4.0...v1.5.1
