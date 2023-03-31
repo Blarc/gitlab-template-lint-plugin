@@ -39,6 +39,8 @@ class FileListener : FileEditorManagerListener {
             PsiManager.getInstance(project).findFile(file)?.let {
                 runLinting(it)
             }
+        } else {
+            updateStatusWidget(project, LintStatusEnum.WAITING)
         }
     }
 }

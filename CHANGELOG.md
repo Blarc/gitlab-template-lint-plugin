@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - Run linting on startup if the opened file matches the glob patterns.
+- Update lint status widget whenever the file changes, so it properly shows whether the file is linted or not.
 
 ### Changed
 - Replace StatusBarWidgetSettings by controlling the widget visibility in LintStatusPresentation.

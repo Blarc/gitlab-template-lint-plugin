@@ -1,8 +1,10 @@
 package com.github.blarc.gitlab.template.lint.plugin.inspections
 
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.runLinting
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.ui.settings.LintFrequencyEnum
+import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.components.Service
@@ -17,6 +19,9 @@ class GitlabLintInspection : LocalInspectionTool() {
             override fun visitFile(file: PsiFile) {
                 if (AppSettings.instance.lintFrequency == LintFrequencyEnum.ON_CHANGE) {
                     runLinting(file)
+                }
+                else {
+                    GitlabLintUtils.updateStatusWidget(file.project, LintStatusEnum.WAITING)
                 }
             }
         }
