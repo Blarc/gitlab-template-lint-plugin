@@ -4,11 +4,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.StatusBar
 import com.intellij.openapi.wm.StatusBarWidget
-import com.intellij.openapi.wm.WindowManager
 
 class LintStatusWidget(val project: Project) : StatusBarWidget {
-
-    private var statusBar = WindowManager.getInstance().getStatusBar(project)
 
     companion object {
         const val ID = "LintStatus"
@@ -25,6 +22,6 @@ class LintStatusWidget(val project: Project) : StatusBarWidget {
     }
 
     override fun getPresentation(): StatusBarWidget.WidgetPresentation {
-        return LintStatusPresentation(statusBar)
+        return LintStatusPresentation(project)
     }
 }

@@ -1,6 +1,12 @@
 package com.github.blarc.gitlab.template.lint.plugin
 
+import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
+import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidget
+import com.intellij.openapi.components.service
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.wm.WindowManager
 import java.nio.file.FileSystems
 
 object GitlabLintUtils {
@@ -14,5 +20,10 @@ object GitlabLintUtils {
             }
         }
         return false
+    }
+
+    fun updateStatusWidget(project: Project, status: LintStatusEnum) {
+        project.service<Pipeline>().lintStatus = status
+        WindowManager.getInstance().getStatusBar(project)?.updateWidget(LintStatusWidget.ID)
     }
 }

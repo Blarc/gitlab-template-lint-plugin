@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- Replace StatusBarWidgetSettings by controlling the widget visibility in LintStatusPresentation.
+
 ### Fixed
 - Null value for gitlab token preventing saving settings.
 
