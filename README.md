@@ -18,10 +18,10 @@
 
 - [Description](#description)
 - [Features](#features)
+- [Demo](#demo)
 - [Compatibility](#compatibility)
 - [Install](#install)
 - [Installation from zip](#installation-from-zip)
-- [Demo](#demo)
 
 ## Description
 Gitlab Template Lint Plugin is a plugin for IntelliJ based IDEs/Android studio for linting
@@ -34,6 +34,12 @@ To get started, install the plugin and set Gitlab private token with <kbd>read_a
 ## Features
 - Linting of Gitlab CI/CD yaml configuration files
 - Preview of the merged Gitlab CI/CD yaml configuration files
+- Setting inclusion and exclusion globs for linting
+- Multiple Gitlab instances support
+
+## Demo
+
+![demo.gif](./screenshots/plugin2.gif)
 
 ## Compatibility
 IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, GoLand, DataGrip, Rider, MPS, Android Studio, DataSpell, Code With Me
@@ -54,10 +60,6 @@ For Mac: <kbd>IntelliJ IDEA</kbd> > <kbd>Preferences</kbd> > <kbd>Plugins</kbd> 
 1. Download zip from [releases](https://github.com/Blarc/gitlab-lint-plugin/releases)
 2. Import to IntelliJ: <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Cog</kbd> > <kbd>Install plugin from disk...</kbd>
 3. Set Gitlab private token in plugin's settings: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Gitlab Template Lint</kbd>
-
-## Demo
-
-![demo.gif](./screenshots/plugin2.gif)
 
 ## Support
 

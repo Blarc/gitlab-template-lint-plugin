@@ -8,7 +8,7 @@ import com.intellij.ui.EditorNotifications
 
 
 fun runLinting(file: PsiFile) {
-    if (GitlabLintUtils.matchesGitlabLintGlob(file.virtualFile.path)) {
+    if (GitlabLintUtils.matchesGlobs(file.virtualFile.path)) {
         runBackgroundableTask(GitlabLintBundle.message("inspection.title"), file.project) { indicator ->
             indicator.isIndeterminate = true
             val project = file.project

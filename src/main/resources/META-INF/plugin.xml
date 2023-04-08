@@ -21,6 +21,8 @@
         <ul>
             <li>Linting of Gitlab CI/CD yaml configuration files</li>
             <li>Preview of the merged Gitlab CI/CD yaml configuration files</li>
+            <li>Setting inclusion and exclusion globs for linting</li>
+            <li>Multiple Gitlab instances support</li>
         </ul>
         <h3>Usage</h3>
         <p>To get started, install the plugin and set Gitlab private token with <strong>read_api</strong> and

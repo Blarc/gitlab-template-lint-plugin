@@ -30,7 +30,9 @@ class AppSettings : PersistentStateComponent<AppSettings> {
             get() = ApplicationManager.getApplication().getService(AppSettings::class.java)
     }
 
+    // Inclusion globs - do not rename to avoid breaking existing settings
     var gitlabLintGlobStrings: List<String> = listOf("**/*.gitlab-ci.yml", "**/*.gitlab-ci.yaml")
+    var exclusionGlobs: List<String> = listOf()
     var lastVersion: String? = null
     var hits = 0
     var requestSupport = true

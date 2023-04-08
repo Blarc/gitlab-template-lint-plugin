@@ -10,10 +10,24 @@ import com.intellij.openapi.wm.WindowManager
 import java.nio.file.FileSystems
 
 object GitlabLintUtils {
-    fun matchesGitlabLintGlob(text: String): Boolean {
-        val globStrings = AppSettings.instance.gitlabLintGlobStrings
+
+    fun matchesGlobs(text: String): Boolean {
+        return matchesInclusionGlobs(text) && !matchesExclusionGlobs(text)
+    }
+
+    fun matchesInclusionGlobs(text: String): Boolean {
+        val inclusionGlobs = AppSettings.instance.gitlabLintGlobStrings
+        return matchesGlobs(text, inclusionGlobs)
+    }
+
+    fun matchesExclusionGlobs(text: String): Boolean {
+        val exclusionGlobs = AppSettings.instance.exclusionGlobs
+        return matchesGlobs(text, exclusionGlobs)
+    }
+
+    fun matchesGlobs(text: String, globs: List<String>): Boolean {
         val fileSystem = FileSystems.getDefault()
-        for (globString in globStrings) {
+        for (globString in globs) {
             val glob = fileSystem.getPathMatcher("glob:$globString")
             if (glob.matches(fileSystem.getPath(text))) {
                 return true
