@@ -69,6 +69,9 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
 
+        <psi.referenceContributor
+                implementation="com.github.blarc.gitlab.template.lint.plugin.references.GitlabLintReferenceContributor"
+                language="yaml"/>
 
         <fileType
                 name="Gitlab Yaml"
