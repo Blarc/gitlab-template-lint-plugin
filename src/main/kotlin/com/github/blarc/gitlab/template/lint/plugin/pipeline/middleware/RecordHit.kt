@@ -1,9 +1,9 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
-import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabObject
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
-import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.widget.PipelineStatusEnum
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 
@@ -11,7 +11,7 @@ import com.intellij.openapi.components.service
 class RecordHit : Middleware {
     override val priority = 20
 
-    override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?) : Pair<GitlabLintResponse?, LintStatusEnum>? {
+    override fun invoke(pass: Pass, next: () -> Pair<GitlabObject?, PipelineStatusEnum>?) : Pair<GitlabObject?, PipelineStatusEnum>? {
         val result = next() ?: return null
 
         service<AppSettings>().recordHit();

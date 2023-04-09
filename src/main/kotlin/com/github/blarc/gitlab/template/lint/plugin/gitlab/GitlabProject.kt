@@ -9,4 +9,4 @@ data class GitlabProject(
     val id: Long,
     @SerialName("web_url")
     val webUrl: String
-)
+): GitlabObject

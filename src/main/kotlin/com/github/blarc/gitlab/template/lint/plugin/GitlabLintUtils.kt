@@ -1,9 +1,9 @@
 package com.github.blarc.gitlab.template.lint.plugin
 
 import com.github.blarc.gitlab.template.lint.plugin.language.GitlabYamlFileType
-import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
+import com.github.blarc.gitlab.template.lint.plugin.pipeline.LintPipeline
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
-import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.widget.PipelineStatusEnum
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidget
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileTypes.FileTypeManager
@@ -47,8 +47,8 @@ object GitlabLintUtils {
         return false
     }
 
-    fun updateStatusWidget(project: Project, status: LintStatusEnum) {
-        project.service<Pipeline>().lintStatus = status
+    fun updateStatusWidget(project: Project, status: PipelineStatusEnum) {
+        project.service<LintPipeline>().lintStatus = status
         WindowManager.getInstance().getStatusBar(project)?.updateWidget(LintStatusWidget.ID)
     }
 }

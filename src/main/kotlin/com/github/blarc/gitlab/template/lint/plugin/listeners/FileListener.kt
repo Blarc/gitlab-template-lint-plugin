@@ -4,7 +4,7 @@ import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.updateStatusWidget
 import com.github.blarc.gitlab.template.lint.plugin.runLinting
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
-import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.widget.PipelineStatusEnum
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidget
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
@@ -27,7 +27,7 @@ class FileListener : FileEditorManagerListener {
 
         // Hide widget if file doesn't match glob
         if (!GitlabLintUtils.isGitlabYaml(file)) {
-            updateStatusWidget(project, LintStatusEnum.HIDDEN)
+            updateStatusWidget(project, PipelineStatusEnum.HIDDEN)
             return
         }
 
@@ -40,7 +40,7 @@ class FileListener : FileEditorManagerListener {
                 runLinting(it)
             }
         } else {
-            updateStatusWidget(project, LintStatusEnum.WAITING)
+            updateStatusWidget(project, PipelineStatusEnum.WAITING)
         }
     }
 }

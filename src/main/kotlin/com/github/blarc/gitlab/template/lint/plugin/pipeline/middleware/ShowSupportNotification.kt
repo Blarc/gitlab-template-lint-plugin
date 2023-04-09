@@ -1,11 +1,11 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
-import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabObject
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
-import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.widget.PipelineStatusEnum
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 
@@ -13,7 +13,7 @@ import com.intellij.openapi.components.service
 class ShowSupportNotification : Middleware {
     override val priority = 10
 
-    override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
+    override fun invoke(pass: Pass, next: () -> Pair<GitlabObject?, PipelineStatusEnum>?): Pair<GitlabObject?, PipelineStatusEnum>? {
         val gitlabLintResponse = next()
 
         val settings = service<AppSettings>()
