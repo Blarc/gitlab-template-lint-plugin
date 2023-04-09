@@ -89,7 +89,37 @@ open class Gitlab(val project: Project) {
             .post(formBody)
             .build()
 
-        val result = CompletableFuture<GitlabLint?>()
+        return makeRequest(request, showGitlabTokenNotification) {
+            json.decodeFromString<GitlabLint>(it)
+        }
+    }
+
+    fun getFile(
+        baseUrl: String,
+        gitlabToken: String,
+        filePath: String,
+        remoteId: Long,
+        branch: String,
+        showGitlabTokenNotification: Boolean
+    ): CompletableFuture<GitlabFile?> {
+
+        val request: Request =
+            prepareRequest(baseUrl, gitlabToken, "/projects/${remoteId}/repository/files/${filePath}?ref=${branch}")
+                .get()
+                .build()
+
+        return makeRequest(request, showGitlabTokenNotification) {
+            json.decodeFromString<GitlabFile>(it)
+        }
+    }
+
+    private fun <T> makeRequest(
+        request: Request,
+        showGitlabTokenNotification: Boolean,
+        deserialize: (String) -> T
+    ): CompletableFuture<T?> {
+        val result = CompletableFuture<T?>()
+
         httpClient.newCall(request)
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
