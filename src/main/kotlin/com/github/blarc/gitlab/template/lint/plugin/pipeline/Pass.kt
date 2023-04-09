@@ -4,7 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import git4idea.repo.GitRepository
 
-class Pass(val project: Project, val file: PsiFile) {
+open class Pass(val project: Project, val file: PsiFile) {
     var repository: GitRepository? = null
     var remoteUrl: String? = null
     var remoteId: Long? = null

@@ -1,7 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
-import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLint
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabObject
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.providers.EditorWithMergedPreview
@@ -14,7 +13,6 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 @Service
 class LintTemplate : Middleware {
     override val priority = 50
-    var gitlabLint: GitlabLint? = null
     private var showGitlabTokenNotification = true
 
     override fun invoke(pass: Pass, next: () -> Pair<GitlabObject?, PipelineStatusEnum>?): Pair<GitlabObject?, PipelineStatusEnum>? {
@@ -26,7 +24,7 @@ class LintTemplate : Middleware {
 
         val gitlab = pass.project.service<Gitlab>()
 
-        gitlabLint = gitlab.lintTemplate(
+        val lintTemplate = gitlab.lintTemplate(
             gitlabUrl,
             gitlabToken,
             pass.file.text,
@@ -36,13 +34,13 @@ class LintTemplate : Middleware {
         ).get()
 
 
-        val lintStatus = if (gitlabLint?.valid == true) {
+        val lintStatus = if (lintTemplate?.valid == true) {
             showGitlabTokenNotification = true
 
             WriteCommandAction.runWriteCommandAction(pass.project) {
                 val selectedEditor = FileEditorManager.getInstance(pass.project).getSelectedEditor(pass.file.virtualFile)
                 if (selectedEditor is EditorWithMergedPreview) {
-                    gitlabLint?.mergedYaml?.let { selectedEditor.setPreviewText(it) }
+                    lintTemplate.mergedYaml?.let { selectedEditor.setPreviewText(it) }
                 }
             }
 
@@ -51,6 +49,6 @@ class LintTemplate : Middleware {
             showGitlabTokenNotification = false
             PipelineStatusEnum.INVALID
         }
-        return Pair(gitlabLint, lintStatus)
+        return Pair(lintTemplate, lintStatus)
     }
 }
