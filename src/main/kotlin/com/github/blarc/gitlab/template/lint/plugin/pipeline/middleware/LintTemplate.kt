@@ -26,8 +26,7 @@ class LintTemplate : Middleware {
 
         val gitlab = pass.project.service<Gitlab>()
 
-
-        gitlabLint = gitlab.lintContent(
+        gitlabLint = gitlab.lintTemplate(
             gitlabUrl,
             gitlabToken,
             pass.file.text,
