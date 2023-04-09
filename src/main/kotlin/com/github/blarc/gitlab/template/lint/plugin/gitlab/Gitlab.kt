@@ -128,7 +128,7 @@ open class Gitlab(val project: Project) {
         remoteId: Long,
         branch: String,
         showGitlabTokenNotification: Boolean
-    ): CompletableFuture<GitlabLintResponse?> {
+    ): CompletableFuture<GitlabLint?> {
 
         val formBody = FormBody.Builder()
             .add("content", content)
@@ -141,7 +141,7 @@ open class Gitlab(val project: Project) {
             .post(formBody)
             .build()
 
-        val result = CompletableFuture<GitlabLintResponse?>()
+        val result = CompletableFuture<GitlabLint?>()
         httpClient.newCall(request)
             .enqueue(object: Callback{
                 override fun onFailure(call: Call, e: IOException) {
@@ -155,7 +155,7 @@ open class Gitlab(val project: Project) {
                     response.use {
                         if (it.isSuccessful) {
                             val responseString = it.body!!.string()
-                            val decodeFromString = json.decodeFromString<GitlabLintResponse>(responseString)
+                            val decodeFromString = json.decodeFromString<GitlabLint>(responseString)
                             result.complete(decodeFromString)
                         }
                         else {

@@ -3,7 +3,7 @@ package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 import com.github.blarc.gitlab.template.lint.plugin.git.gitlabUrl
 import com.github.blarc.gitlab.template.lint.plugin.git.httpUrl
 import com.github.blarc.gitlab.template.lint.plugin.git.locateRemote
-import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabObject
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.http.toHttps
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
@@ -11,7 +11,7 @@ import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote.Remote
-import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.widget.PipelineStatusEnum
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import git4idea.repo.GitRemote
@@ -24,7 +24,7 @@ class ResolveContext : Middleware {
     private var showRepositoryNotification = true
     private var showRemoteNotification = true
 
-    override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
+    override fun invoke(pass: Pass, next: () -> Pair<GitlabObject?, PipelineStatusEnum>?): Pair<GitlabObject?, PipelineStatusEnum>? {
 
         val repository = locateRepository(pass) ?: return null
         val remote = locateRemote(pass, repository) ?: return null

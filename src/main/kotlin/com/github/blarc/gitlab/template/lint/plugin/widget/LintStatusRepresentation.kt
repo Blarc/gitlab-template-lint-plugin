@@ -1,7 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.widget
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
-import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
+import com.github.blarc.gitlab.template.lint.plugin.pipeline.LintPipeline
 import com.github.blarc.gitlab.template.lint.plugin.widget.actions.OpenSettingsAction
 import com.github.blarc.gitlab.template.lint.plugin.widget.actions.RefreshAction
 import com.intellij.dvcs.ui.LightActionGroup
@@ -43,18 +43,18 @@ class LintStatusPresentation(val project: Project) : StatusBarWidget.MultipleTex
     }
 
     override fun getTooltipText(): String? {
-        val status = project.service<Pipeline>().lintStatus
+        val status = project.service<LintPipeline>().lintStatus
         return status.tooltip
     }
 
 
     override fun getSelectedValue(): String? {
-        val status = project.service<Pipeline>().lintStatus
+        val status = project.service<LintPipeline>().lintStatus
         return status.text
     }
 
     override fun getIcon(): Icon? {
-        val status = project.service<Pipeline>().lintStatus
+        val status = project.service<LintPipeline>().lintStatus
         return status.icon
     }
 

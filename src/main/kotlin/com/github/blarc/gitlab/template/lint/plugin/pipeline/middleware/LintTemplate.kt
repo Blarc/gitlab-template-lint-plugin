@@ -1,22 +1,23 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
-import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLint
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabObject
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.providers.EditorWithMergedPreview
-import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.widget.PipelineStatusEnum
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditorManager
 
 @Service
-class LintContext : Middleware {
+class LintTemplate : Middleware {
     override val priority = 50
-    var gitlabLintResponse: GitlabLintResponse? = null
+    var gitlabLint: GitlabLint? = null
     private var showGitlabTokenNotification = true
 
-    override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
+    override fun invoke(pass: Pass, next: () -> Pair<GitlabObject?, PipelineStatusEnum>?): Pair<GitlabObject?, PipelineStatusEnum>? {
         val remoteId = pass.remoteIdOrThrow()
         val branch = pass.repositoryOrThrow().currentBranchName ?: return null
 
@@ -26,7 +27,7 @@ class LintContext : Middleware {
         val gitlab = pass.project.service<Gitlab>()
 
 
-        gitlabLintResponse = gitlab.lintContent(
+        gitlabLint = gitlab.lintContent(
             gitlabUrl,
             gitlabToken,
             pass.file.text,
@@ -36,21 +37,21 @@ class LintContext : Middleware {
         ).get()
 
 
-        val lintStatus = if (gitlabLintResponse?.valid == true) {
+        val lintStatus = if (gitlabLint?.valid == true) {
             showGitlabTokenNotification = true
 
             WriteCommandAction.runWriteCommandAction(pass.project) {
                 val selectedEditor = FileEditorManager.getInstance(pass.project).getSelectedEditor(pass.file.virtualFile)
                 if (selectedEditor is EditorWithMergedPreview) {
-                    gitlabLintResponse?.mergedYaml?.let { selectedEditor.setPreviewText(it) }
+                    gitlabLint?.mergedYaml?.let { selectedEditor.setPreviewText(it) }
                 }
             }
 
-            LintStatusEnum.VALID
+            PipelineStatusEnum.VALID
         } else {
             showGitlabTokenNotification = false
-            LintStatusEnum.INVALID
+            PipelineStatusEnum.INVALID
         }
-        return Pair(gitlabLintResponse, lintStatus)
+        return Pair(gitlabLint, lintStatus)
     }
 }

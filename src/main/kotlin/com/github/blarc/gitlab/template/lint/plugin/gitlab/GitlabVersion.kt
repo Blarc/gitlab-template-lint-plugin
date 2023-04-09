@@ -7,4 +7,4 @@ import kotlinx.serialization.Serializable
 data class GitlabVersion (
     val version: String,
     val revision: String
-)
+): GitlabObject
