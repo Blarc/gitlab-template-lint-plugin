@@ -19,6 +19,7 @@ version = properties("pluginVersion")
 repositories {
     mavenCentral()
     gradlePluginPortal()
+    maven(url="https://jitpack.io")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
@@ -94,4 +95,5 @@ tasks.withType<KotlinCompile>().configureEach {
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("net.jimblackler.jsonschemafriend:core:0.11.4")
 }
