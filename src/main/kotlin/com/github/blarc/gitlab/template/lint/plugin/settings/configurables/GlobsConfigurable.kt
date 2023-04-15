@@ -4,6 +4,10 @@ import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
 import com.github.blarc.gitlab.template.lint.plugin.extensions.createColumn
 import com.github.blarc.gitlab.template.lint.plugin.extensions.reportBugLink
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
+import com.intellij.ide.DataManager
+import com.intellij.ide.projectView.ProjectView
+import com.intellij.openapi.actionSystem.PlatformDataKeys
+import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.ToolbarDecorator
@@ -128,6 +132,24 @@ class GlobsConfigurable : BoundConfigurable(GitlabLintBundle.message("settings.g
         super.apply()
         AppSettings.instance.gitlabLintGlobStrings = inclusionGlobs
         AppSettings.instance.exclusionGlobs = exclusionGlobs
+
+        DataManager.getInstance().dataContextFromFocusAsync.onSuccess { context ->
+            context.getData(PlatformDataKeys.PROJECT)?.let { project ->
+
+                if (project.isDisposed) {
+                    return@onSuccess
+                }
+
+                val projectView = ProjectView.getInstance(project)
+                projectView ?: return@onSuccess
+
+                projectView.refresh()
+                projectView.currentProjectViewPane?.updateFromRoot(true)
+                FileEditorManagerEx.getInstanceEx(project).windows.forEach {
+                    it.manager.refreshIcons()
+                }
+            }
+        }
     }
 
     private class GlobDialog(var glob: String = "") : DialogWrapper(false) {

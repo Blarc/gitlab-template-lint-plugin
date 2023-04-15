@@ -4,6 +4,7 @@
 ### Added
 - Exclusion globs for excluding files from linting.
 - Gitlab yaml file type and icon.
+- Update file icons after updating file globs.
 
 ## [1.6.0] - 2023-03-31
 
