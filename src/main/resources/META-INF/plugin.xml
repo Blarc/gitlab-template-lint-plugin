@@ -70,6 +70,19 @@
     <extensions defaultExtensionNs="com.intellij">
 
 
+        <fileType
+                name="Gitlab Yaml"
+                implementationClass="com.github.blarc.gitlab.template.lint.plugin.language.GitlabYamlFileType"
+                patterns="*.gitlab-ci.yml;*.gitlab-ci.yaml"
+                order="first"
+                fileNames=".gitlab-ci.yml;.gitlab-ci.yaml"
+        />
+
+        <fileTypeOverrider
+                implementation="com.github.blarc.gitlab.template.lint.plugin.language.GitlabYamlFileTypeOverrider"
+                order="last"
+        />
+
         <applicationService
                 serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings"/>
 

@@ -1,31 +1,42 @@
 package com.github.blarc.gitlab.template.lint.plugin
 
+import com.github.blarc.gitlab.template.lint.plugin.language.GitlabYamlFileType
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidget
 import com.intellij.openapi.components.service
+import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.WindowManager
 import java.nio.file.FileSystems
 
 object GitlabLintUtils {
-
-    fun matchesGlobs(text: String): Boolean {
-        return matchesInclusionGlobs(text) && !matchesExclusionGlobs(text)
+    fun isGitlabYaml(file: VirtualFile): Boolean {
+        return !matchesExclusionGlobs(file.path) && (matchesInclusionGlobs(file.path) || matchesFileType(file))
     }
 
-    fun matchesInclusionGlobs(text: String): Boolean {
+    private fun matchesFileType(file: VirtualFile): Boolean {
+        FileTypeManager.getInstance().getAssociations(GitlabYamlFileType()).forEach {
+            if (it.acceptsCharSequence(file.nameSequence)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun matchesInclusionGlobs(text: String): Boolean {
         val inclusionGlobs = AppSettings.instance.gitlabLintGlobStrings
         return matchesGlobs(text, inclusionGlobs)
     }
 
-    fun matchesExclusionGlobs(text: String): Boolean {
+    private fun matchesExclusionGlobs(text: String): Boolean {
         val exclusionGlobs = AppSettings.instance.exclusionGlobs
         return matchesGlobs(text, exclusionGlobs)
     }
 
-    fun matchesGlobs(text: String, globs: List<String>): Boolean {
+    private fun matchesGlobs(text: String, globs: List<String>): Boolean {
         val fileSystem = FileSystems.getDefault()
         for (globString in globs) {
             val glob = fileSystem.getPathMatcher("glob:$globString")

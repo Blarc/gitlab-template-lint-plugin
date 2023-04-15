@@ -26,7 +26,7 @@ class FileListener : FileEditorManagerListener {
         EditorNotifications.getInstance(project).updateAllNotifications()
 
         // Hide widget if file doesn't match glob
-        if (!GitlabLintUtils.matchesGlobs(file.path)) {
+        if (!GitlabLintUtils.isGitlabYaml(file)) {
             updateStatusWidget(project, LintStatusEnum.HIDDEN)
             return
         }
