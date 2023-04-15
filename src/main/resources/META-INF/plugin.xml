@@ -14,8 +14,8 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-        <p>Gitlab Template Lint Plugin is a plugin for IntelliJ based IDEs/Android studio for linting
-        Gitlab CI/CD yaml configuration files. It uses the Gitlab lint API to check the currently
+        <p>Gitlab Template Lint Plugin is a plugin for IntelliJ based IDEs/Android studio for linting<br/>
+        Gitlab CI/CD yaml configuration files. It uses the Gitlab lint API to check the currently<br/>
         open yaml configuration and shows the errors in the notification bar.</p>
         <h3>Features</h3>
         <ul>
