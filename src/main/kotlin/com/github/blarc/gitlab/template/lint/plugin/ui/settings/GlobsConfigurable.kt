@@ -107,8 +107,8 @@ class GlobsConfigurable : BoundConfigurable(message("settings.globs.group.title"
     }
 
     private fun refreshTableModel() {
-        inclusionTableModel.items = inclusionGlobs
-        exclusionTableModel.items = exclusionGlobs
+        inclusionTable.model = createTableModel(inclusionGlobs)
+        exclusionTable.model = createTableModel(exclusionGlobs)
     }
 
     override fun reset() {
