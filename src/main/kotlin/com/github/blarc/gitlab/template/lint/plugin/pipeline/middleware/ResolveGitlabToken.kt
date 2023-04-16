@@ -4,8 +4,8 @@ import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabObject
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
+import com.github.blarc.gitlab.template.lint.plugin.pipeline.PipelineStatusEnum
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
-import com.github.blarc.gitlab.template.lint.plugin.widget.PipelineStatusEnum
 import com.intellij.openapi.components.Service
 
 @Service

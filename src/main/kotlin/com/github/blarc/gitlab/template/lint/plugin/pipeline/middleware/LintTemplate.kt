@@ -4,7 +4,7 @@ import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabObject
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.providers.EditorWithMergedPreview
-import com.github.blarc.gitlab.template.lint.plugin.widget.PipelineStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.pipeline.PipelineStatusEnum
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service

@@ -2,12 +2,11 @@ package com.github.blarc.gitlab.template.lint.plugin.pipeline
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabObject
+import com.github.blarc.gitlab.template.lint.plugin.language.GitlabLintSchema
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware.*
-import com.github.blarc.gitlab.template.lint.plugin.widget.PipelineStatusEnum
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import java.util.*
 
@@ -23,8 +22,7 @@ class Pipeline(val project: Project) {
         project.service<RecordHit>(),
         project.service<ResolveRemoteId>()
     )
-
-    private fun accept(pass: Pass, middleware: Middleware) {
+    private fun accept(pass: Pass, middleware: Middleware): GitlabObject? {
 
         val queue = PriorityQueue(middlewares.plus(middleware))
 
@@ -34,6 +32,8 @@ class Pipeline(val project: Project) {
         pipelineResult = result?.first
 
         GitlabLintUtils.updateStatusWidget(project, result?.second ?: PipelineStatusEnum.INVALID)
+
+        return pipelineResult
     }
 
     private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : Pair<GitlabObject?, PipelineStatusEnum>? {
@@ -44,11 +44,11 @@ class Pipeline(val project: Project) {
         }
     }
 
-    fun runLint(file: PsiFile) {
-        accept(Pass(project, file), project.service<LintTemplate>())
+    fun runLint(file: PsiFile): GitlabObject? {
+        return accept(Pass(project, file), project.service<LintTemplate>())
     }
 
-    fun funResolveInclude(includePsiElement: PsiElement) {
-        accept(PassResolveInclude(project, includePsiElement), project.service<ResolveInclude>())
+    fun runResolveInclude(file: PsiFile, filePath: String, type: GitlabLintSchema.IncludeItem, properties: Map<String, String>): GitlabObject? {
+        return accept(Pass.ResolveInclude(project, file, type, filePath, properties), project.service<ResolveInclude>())
     }
 }

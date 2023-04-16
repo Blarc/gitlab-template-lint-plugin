@@ -1,5 +1,6 @@
-package com.github.blarc.gitlab.template.lint.plugin.references
+package com.github.blarc.gitlab.template.lint.plugin.language
 
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
@@ -14,9 +15,13 @@ import org.jetbrains.yaml.psi.YAMLScalar
 class GitlabLintReferenceProvider(val schema: Schema) : PsiReferenceProvider() {
     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
 
+        element.containingFile.virtualFile ?: return PsiReference.EMPTY_ARRAY
+
+        if (!GitlabLintUtils.isGitlabYaml(element.containingFile.virtualFile)) {
+            return PsiReference.EMPTY_ARRAY
+        }
 
         val pathForKey = pathForKey(element as YAMLScalar)
-        val value = element.textValue
 
         val schemaForPath = schemaForPath(schema, pathForKey)
 

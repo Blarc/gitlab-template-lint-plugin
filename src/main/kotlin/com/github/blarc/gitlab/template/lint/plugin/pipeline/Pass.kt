@@ -1,5 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline
 
+import com.github.blarc.gitlab.template.lint.plugin.language.GitlabLintSchema
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import git4idea.repo.GitRepository
@@ -16,4 +17,8 @@ open class Pass(val project: Project, val file: PsiFile) {
     fun repositoryOrThrow() = repository ?: throw IllegalStateException("Repository not set")
     fun remoteOrThrow() = remoteUrl ?: throw IllegalStateException("Remote not set")
     fun remoteIdOrThrow() = remoteId ?: throw IllegalStateException("Remote ID not set")
+
+    class ResolveInclude(project: Project, file: PsiFile, val type: GitlabLintSchema.IncludeItem, val filePath: String, val properties: Map<String, String>) :
+        Pass(project, file) {
+    }
 }
