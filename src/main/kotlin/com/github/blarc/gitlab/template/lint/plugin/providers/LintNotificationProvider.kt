@@ -20,8 +20,8 @@ class LintNotificationProvider : EditorNotificationProvider {
     ) = Function { _: FileEditor ->
             val pipeline = project.service<Pipeline>()
 
-            val result = pipeline.pipelineResult as GitlabLint?
-            if (result?.valid == false && GitlabLintUtils.isGitlabYaml(file)) {
+        val result = pipeline.pipelineResult
+        if (result is GitlabLint && !result.valid && GitlabLintUtils.isGitlabYaml(file)) {
                 val panel = EditorNotificationPanel(HintUtil.ERROR_COLOR_KEY)
                 panel.text = result.errors.toString()
                 return@Function panel

@@ -10,10 +10,14 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import okhttp3.*
 import java.io.IOException
+import java.net.URLEncoder
+import java.util.*
 import java.util.concurrent.CompletableFuture
 
 @Service
 open class Gitlab(val project: Project) {
+    var gitlabUrl: String = "https://gitlab.com"
+    var gitlabToken: String = "invalid"
     private val allowSelfSignedTls: Boolean = false
     private val httpClient: OkHttpClient
     private val json: Json
@@ -25,20 +29,20 @@ open class Gitlab(val project: Project) {
     }
 
     private fun prepareRequest(
-        baseUrl: String,
-        gitlabToken: String,
+        gitlabUrl: String = this.gitlabUrl,
+        gitlabToken: String = this.gitlabToken,
         urlSuffix: String
     ): Request.Builder {
         return Request.Builder()
-            .url("${baseUrl}${urlSuffix}")
+            .url("${gitlabUrl}${urlSuffix}")
             .addHeader("Private-Token", gitlabToken)
     }
 
     fun getVersion(
-        baseUrl: String,
-        gitlabToken: String
+        gitlabUrl: String = this.gitlabUrl,
+        gitlabToken: String = this.gitlabToken,
     ): CompletableFuture<GitlabVersion?> {
-        val request: Request = prepareRequest(baseUrl, gitlabToken, "/version")
+        val request: Request = prepareRequest(gitlabUrl, gitlabToken, "/version")
             .get()
             .build()
 
@@ -48,12 +52,12 @@ open class Gitlab(val project: Project) {
     }
 
     fun searchProjectId(
-        baseUrl: String,
-        gitlabToken: String,
+        gitlabUrl: String = this.gitlabUrl,
+        gitlabToken: String = this.gitlabToken,
         remoteUrl: String
     ): CompletableFuture<Long?> {
         val projectName = remoteUrl.split("/").last()
-        val request: Request = prepareRequest(baseUrl, gitlabToken, "/projects?search=$projectName")
+        val request: Request = prepareRequest(gitlabUrl, gitlabToken, "/projects?search=$projectName")
             .get()
             .build()
 
@@ -70,8 +74,8 @@ open class Gitlab(val project: Project) {
     }
 
     fun lintTemplate(
-        baseUrl: String,
-        gitlabToken: String,
+        gitlabUrl: String = this.gitlabUrl,
+        gitlabToken: String = this.gitlabToken,
         content: String,
         remoteId: Long,
         branch: String,
@@ -84,7 +88,7 @@ open class Gitlab(val project: Project) {
             .add("dry_run", "true")
             .build()
 
-        val request = prepareRequest(baseUrl, gitlabToken, "/projects/${remoteId}/ci/lint")
+        val request = prepareRequest(gitlabUrl, gitlabToken, "/projects/${remoteId}/ci/lint")
             .header("Content-Type", "application/json")
             .post(formBody)
             .build()
@@ -95,21 +99,24 @@ open class Gitlab(val project: Project) {
     }
 
     fun getFile(
-        baseUrl: String,
-        gitlabToken: String,
+        gitlabUrl: String = this.gitlabUrl,
+        gitlabToken: String = this.gitlabToken,
         filePath: String,
         remoteId: Long,
         branch: String,
         showGitlabTokenNotification: Boolean
     ): CompletableFuture<GitlabFile?> {
 
+        val filePathUrlEncoded = URLEncoder.encode(filePath.removePrefix("/"), "UTF-8")
         val request: Request =
-            prepareRequest(baseUrl, gitlabToken, "/projects/${remoteId}/repository/files/${filePath}?ref=${branch}")
+            prepareRequest(gitlabUrl, gitlabToken, "/projects/${remoteId}/repository/files/${filePathUrlEncoded}?ref=${branch}")
                 .get()
                 .build()
 
         return makeRequest(request, showGitlabTokenNotification) {
-            json.decodeFromString<GitlabFile>(it)
+            val gitlabFile = json.decodeFromString<GitlabFile>(it)
+            gitlabFile.content = String(Base64.getDecoder().decode(gitlabFile.content))
+            gitlabFile
         }
     }
 

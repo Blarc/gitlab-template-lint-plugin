@@ -4,7 +4,7 @@ import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.runLinting
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.lintFrequency.LintFrequencyEnum
-import com.github.blarc.gitlab.template.lint.plugin.widget.PipelineStatusEnum
+import com.github.blarc.gitlab.template.lint.plugin.pipeline.PipelineStatusEnum
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.components.Service

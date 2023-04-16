@@ -2,9 +2,9 @@ package com.github.blarc.gitlab.template.lint.plugin.listeners
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.updateStatusWidget
+import com.github.blarc.gitlab.template.lint.plugin.pipeline.PipelineStatusEnum
 import com.github.blarc.gitlab.template.lint.plugin.runLinting
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
-import com.github.blarc.gitlab.template.lint.plugin.widget.PipelineStatusEnum
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidget
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
