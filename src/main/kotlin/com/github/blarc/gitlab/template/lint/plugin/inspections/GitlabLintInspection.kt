@@ -3,7 +3,7 @@ package com.github.blarc.gitlab.template.lint.plugin.inspections
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.runLinting
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
-import com.github.blarc.gitlab.template.lint.plugin.ui.settings.LintFrequencyEnum
+import com.github.blarc.gitlab.template.lint.plugin.settings.lintFrequency.LintFrequencyEnum
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemsHolder

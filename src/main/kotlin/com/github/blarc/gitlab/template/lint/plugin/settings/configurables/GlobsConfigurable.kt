@@ -1,6 +1,6 @@
-package com.github.blarc.gitlab.template.lint.plugin.ui.settings
+package com.github.blarc.gitlab.template.lint.plugin.settings.configurables
 
-import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
 import com.github.blarc.gitlab.template.lint.plugin.extensions.createColumn
 import com.github.blarc.gitlab.template.lint.plugin.extensions.reportBugLink
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
@@ -13,9 +13,9 @@ import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.text
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ListTableModel
-import javax.swing.ListSelectionModel.SINGLE_SELECTION
+import javax.swing.ListSelectionModel
 
-class GlobsConfigurable : BoundConfigurable(message("settings.globs.group.title")) {
+class GlobsConfigurable : BoundConfigurable(GitlabLintBundle.message("settings.globs.group.title")) {
     private var inclusionGlobs = AppSettings.instance.gitlabLintGlobStrings.toMutableList()
     private var exclusionGlobs = AppSettings.instance.exclusionGlobs.toMutableList()
 
@@ -24,17 +24,17 @@ class GlobsConfigurable : BoundConfigurable(message("settings.globs.group.title"
 
     private val inclusionTable = TableView(inclusionTableModel).apply {
         setShowColumns(false)
-        setSelectionMode(SINGLE_SELECTION)
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
     }
 
     private val exclusionTable = TableView(exclusionTableModel).apply {
         setShowColumns(false)
-        setSelectionMode(SINGLE_SELECTION)
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
     }
 
     override fun createPanel() = panel {
         row {
-            label(message("settings.globs.inclusions.title"))
+            label(GitlabLintBundle.message("settings.globs.inclusions.title"))
         }
         row {
             cell(
@@ -48,7 +48,7 @@ class GlobsConfigurable : BoundConfigurable(message("settings.globs.group.title"
             ).align(Align.FILL)
         }.resizableRow()
         row {
-            label(message("settings.globs.exclusions.title"))
+            label(GitlabLintBundle.message("settings.globs.exclusions.title"))
         }
         row {
             cell(
@@ -62,7 +62,7 @@ class GlobsConfigurable : BoundConfigurable(message("settings.globs.group.title"
             ).align(Align.FILL)
         }.resizableRow()
         row {
-            comment(message("settings.globs.comment"))
+            comment(GitlabLintBundle.message("settings.globs.comment"))
         }
         row {
             reportBugLink()
@@ -129,28 +129,28 @@ class GlobsConfigurable : BoundConfigurable(message("settings.globs.group.title"
         AppSettings.instance.gitlabLintGlobStrings = inclusionGlobs
         AppSettings.instance.exclusionGlobs = exclusionGlobs
     }
-}
 
-private class GlobDialog(var glob: String = "") : DialogWrapper(false) {
-    init {
-        title = message("settings.glob.dialog.title")
+    private class GlobDialog(var glob: String = "") : DialogWrapper(false) {
+        init {
+            title = GitlabLintBundle.message("settings.glob.dialog.title")
 
-        if (glob.isEmpty()) {
-            setOKButtonText(message("actions.add"))
-        } else {
-            setOKButtonText(message("actions.update"))
+            if (glob.isEmpty()) {
+                setOKButtonText(GitlabLintBundle.message("actions.add"))
+            } else {
+                setOKButtonText(GitlabLintBundle.message("actions.update"))
+            }
+            init()
         }
-        init()
-    }
 
-    override fun createCenterPanel() = panel {
-        row {
-            label(message("settings.glob.dialog.label"))
-            textField()
-                .text(glob)
-                .bindText({ glob }, { glob = it })
-                .focused()
+        override fun createCenterPanel() = panel {
+            row {
+                label(GitlabLintBundle.message("settings.glob.dialog.label"))
+                textField()
+                    .text(glob)
+                    .bindText({ glob }, { glob = it })
+                    .focused()
+            }
         }
-    }
 
+    }
 }

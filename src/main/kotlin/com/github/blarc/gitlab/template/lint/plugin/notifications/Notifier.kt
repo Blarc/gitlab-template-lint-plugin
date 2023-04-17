@@ -1,6 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.notifications
 
-import com.github.blarc.gitlab.template.lint.plugin.ui.Icons
+import com.github.blarc.gitlab.template.lint.plugin.Icons
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.project.DumbAwareAction

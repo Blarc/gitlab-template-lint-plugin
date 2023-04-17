@@ -1,4 +1,4 @@
-package com.github.blarc.gitlab.template.lint.plugin.ui.settings.gitlabUrlToken
+package com.github.blarc.gitlab.template.lint.plugin.settings.gitlabUrlToken
 
 import kotlinx.serialization.Serializable
 

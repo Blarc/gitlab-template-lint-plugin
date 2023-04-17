@@ -101,21 +101,21 @@
 
         <projectConfigurable
                 parentId="tools"
-                instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
-                id="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
+                instance="com.github.blarc.gitlab.template.lint.plugin.settings.configurables.SettingsConfigurable"
+                id="com.github.blarc.gitlab.template.lint.plugin.settings.configurables.SettingsConfigurable"
                 key="settings.general.group.title"/>
 
 
         <projectConfigurable
-                parentId="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
-                instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote.RemotesConfigurable"
-                id="com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote.RemotesConfigurable"
+                parentId="com.github.blarc.gitlab.template.lint.plugin.settings.configurables.SettingsConfigurable"
+                instance="com.github.blarc.gitlab.template.lint.plugin.settings.remote.RemotesConfigurable"
+                id="com.github.blarc.gitlab.template.lint.plugin.settings.remote.RemotesConfigurable"
                 key="settings.remotes.group.title" />
 
         <applicationConfigurable
-            parentId="com.github.blarc.gitlab.template.lint.plugin.ui.settings.SettingsConfigurable"
-            instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.GlobsConfigurable"
-            id="com.github.blarc.gitlab.template.lint.plugin.ui.settings.GlobsConfigurable"
+            parentId="com.github.blarc.gitlab.template.lint.plugin.settings.configurables.SettingsConfigurable"
+            instance="com.github.blarc.gitlab.template.lint.plugin.settings.configurables.GlobsConfigurable"
+            id="com.github.blarc.gitlab.template.lint.plugin.settings.configurables.GlobsConfigurable"
             key="settings.globs.group.title" />
 
 

@@ -2,7 +2,7 @@ package com.github.blarc.gitlab.template.lint.plugin.listeners
 
 import com.github.blarc.gitlab.template.lint.plugin.runLinting
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
-import com.github.blarc.gitlab.template.lint.plugin.ui.settings.LintFrequencyEnum
+import com.github.blarc.gitlab.template.lint.plugin.settings.lintFrequency.LintFrequencyEnum
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.fileEditor.FileDocumentManagerListener
 import com.intellij.openapi.project.Project

@@ -1,4 +1,4 @@
-package com.github.blarc.gitlab.template.lint.plugin.ui.settings
+package com.github.blarc.gitlab.template.lint.plugin.settings.lintFrequency
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 

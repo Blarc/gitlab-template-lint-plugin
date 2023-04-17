@@ -1,7 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.settings
 
-import com.github.blarc.gitlab.template.lint.plugin.ui.settings.LintFrequencyEnum
-import com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote.Remote
+import com.github.blarc.gitlab.template.lint.plugin.settings.lintFrequency.LintFrequencyEnum
+import com.github.blarc.gitlab.template.lint.plugin.settings.remote.Remote
 import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.Credentials
 import com.intellij.ide.passwordSafe.PasswordSafe

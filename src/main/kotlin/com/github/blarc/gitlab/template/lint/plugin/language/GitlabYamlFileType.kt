@@ -1,6 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.language
 
-import com.github.blarc.gitlab.template.lint.plugin.ui.Icons
+import com.github.blarc.gitlab.template.lint.plugin.Icons
 import com.intellij.openapi.fileTypes.LanguageFileType
 import org.jetbrains.yaml.YAMLLanguage
 import javax.swing.Icon

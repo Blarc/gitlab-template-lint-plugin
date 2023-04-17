@@ -1,4 +1,4 @@
-package com.github.blarc.gitlab.template.lint.plugin.ui.settings.remote
+package com.github.blarc.gitlab.template.lint.plugin.settings.remote
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.extensions.*
