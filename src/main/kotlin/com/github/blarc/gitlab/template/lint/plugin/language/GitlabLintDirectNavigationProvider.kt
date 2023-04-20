@@ -5,12 +5,15 @@ import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabFile
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
 import com.intellij.navigation.DirectNavigationProvider
 import com.intellij.openapi.components.service
+import com.intellij.openapi.util.Key
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFileFactory
+import com.intellij.psi.PsiManager
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.testFramework.LightVirtualFile
 import net.jimblackler.jsonschemafriend.Schema
 import net.jimblackler.jsonschemafriend.SchemaStore
+import org.jetbrains.yaml.YAMLFileType
 import org.jetbrains.yaml.YAMLLanguage
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLPsiElement
@@ -18,30 +21,26 @@ import org.jetbrains.yaml.psi.YAMLScalar
 import java.net.URI
 
 class GitlabLintDirectNavigationProvider : DirectNavigationProvider {
+    companion object {
+        val RESOLVED_FILE_KEY = Key.create<Boolean>("GitlabLintResolvedFile")
+    }
+
+    // TODO @Blarc: This gets the latest schema from the Gitlab repo. Should probably be configurable.
     private val schema: Schema = SchemaStore().loadSchema(URI.create("https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"))
 
     override fun getNavigationElement(element: PsiElement): PsiElement? {
         if (PlatformPatterns.psiElement(YAMLScalar::class.java).withLanguage(YAMLLanguage.INSTANCE).accepts(element)) {
-            element.containingFile.virtualFile ?: return null
+            val virtualFile = element.containingFile.virtualFile ?: return null
 
-            if (!GitlabLintUtils.isGitlabYaml(element.containingFile.virtualFile)) {
+            if (!GitlabLintUtils.isGitlabYaml(virtualFile) && virtualFile.getUserData(RESOLVED_FILE_KEY) != true) {
                 return null
             }
 
-            val schemaForPath = schemaForPath(schema, pathForKey(element as YAMLScalar))
+            val schemaForPath = schemaForPath(schema, pathForKey(element as YAMLScalar)) ?: return null
+            val resolvedIncludeFile = resolveInclude(schemaForPath.uri.toString(), element) ?: return null
 
-            schemaForPath ?: return null
-
-            val psiFileFactory = PsiFileFactory.getInstance(element.project)
-
-            val resolvedFile = resolveFile(schemaForPath.uri.toString(), element) ?: return null
-
-            return psiFileFactory.createFileFromText(
-                resolvedFile.fileName,
-                element.language,
-                resolvedFile.content
-            )
-
+            val file = ResolvedIncludeLightVirtualFile(resolvedIncludeFile.fileName, resolvedIncludeFile.content)
+            return PsiManager.getInstance(element.project).findFile(file)
         }
 
         return null
@@ -81,7 +80,7 @@ class GitlabLintDirectNavigationProvider : DirectNavigationProvider {
         return null
     }
 
-    private fun resolveFile(schema: String, element: YAMLScalar): GitlabFile? {
+    private fun resolveInclude(schema: String, element: YAMLScalar): GitlabFile? {
         val value = element.textValue
         val pipeline = element.project.service<Pipeline>()
 
@@ -109,5 +108,12 @@ class GitlabLintDirectNavigationProvider : DirectNavigationProvider {
             return element
         }
         return findParent(element.parent)
+    }
+
+    class ResolvedIncludeLightVirtualFile(name: String, content: String) : LightVirtualFile(name, YAMLFileType.YML, content) {
+        init {
+            isWritable = false
+            putUserData(RESOLVED_FILE_KEY, true)
+        }
     }
 }
