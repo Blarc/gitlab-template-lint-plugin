@@ -8,6 +8,16 @@ import kotlinx.serialization.Serializable
 data class GitlabFile(
     @SerialName("file_name")
     val fileName: String,
-    @SerialName("content")
-    var content: String
+    @SerialName("file_path")
+    val filePath: String,
+    val encoding: String,
+    var content: String,
+    @SerialName("content_sha256")
+    val sha: String,
+    val ref: String,
+    @SerialName("blob_id")
+    val blobId: String,
+    @SerialName("commit_id")
+    val commitId: String,
+    var properties: Map<String, String>? = null
 ) : GitlabObject

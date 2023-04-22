@@ -26,6 +26,7 @@ class ResolveInclude : Middleware {
 
         val gitlab = pass.project.service<Gitlab>()
 
+        println("${pass.type.name} ${pass.type.value}")
         val resolveTemplate = gitlab.getFile(
             gitlabUrl,
             gitlabToken,
@@ -34,6 +35,9 @@ class ResolveInclude : Middleware {
             pass.properties["ref"] ?: "main",
             showGitlabTokenNotification
         ).get()
+
+        // Save properties to file object
+        resolveTemplate?.properties = pass.properties
 
         // If resolve template is null, there was an error and notification was shown,
         // so we don't want to show it again

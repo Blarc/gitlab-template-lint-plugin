@@ -22,7 +22,7 @@ import java.net.URI
 
 class GitlabLintDirectNavigationProvider : DirectNavigationProvider {
     companion object {
-        val RESOLVED_FILE_KEY = Key.create<Boolean>("GitlabLintResolvedFile")
+        val RESOLVED_FILE_KEY = Key.create<GitlabFile>("GitlabLintResolvedFile")
     }
 
     // TODO @Blarc: This gets the latest schema from the Gitlab repo. Should probably be configurable.
@@ -32,14 +32,15 @@ class GitlabLintDirectNavigationProvider : DirectNavigationProvider {
         if (PlatformPatterns.psiElement(YAMLScalar::class.java).withLanguage(YAMLLanguage.INSTANCE).accepts(element)) {
             val virtualFile = element.containingFile.virtualFile ?: return null
 
-            if (!GitlabLintUtils.isGitlabYaml(virtualFile) && virtualFile.getUserData(RESOLVED_FILE_KEY) != true) {
+            val gitlabFile = virtualFile.getUserData(RESOLVED_FILE_KEY)
+            if (!GitlabLintUtils.isGitlabYaml(virtualFile) && gitlabFile == null) {
                 return null
             }
 
             val schemaForPath = schemaForPath(schema, pathForKey(element as YAMLScalar)) ?: return null
-            val resolvedIncludeFile = resolveInclude(schemaForPath.uri.toString(), element) ?: return null
+            val resolvedIncludeFile = resolveInclude(schemaForPath.uri.toString(), element, gitlabFile?.properties) ?: return null
 
-            val file = ResolvedIncludeLightVirtualFile(resolvedIncludeFile.fileName, resolvedIncludeFile.content)
+            val file = ResolvedIncludeLightVirtualFile(resolvedIncludeFile.fileName, resolvedIncludeFile)
             return PsiManager.getInstance(element.project).findFile(file)
         }
 
@@ -80,14 +81,14 @@ class GitlabLintDirectNavigationProvider : DirectNavigationProvider {
         return null
     }
 
-    private fun resolveInclude(schema: String, element: YAMLScalar): GitlabFile? {
+    private fun resolveInclude(schema: String, element: YAMLScalar, properties: Map<String, String>? = null): GitlabFile? {
         val value = element.textValue
         val pipeline = element.project.service<Pipeline>()
 
         GitlabLintSchema.IncludeItem.values()
             .filter { it.value == schema }
             .first() {
-                return pipeline.runResolveInclude(element.containingFile, value, it, getProperties(element)) as GitlabFile?
+                return pipeline.runResolveInclude(element.containingFile, value, it, properties ?: getProperties(element)) as GitlabFile?
             }
         return null
     }
@@ -110,10 +111,10 @@ class GitlabLintDirectNavigationProvider : DirectNavigationProvider {
         return findParent(element.parent)
     }
 
-    class ResolvedIncludeLightVirtualFile(name: String, content: String) : LightVirtualFile(name, YAMLFileType.YML, content) {
+    class ResolvedIncludeLightVirtualFile(name: String, gitlabFile: GitlabFile) : LightVirtualFile(name, YAMLFileType.YML, gitlabFile.content) {
         init {
             isWritable = false
-            putUserData(RESOLVED_FILE_KEY, true)
+            putUserData(RESOLVED_FILE_KEY, gitlabFile)
         }
     }
 }
