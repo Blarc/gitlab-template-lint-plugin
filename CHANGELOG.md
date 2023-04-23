@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.8.0] - 2023-04-23
+
 ### Added
 - Hints for better understanding of settings.
 - Rename settings labels to be more inline with Gitlab terminology.
@@ -207,7 +210,8 @@
 - Setting private Gitlab token
 - Error message on linting error
 
-[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.3...v1.6.0
 [1.5.3]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.2...v1.5.3
