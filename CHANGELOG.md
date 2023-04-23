@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Hints for better understanding of settings.
+- Rename settings labels to be more inline with Gitlab terminology.
 
 ## [1.7.0] - 2023-04-20
 

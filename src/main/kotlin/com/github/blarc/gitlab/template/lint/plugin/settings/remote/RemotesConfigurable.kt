@@ -45,9 +45,9 @@ class RemotesConfigurable(project: Project) : BoundConfigurable(message("setting
 
     private fun createTableModel(): ListTableModel<Remote> = ListTableModel(
         arrayOf(
-            createColumn<Remote>("Remote URL") { remote -> remote.remoteUrl },
-            createColumn("Gitlab URL") { remote -> remote.gitlabUrl.orEmpty() },
-            createColumn("Remote ID") { remote -> remote.remoteId?.toString().orEmpty() }
+            createColumn<Remote>(message("settings.remote.remote-url")) { remote -> remote.remoteUrl },
+            createColumn(message("settings.remote.gitlab-api-url")) { remote -> remote.gitlabUrl.orEmpty() },
+            createColumn(message("settings.remote.project-id")) { remote -> remote.remoteId?.toString().orEmpty() }
         ),
         remotes
     )
@@ -108,23 +108,26 @@ private class RemoteDialog(val gitlabUrls: Set<String>, newRemote: Remote? = nul
     }
 
     override fun createCenterPanel() = panel {
-        row(message("settings.remotes.dialog.remoteUrl.label")) {
+        row(message("settings.remote.remote-url")) {
             textField()
                 .align(Align.FILL)
                 .bindText(remote::remoteUrl)
                 .focused()
                 .validationOnApply { notBlank(it.text)}
+                .comment(message("settings.remote.remote-url.comment"))
         }
-        row(message("settings.remotes.dialog.gitlabUrl.label")) {
+        row(message("settings.remote.gitlab-api-url")) {
             comboBox(gitlabUrls)
                 .align(Align.FILL)
                 .bindItem(remote::gitlabUrl.toNullableProperty())
+                .comment(message("settings.remote.gitlab-api-url.comment"))
         }
-        row(message("settings.remotes.dialog.remoteId.label")) {
+        row(message("settings.remote.project-id")) {
             textField()
                 .align(Align.FILL)
                 .bindText({ remote.remoteId?.toString().orEmpty() }, { remote.remoteId = it.toLong() })
                 .validationOnApply { isLong(it.text) }
+                .comment(message("settings.remote.project-id.comment"))
         }
     }
 }

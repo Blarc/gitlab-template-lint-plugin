@@ -12,6 +12,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.runBackgroundableTask
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
@@ -38,8 +39,8 @@ class GitlabUrlTokenTable(val project: Project) {
 
     private fun createTableModel(): ListTableModel<GitlabUrlToken> = ListTableModel(
         arrayOf(
-            createColumn<GitlabUrlToken>(message("settings.gitlabUrlToken.gitlab-url")) { gitlabUrlToken -> gitlabUrlToken.gitlabUrl },
-            createColumn(message("settings.gitlabUrlToken.gitlab-token")) { gitlabUrlToken -> gitlabUrlToken.gitlabToken.orEmpty() }
+            createColumn<GitlabUrlToken>(message("settings.gitlab-url-token.gitlab-url")) { gitlabUrlToken -> gitlabUrlToken.gitlabUrl },
+            createColumn(message("settings.gitlab-url-token.gitlab-token")) { gitlabUrlToken -> gitlabUrlToken.gitlabToken.orEmpty() }
         ),
         gitlabUrlTokens
     )
@@ -98,7 +99,7 @@ class GitlabUrlTokenTable(val project: Project) {
     private class GitlabUrlTokenDialog(val project: Project, newGitlabUrlToken: GitlabUrlToken? = null) :
         DialogWrapper(true) {
         var gitlabUrlToken = newGitlabUrlToken ?: GitlabUrlToken()
-        val gitlabUrlTextField = JTextField()
+        val gitlabUrlTextField = JBTextField()
         val gitlabTokenTextField = JTextField()
         val verifyLabel = JLabel()
 
@@ -115,18 +116,23 @@ class GitlabUrlTokenTable(val project: Project) {
         }
 
         override fun createCenterPanel() = panel {
-            row(message("settings.gitlabUrlToken.gitlab-url")) {
+            row(message("settings.gitlab-url-token.gitlab-url")) {
                 cell(gitlabUrlTextField)
                     .align(Align.FILL)
                     .bindText({ gitlabUrlToken.gitlabUrl }, { gitlabUrlToken.gitlabUrl = it })
                     .focused()
                     .validationOnApply { notBlank(it.text) }
+                    .comment(message("settings.gitlab-url-token.gitlab-url.comment"))
             }
-            row(message("settings.gitlabUrlToken.gitlab-token")) {
+            row(message("settings.gitlab-url-token.gitlab-token")) {
                 cell(gitlabTokenTextField)
                     .align(Align.FILL)
                     .bindText({ gitlabUrlToken.gitlabToken.orEmpty() }, { gitlabUrlToken.gitlabToken = it })
                     .validationOnApply { notBlank(it.text) }
+                    .comment(message("settings.gitlab-url-token.gitlab-token.comment", "${
+                        gitlabUrlToken.gitlabUrl.takeIf { it.isNotBlank() }
+                            ?.substringBefore("/api", "https://gitlab.com") ?: "https://gitlab.com"
+                    }/-/profile/personal_access_tokens"))
             }
             row {
                 cell(verifyLabel)

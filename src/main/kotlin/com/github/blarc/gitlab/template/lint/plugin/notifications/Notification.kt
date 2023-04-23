@@ -33,8 +33,8 @@ data class Notification(
 
         fun remoteIdNotFound(project: Project) = Notification(
             DEFAULT_TITLE,
-            message = message("notifications.remote-id-not-found"),
-            actions = setOf(NotificationAction.settingsRemote(project, message("actions.set-remote-id")))
+            message = message("notifications.gitlab-project-id-not-found"),
+            actions = setOf(NotificationAction.settingsRemote(project, message("actions.set-gitlab-project-id")))
         )
 
         fun star() = Notification(
