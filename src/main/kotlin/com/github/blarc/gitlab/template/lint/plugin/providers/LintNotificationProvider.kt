@@ -1,5 +1,6 @@
 package com.github.blarc.gitlab.template.lint.plugin.providers
 
+import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
 import com.intellij.codeInsight.hint.HintUtil
@@ -21,7 +22,13 @@ class LintNotificationProvider : EditorNotificationProvider {
 
             if (pipeline.gitlabLintResponse?.valid == false && GitlabLintUtils.isGitlabYaml(file)) {
                 val panel = EditorNotificationPanel(HintUtil.ERROR_COLOR_KEY)
-                panel.text = pipeline.gitlabLintResponse?.errors.toString()
+
+                if (pipeline.gitlabLintResponse?.errors?.get(0).equals("Reference not found", true)) {
+                    panel.text = GitlabLintBundle.message("lint.error.reference-not-found")
+                }
+                else {
+                    panel.text = pipeline.gitlabLintResponse?.errors.toString()
+                }
                 return@Function panel
             }
 
