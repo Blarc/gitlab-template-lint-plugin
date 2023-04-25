@@ -8,6 +8,7 @@ import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.intellij.icons.AllIcons
+import com.intellij.ide.browsers.BrowserLauncher
 import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.runBackgroundableTask
 import com.intellij.openapi.project.Project
@@ -19,6 +20,7 @@ import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ListTableModel
 import java.awt.event.ActionEvent
+import java.net.URL
 import javax.swing.Action
 import javax.swing.JLabel
 import javax.swing.JTextField
@@ -129,10 +131,15 @@ class GitlabUrlTokenTable(val project: Project) {
                     .align(Align.FILL)
                     .bindText({ gitlabUrlToken.gitlabToken.orEmpty() }, { gitlabUrlToken.gitlabToken = it })
                     .validationOnApply { notBlank(it.text) }
-                    .comment(message("settings.gitlab-url-token.gitlab-token.comment", "${
-                        gitlabUrlToken.gitlabUrl.takeIf { it.isNotBlank() }
-                            ?.substringBefore("/api", "https://gitlab.com") ?: "https://gitlab.com"
-                    }/-/profile/personal_access_tokens"))
+                    .comment(message("settings.gitlab-url-token.gitlab-token.comment"), action= {
+                        val host: String = try {
+                            val uri = URL(gitlabUrlTextField.text).toURI()
+                            "${uri.scheme}://${uri.host}"
+                        } catch (e: Exception) {
+                            "https://gitlab.com"
+                        }
+                        BrowserLauncher.instance.open("$host/-/profile/personal_access_tokens?name=Gitlab+Template+Lint+token&scopes=api,read_api");
+                    })
             }
             row {
                 cell(verifyLabel)
