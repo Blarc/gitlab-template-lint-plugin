@@ -4,6 +4,7 @@
 ### Added
 - Create link for creating Gitlab personal access token with required scopes from Gitlab API url.
 - More descriptive message when branch does not exist on remote.
+- Remove square brackets from error notification.
 
 ## [1.8.0] - 2023-04-23
 
