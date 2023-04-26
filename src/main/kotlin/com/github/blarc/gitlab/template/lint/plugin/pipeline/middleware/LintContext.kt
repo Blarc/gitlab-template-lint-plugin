@@ -4,6 +4,7 @@ import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.providers.EditorWithMergedPreview
+import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.Service
@@ -13,7 +14,6 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 @Service
 class LintContext : Middleware {
     override val priority = 50
-    var gitlabLintResponse: GitlabLintResponse? = null
     private var showGitlabTokenNotification = true
 
     override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
@@ -25,8 +25,52 @@ class LintContext : Middleware {
 
         val gitlab = pass.project.service<Gitlab>()
 
+        // Try to lint with current branch
+        var gitlabLintResponse = lintContent(gitlab, gitlabUrl, gitlabToken, pass, remoteId, branch)
+        if (gitlabLintResponse?.valid == true) {
+            showGitlabTokenNotification = true
+            setMergedPreview(pass, gitlabLintResponse)
+            return Pair(gitlabLintResponse, LintStatusEnum.VALID)
+        }
 
-        gitlabLintResponse = gitlab.lintContent(
+        val fallbackBranch = pass.project.service<ProjectSettings>().fallbackBranch
+        if (gitlabLintResponse?.errors?.get(0).equals("Reference not found", true) && fallbackBranch.isNotBlank()) {
+            // Try to lint with fallback branch
+            gitlabLintResponse = lintContent(gitlab, gitlabUrl, gitlabToken, pass, remoteId, fallbackBranch)
+            if (gitlabLintResponse?.valid == true) {
+                showGitlabTokenNotification = true
+                setMergedPreview(pass, gitlabLintResponse)
+                return Pair(gitlabLintResponse, LintStatusEnum.VALID)
+            }
+        }
+
+        // Show error
+        showGitlabTokenNotification = false
+        return Pair(gitlabLintResponse, LintStatusEnum.INVALID)
+    }
+
+    private fun setMergedPreview(
+        pass: Pass,
+        gitlabLintResponse: GitlabLintResponse
+    ) {
+        WriteCommandAction.runWriteCommandAction(pass.project) {
+            val selectedEditor =
+                FileEditorManager.getInstance(pass.project).getSelectedEditor(pass.file.virtualFile)
+            if (selectedEditor is EditorWithMergedPreview) {
+                gitlabLintResponse.mergedYaml?.let { selectedEditor.setPreviewText(it) }
+            }
+        }
+    }
+
+    private fun lintContent(
+        gitlab: Gitlab,
+        gitlabUrl: String,
+        gitlabToken: String,
+        pass: Pass,
+        remoteId: Long,
+        branch: String
+    ): GitlabLintResponse? {
+        return gitlab.lintContent(
             gitlabUrl,
             gitlabToken,
             pass.file.text,
@@ -34,23 +78,5 @@ class LintContext : Middleware {
             branch,
             showGitlabTokenNotification
         ).get()
-
-
-        val lintStatus = if (gitlabLintResponse?.valid == true) {
-            showGitlabTokenNotification = true
-
-            WriteCommandAction.runWriteCommandAction(pass.project) {
-                val selectedEditor = FileEditorManager.getInstance(pass.project).getSelectedEditor(pass.file.virtualFile)
-                if (selectedEditor is EditorWithMergedPreview) {
-                    gitlabLintResponse?.mergedYaml?.let { selectedEditor.setPreviewText(it) }
-                }
-            }
-
-            LintStatusEnum.VALID
-        } else {
-            showGitlabTokenNotification = false
-            LintStatusEnum.INVALID
-        }
-        return Pair(gitlabLintResponse, lintStatus)
     }
 }

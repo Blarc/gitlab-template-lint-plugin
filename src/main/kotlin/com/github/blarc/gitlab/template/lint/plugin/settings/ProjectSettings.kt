@@ -23,7 +23,7 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
 
     var gitlabUrl: String? = null
     var gitlabUrls: Set<String> = setOf()
-    var fallbackBranch = "main"
+    var fallbackBranch: String = ""
     var remote = "origin"
     var forceHttps = true
 

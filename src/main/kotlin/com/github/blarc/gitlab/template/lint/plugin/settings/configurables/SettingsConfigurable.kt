@@ -14,7 +14,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.dsl.builder.*
 
-class SettingsConfigurable(val project: Project) : BoundConfigurable(GitlabLintBundle.message("settings.general.group.title")) {
+class SettingsConfigurable(val project: Project) :
+    BoundConfigurable(GitlabLintBundle.message("settings.general.group.title")) {
 
     private val gitlabUrlTokenTable = GitlabUrlTokenTable(project)
     override fun createPanel() = panel {
@@ -25,13 +26,6 @@ class SettingsConfigurable(val project: Project) : BoundConfigurable(GitlabLintB
         }
         row {
             comment(GitlabLintBundle.message("settings.frequency.description"))
-        }
-        row {
-            textField()
-                .label(GitlabLintBundle.message("settings.remote"))
-                .bindText(project.service<ProjectSettings>()::remote)
-                .validationOnApply { notBlank(it.text) }
-                .align(Align.FILL)
         }
         row {
             checkBox(GitlabLintBundle.message("settings.force-https"))
@@ -46,6 +40,22 @@ class SettingsConfigurable(val project: Project) : BoundConfigurable(GitlabLintB
             checkBox(GitlabLintBundle.message("settings.run-lint-on-file-change"))
                 .bindSelected(AppSettings.instance::runLintOnFileChange)
                 .comment(GitlabLintBundle.message("settings.run-lint-on-file-change.comment"))
+        }
+        row {
+            label(GitlabLintBundle.message("settings.remote"))
+                .widthGroup("label")
+            textField()
+                .bindText(project.service<ProjectSettings>()::remote)
+                .validationOnApply { notBlank(it.text) }
+                .align(Align.FILL)
+        }
+        row {
+            label(GitlabLintBundle.message("settings.fallback-branch"))
+                .widthGroup("label")
+            textField()
+                .bindText(project.service<ProjectSettings>()::fallbackBranch)
+                .align(Align.FILL)
+                .comment(GitlabLintBundle.message("settings.fallback-branch.comment"))
         }
         row {
             cell(
