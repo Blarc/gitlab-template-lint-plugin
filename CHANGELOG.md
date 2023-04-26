@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.9.0] - 2023-04-26
+
 ### Added
 - Create link for creating Gitlab personal access token with required scopes from Gitlab API url.
 - More descriptive message when git branch does not exist on remote.
@@ -215,7 +218,8 @@
 - Setting private Gitlab token
 - Error message on linting error
 
-[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.8.0...HEAD
+[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.9.0...HEAD
+[1.9.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.5.3...v1.6.0
