@@ -22,6 +22,8 @@
 - [Compatibility](#compatibility)
 - [Install](#install)
 - [Installation from zip](#installation-from-zip)
+- [How does it work](/docs/how-does-it-work.md)
+- [Configuration](/docs/configuration.md)
 
 ## Description
 Gitlab Template Lint Plugin is a plugin for IntelliJ based IDEs/Android studio for linting
