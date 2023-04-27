@@ -4,6 +4,7 @@ import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.http.HttpClientFactory
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
+import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import kotlinx.serialization.decodeFromString
@@ -14,14 +15,11 @@ import java.util.concurrent.CompletableFuture
 
 @Service
 open class Gitlab(val project: Project) {
-    private val allowSelfSignedTls: Boolean = false
-    private val httpClient: OkHttpClient
-    private val json: Json
+    private val json: Json = Json { ignoreUnknownKeys = true }
 
-    init {
+    private fun createHttpClient(): OkHttpClient {
         val httpClientFactory: HttpClientFactory = HttpClientFactory.instance
-        httpClient = if (allowSelfSignedTls) httpClientFactory.insecureHttpClient else httpClientFactory.httpClient
-        json = Json { ignoreUnknownKeys = true }
+        return if (AppSettings.instance.allowSelfSignedCertificate) httpClientFactory.insecureHttpClient else httpClientFactory.httpClient
     }
 
     private fun prepareRequest(
@@ -44,7 +42,7 @@ open class Gitlab(val project: Project) {
             .get()
             .build()
 
-        httpClient.newCall(request)
+        createHttpClient().newCall(request)
             .enqueue(object: Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     result.completeExceptionally(e)
@@ -79,7 +77,7 @@ open class Gitlab(val project: Project) {
             .build()
 
         val result = CompletableFuture<Long?>()
-        httpClient.newCall(request)
+        createHttpClient().newCall(request)
             .enqueue(object: Callback{
                 override fun onFailure(call: Call, e: IOException) {
                     sendNotification(Notification.remoteIdNotFound(project), project)
@@ -142,7 +140,7 @@ open class Gitlab(val project: Project) {
             .build()
 
         val result = CompletableFuture<GitlabLintResponse?>()
-        httpClient.newCall(request)
+        createHttpClient().newCall(request)
             .enqueue(object: Callback{
                 override fun onFailure(call: Call, e: IOException) {
                     if (showGitlabTokenNotification) {

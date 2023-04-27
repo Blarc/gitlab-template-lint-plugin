@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Add setting for allowing self-signed certificate.
 
 ## [1.9.0] - 2023-04-26
 

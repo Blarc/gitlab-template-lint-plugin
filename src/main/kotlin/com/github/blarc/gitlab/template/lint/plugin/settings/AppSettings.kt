@@ -39,6 +39,7 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var remotes: MutableMap<String, Remote> = mutableMapOf()
     var lintFrequency: LintFrequencyEnum = LintFrequencyEnum.ON_SAVE
     var showMergedPreview = true
+    var allowSelfSignedCertificate = false
     var runLintOnFileChange = true
 
     fun saveGitlabToken(token: String, gitlabUrl: String) {

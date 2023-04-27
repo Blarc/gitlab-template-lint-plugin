@@ -28,6 +28,10 @@ class SettingsConfigurable(val project: Project) :
             comment(GitlabLintBundle.message("settings.frequency.description"))
         }
         row {
+            checkBox(GitlabLintBundle.message("settings.allow-self-signed-certificate"))
+                .bindSelected(AppSettings.instance::allowSelfSignedCertificate)
+        }
+        row {
             checkBox(GitlabLintBundle.message("settings.force-https"))
                 .bindSelected(project.service<ProjectSettings>()::forceHttps)
         }
