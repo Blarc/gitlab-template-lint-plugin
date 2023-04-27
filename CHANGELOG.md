@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.10.0] - 2023-04-27
+
 ### Added
 - Add setting for allowing self-signed certificate.
 
@@ -220,7 +223,8 @@
 - Setting private Gitlab token
 - Error message on linting error
 
-[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.9.0...HEAD
+[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.6.0...v1.7.0
