@@ -36,6 +36,7 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var lastVersion: String? = null
     var hits = 0
     var requestSupport = true
+    // Remote url to Remote
     var remotes: MutableMap<String, Remote> = mutableMapOf()
     var lintFrequency: LintFrequencyEnum = LintFrequencyEnum.ON_SAVE
     var showMergedPreview = true
