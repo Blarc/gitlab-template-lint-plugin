@@ -23,9 +23,8 @@ class SettingsConfigurable(val project: Project) :
             comboBox(LintFrequencyEnum.values().toList(), ListCellRenderer())
                 .label(GitlabLintBundle.message("settings.frequency.label"))
                 .bindItem(AppSettings.instance::lintFrequency.toNullableProperty())
-        }
-        row {
-            comment(GitlabLintBundle.message("settings.frequency.description"))
+
+            contextHelp(GitlabLintBundle.message("settings.frequency.description"))
         }
         row {
             checkBox(GitlabLintBundle.message("settings.allow-self-signed-certificate"))
@@ -59,7 +58,8 @@ class SettingsConfigurable(val project: Project) :
             textField()
                 .bindText(project.service<ProjectSettings>()::fallbackBranch)
                 .align(Align.FILL)
-                .comment(GitlabLintBundle.message("settings.fallback-branch.comment"))
+
+            contextHelp(GitlabLintBundle.message("settings.fallback-branch.comment"))
         }
         row {
             cell(

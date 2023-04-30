@@ -4,6 +4,7 @@
 ### Changed
 - Display list of all previously set Gitlab URL Tokens in settings and during the addition of a new remote to the 
 remotes table.
+- Replace comments with context help and add empty text in settings.
 
 ## [1.10.0] - 2023-04-27
 

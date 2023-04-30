@@ -30,9 +30,9 @@ class RemotesConfigurable(project: Project) : BoundConfigurable(message("setting
         row {
             cell(
                 ToolbarDecorator.createDecorator(table)
-                    .setAddAction{ addRemote() }
-                    .setEditAction{ editRemote() }
-                    .setRemoveAction{ removeRemote() }
+                    .setAddAction { addRemote() }
+                    .setEditAction { editRemote() }
+                    .setRemoveAction { removeRemote() }
                     .disableUpAction()
                     .disableDownAction()
                     .createPanel()
@@ -78,6 +78,7 @@ class RemotesConfigurable(project: Project) : BoundConfigurable(message("setting
             refreshTableModel()
         }
     }
+
     private fun refreshTableModel() {
         tableModel.items = remotes
     }
@@ -88,6 +89,7 @@ class RemotesConfigurable(project: Project) : BoundConfigurable(message("setting
         remotes = AppSettings.instance.remotes.values.toList()
         refreshTableModel()
     }
+
     override fun isModified(): Boolean {
         return remotes != AppSettings.instance.remotes.values.toList()
     }
@@ -96,38 +98,50 @@ class RemotesConfigurable(project: Project) : BoundConfigurable(message("setting
         super.apply()
         AppSettings.instance.remotes = remotes.associateBy { it.remoteUrl }.toMutableMap()
     }
-}
 
-private class RemoteDialog(val gitlabUrls: Set<String>, newRemote: Remote? = null): DialogWrapper(false) {
-    val remote = newRemote ?: Remote()
-    init {
-        title = message("settings.remotes.dialog.title")
-        setOKButtonText(newRemote?.let { message("actions.update") } ?: message("actions.add"))
-        setSize(700, 200)
-        init()
-    }
+    private class RemoteDialog(val gitlabUrls: Set<String>, newRemote: Remote? = null) : DialogWrapper(false) {
+        val remote = newRemote ?: Remote()
 
-    override fun createCenterPanel() = panel {
-        row(message("settings.remote.remote-url")) {
-            textField()
-                .align(Align.FILL)
-                .bindText(remote::remoteUrl)
-                .focused()
-                .validationOnApply { notBlank(it.text)}
-                .comment(message("settings.remote.remote-url.comment"))
+        init {
+            title = message("settings.remotes.dialog.title")
+            setOKButtonText(newRemote?.let { message("actions.update") } ?: message("actions.add"))
+            setSize(700, 200)
+            init()
         }
-        row(message("settings.remote.gitlab-api-url")) {
-            comboBox(gitlabUrls)
-                .align(Align.FILL)
-                .bindItem(remote::gitlabUrl.toNullableProperty())
-                .comment(message("settings.remote.gitlab-api-url.comment"))
-        }
-        row(message("settings.remote.project-id")) {
-            textField()
-                .align(Align.FILL)
-                .bindText({ remote.remoteId?.toString().orEmpty() }, { remote.remoteId = it.toLong() })
-                .validationOnApply { isLong(it.text) }
-                .comment(message("settings.remote.project-id.comment"))
+
+        override fun createCenterPanel() = panel {
+            row(message("settings.remote.remote-url")) {
+                textField()
+                    .align(Align.FILL)
+                    .bindText(remote::remoteUrl)
+                    .focused()
+                    .validationOnApply { notBlank(it.text) }
+                    .resizableColumn()
+                    .emptyText(message("settings.remote.remote-url.empty-text"))
+
+                contextHelp(message("settings.remote.remote-url.context-help"))
+                    .align(AlignX.RIGHT)
+            }
+            row(message("settings.remote.gitlab-api-url")) {
+                comboBox(gitlabUrls)
+                    .align(Align.FILL)
+                    .bindItem(remote::gitlabUrl.toNullableProperty())
+                    .resizableColumn()
+
+                contextHelp(message("settings.remote.gitlab-api-url.context-help"))
+                    .align(AlignX.RIGHT)
+            }
+            row(message("settings.remote.project-id")) {
+                textField()
+                    .align(Align.FILL)
+                    .bindText({ remote.remoteId?.toString().orEmpty() }, { remote.remoteId = it.toLong() })
+                    .validationOnApply { isLong(it.text) }
+                    .resizableColumn()
+                    .emptyText(message("settings.remote.project-id.empty-text"))
+
+                contextHelp(message("settings.remote.project-id.context-help"))
+                    .align(AlignX.RIGHT)
+            }
         }
     }
 }
