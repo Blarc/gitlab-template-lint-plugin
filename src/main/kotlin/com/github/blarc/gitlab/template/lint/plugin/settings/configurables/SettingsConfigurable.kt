@@ -1,6 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.settings.configurables
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
+import com.github.blarc.gitlab.template.lint.plugin.extensions.emptyText
 import com.github.blarc.gitlab.template.lint.plugin.extensions.notBlank
 import com.github.blarc.gitlab.template.lint.plugin.extensions.reportBugLink
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
@@ -51,6 +52,10 @@ class SettingsConfigurable(val project: Project) :
                 .bindText(project.service<ProjectSettings>()::remote)
                 .validationOnApply { notBlank(it.text) }
                 .align(Align.FILL)
+                .resizableColumn()
+                .emptyText(GitlabLintBundle.message("settings.remote.empty-text"))
+
+            contextHelp(GitlabLintBundle.message("settings.remote.comment"))
         }
         row {
             label(GitlabLintBundle.message("settings.fallback-branch"))
@@ -58,6 +63,8 @@ class SettingsConfigurable(val project: Project) :
             textField()
                 .bindText(project.service<ProjectSettings>()::fallbackBranch)
                 .align(Align.FILL)
+                .resizableColumn()
+                .emptyText(GitlabLintBundle.message("settings.fallback-branch.empty-text"))
 
             contextHelp(GitlabLintBundle.message("settings.fallback-branch.comment"))
         }

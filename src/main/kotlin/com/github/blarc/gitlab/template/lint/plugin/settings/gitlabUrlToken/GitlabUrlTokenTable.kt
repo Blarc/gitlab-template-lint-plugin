@@ -2,6 +2,7 @@ package com.github.blarc.gitlab.template.lint.plugin.settings.gitlabUrlToken;
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.extensions.createColumn
+import com.github.blarc.gitlab.template.lint.plugin.extensions.emptyText
 import com.github.blarc.gitlab.template.lint.plugin.extensions.notBlank
 import com.github.blarc.gitlab.template.lint.plugin.extensions.replaceAt
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
@@ -23,7 +24,6 @@ import java.awt.event.ActionEvent
 import java.net.URL
 import javax.swing.Action
 import javax.swing.JLabel
-import javax.swing.JTextField
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 
 class GitlabUrlTokenTable(val project: Project) {
@@ -102,7 +102,7 @@ class GitlabUrlTokenTable(val project: Project) {
         DialogWrapper(true) {
         var gitlabUrlToken = newGitlabUrlToken ?: GitlabUrlToken()
         val gitlabUrlTextField = JBTextField()
-        val gitlabTokenTextField = JTextField()
+        val gitlabTokenTextField = JBTextField()
         val verifyLabel = JLabel()
 
         init {
@@ -125,12 +125,14 @@ class GitlabUrlTokenTable(val project: Project) {
                     .focused()
                     .validationOnApply { notBlank(it.text) }
                     .comment(message("settings.gitlab-url-token.gitlab-url.comment"))
+                    .emptyText(message("settings.gitlab-url-token.gitlab-url.empty-text"))
             }
             row(message("settings.gitlab-url-token.gitlab-token")) {
                 cell(gitlabTokenTextField)
                     .align(Align.FILL)
                     .bindText({ gitlabUrlToken.gitlabToken.orEmpty() }, { gitlabUrlToken.gitlabToken = it })
                     .validationOnApply { notBlank(it.text) }
+                    .emptyText(message("settings.gitlab-url-token.gitlab-token.empty-text"))
                     .comment(message("settings.gitlab-url-token.gitlab-token.comment"), action= {
                         val host: String = try {
                             val uri = URL(gitlabUrlTextField.text).toURI()
