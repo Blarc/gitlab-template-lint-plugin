@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.11.0] - 2023-05-03
+
 ### Changed
 - Display list of all previously set Gitlab URL Tokens in settings and during the addition of a new remote to the 
 remotes table.
@@ -227,7 +230,8 @@ remotes table.
 - Setting private Gitlab token
 - Error message on linting error
 
-[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.10.0...HEAD
+[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.7.0...v1.8.0
