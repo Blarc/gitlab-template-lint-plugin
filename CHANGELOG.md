@@ -3,7 +3,8 @@
 ## [Unreleased]
 
 ### Fixed
-- Access is allowed only from Event Dispatch Thread in ApplicationStartupListener.
+- Access is allowed only from Event Dispatch Thread in `ApplicationStartupListener`.
+- `WorkspaceFileIndex` is not initialized yet in `SaveActionListener`.
 
 ## [1.11.0] - 2023-05-03
 
