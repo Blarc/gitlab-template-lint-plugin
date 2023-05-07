@@ -7,6 +7,7 @@ import com.github.blarc.gitlab.template.lint.plugin.runLinting
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.PlatformDataKeys
+import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.ProjectActivity
@@ -17,8 +18,10 @@ class ApplicationStartupListener : ProjectActivity {
     override suspend fun execute(project: Project) {
         showVersionNotification(project)
         DataManager.getInstance().dataContextFromFocusAsync.onSuccess {
-            it.getData(PlatformDataKeys.PSI_FILE)?.let { file ->
-                runLinting(file)
+            runReadAction {
+                it.getData(PlatformDataKeys.PSI_FILE)?.let { file ->
+                    runLinting(file)
+                }
             }
         }
     }
