@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.11.1] - 2023-05-08
+
 ### Fixed
 - Access is allowed only from Event Dispatch Thread in `ApplicationStartupListener`.
 - `WorkspaceFileIndex` is not initialized yet in `SaveActionListener`.
@@ -234,7 +236,8 @@ remotes table.
 - Setting private Gitlab token
 - Error message on linting error
 
-[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.11.0...HEAD
+[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.11.1...HEAD
+[1.11.1]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.8.0...v1.9.0
