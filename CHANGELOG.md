@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- NPE when opening a folder as project.
+
 ## [1.11.1] - 2023-05-08
 
 ### Fixed
