@@ -24,7 +24,10 @@ class ResolveContext : Middleware {
     private var showRepositoryNotification = true
     private var showRemoteNotification = true
 
-    override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
+    override fun invoke(
+        pass: Pass,
+        next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?
+    ): Pair<GitlabLintResponse?, LintStatusEnum>? {
 
         val repository = locateRepository(pass) ?: return null
         val remote = locateRemote(pass, repository) ?: return null
@@ -34,25 +37,25 @@ class ResolveContext : Middleware {
         val settings = pass.project.service<ProjectSettings>()
         val remotesMap = AppSettings.instance.remotes
         if (settings.forceHttps) {
-            pass.remoteUrl = remote.httpUrl?.toHttps().toString()
-
-            if (remotesMap.containsKey(pass.remoteUrl)) {
-                pass.gitlabUrl = remotesMap[pass.remoteUrl]?.gitlabUrl
-            }
-            else {
-                pass.gitlabUrl = remote.gitlabUrl?.toHttps().toString()
-                remotesMap[pass.remoteUrl!!] = Remote(pass.remoteUrl!!, pass.gitlabUrl, null)
-            }
-        }
-        else {
-            pass.remoteUrl = remote.httpUrl?.toString()
-            if (remotesMap.containsKey(pass.remoteUrl)) {
-                pass.gitlabUrl = remotesMap[pass.remoteUrl]?.gitlabUrl
-            }
-            else {
-                pass.gitlabUrl = remote.gitlabUrl?.toString()
-                remotesMap[pass.remoteUrl!!] = Remote(pass.remoteUrl!!, pass.gitlabUrl, null)
-            }
+            val remoteUrl = remote.httpUrl?.toHttps()?.toString() ?: return null
+            pass.remoteUrl = remoteUrl
+            pass.gitlabUrl = remotesMap.getOrPut(remoteUrl) {
+                Remote(
+                    remoteUrl,
+                    remote.gitlabUrl?.toHttps()?.toString(),
+                    null
+                )
+            }.gitlabUrl
+        } else {
+            val remoteUrl = remote.httpUrl?.toString() ?: return null
+            pass.remoteUrl = remoteUrl
+            pass.gitlabUrl = remotesMap.getOrPut(remoteUrl) {
+                Remote(
+                    remoteUrl,
+                    remote.gitlabUrl?.toString(),
+                    null
+                )
+            }.gitlabUrl
         }
 
         return next()

@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- Refactor code for getting remote URL and Gitlab API URL in `ResolveContext`.
+
 ### Fixed
 - NPE when opening a folder as project.
 
