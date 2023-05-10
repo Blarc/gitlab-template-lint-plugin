@@ -14,40 +14,32 @@ import git4idea.repo.GitRepositoryManager
 
 class VcsMappingChangedListener(val project: Project) : VcsRepositoryMappingListener {
 
-    private var firstTime = true
     override fun mappingChanged() {
         val settings = project.service<ProjectSettings>()
         val projectSettings = project.service<ProjectSettings>()
 
-        projectSettings.gitlabUrls = GitRepositoryManager.getInstance(project)
-                .repositories
-                .asSequence()
-                .mapNotNull { it.locateRemote(settings.remote) }
-                .mapNotNull { it.gitlabUrl }
-                .map { if (project.service<ProjectSettings>().forceHttps) it.toHttps() else it }
-                .map { it.toString() }
-                .toSet()
+        val currentGitlabUrls = GitRepositoryManager.getInstance(project)
+            .repositories
+            .asSequence()
+            .mapNotNull { it.locateRemote(settings.remote) }
+            .mapNotNull { it.gitlabUrl }
+            .map { if (project.service<ProjectSettings>().forceHttps) it.toHttps() else it }
+            .map { it.toString() }
+            .toSet()
 
+        projectSettings.gitlabUrls = currentGitlabUrls
         AppSettings.instance.remotes
             .mapNotNull { it.value.gitlabUrl }
             .forEach { projectSettings.gitlabUrls += it }
 
-        if (projectSettings.gitlabUrl != null && projectSettings.gitlabUrls.contains(projectSettings.gitlabUrl)) {
-            return
-        }
-
-        val gitlabUrl = projectSettings.gitlabUrls.firstOrNull()
-        if (gitlabUrl == null) {
-            if (firstTime) {
+        if (projectSettings.newProject) {
+            if (projectSettings.gitlabUrls.isEmpty()) {
                 sendNotification(Notification.couldNotDetectGitlabUrl(project), project)
+            } else {
+                sendNotification(Notification.gitlabUrlsAutoDetected(currentGitlabUrls, project), project)
             }
-            return
         }
 
-        if (firstTime) {
-            sendNotification(Notification.gitlabUrlAutoDetected(gitlabUrl, project), project)
-        }
-        projectSettings.gitlabUrl = gitlabUrl
-        firstTime = false
+        projectSettings.newProject = false
     }
 }

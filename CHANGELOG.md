@@ -4,6 +4,8 @@
 
 ### Changed
 - Refactor code for getting remote URL and Gitlab API URL in `ResolveContext`.
+- Show notification about detected Gitlab API URL only once per project.
+- Do not show detected Gitlab API URL in the notification, because there can be multiple Gitlab API URLs in one project.
 
 ### Fixed
 - NPE when opening a folder as project.

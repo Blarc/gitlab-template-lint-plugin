@@ -66,10 +66,16 @@ data class Notification(
             actions = setOf(NotificationAction.settings(project, message("actions.configure-manually")))
         )
 
-        fun gitlabUrlAutoDetected(url: String, project: Project) = Notification(
-            message =  message("notifications.gitlab-url-detected.message", url),
-            actions = setOf(NotificationAction.settingsRemote(project, message("notifications.gitlab-url-detected.action")))
-        )
+        fun gitlabUrlsAutoDetected(urls: Set<String>, project: Project): Notification {
+            var message = message("notifications.gitlab-urls-detected.message")
+            if (urls.size == 1) {
+                message = message("notifications.gitlab-url-detected.message", urls.first())
+            }
+            return Notification(
+                message =  message,
+                actions = setOf(NotificationAction.settingsRemote(project, message("notifications.gitlab-url-detected.action")))
+            )
+        }
 
         fun unsuccessfulRequest(message: String) = Notification(message = message("notifications.unsuccessful-request", message))
 

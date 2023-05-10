@@ -21,7 +21,7 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
         const val SERVICE_NAME = "com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings"
     }
 
-    var gitlabUrl: String? = null
+    var newProject: Boolean = true
     var gitlabUrls: Set<String> = setOf()
     var fallbackBranch: String = ""
     var remote = "origin"
