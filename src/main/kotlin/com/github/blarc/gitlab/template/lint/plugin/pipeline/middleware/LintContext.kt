@@ -16,7 +16,9 @@ class LintContext : Middleware {
     override val priority = 50
     private var showGitlabTokenNotification = true
 
-    override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
+    override fun invoke(
+        pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?
+    ): Pair<GitlabLintResponse?, LintStatusEnum>? {
         val remoteId = pass.remoteIdOrThrow()
         val branch = pass.repositoryOrThrow().currentBranchName ?: return null
 
@@ -29,7 +31,17 @@ class LintContext : Middleware {
         var gitlabLintResponse = lintContent(gitlab, gitlabUrl, gitlabToken, pass, remoteId, branch)
         if (gitlabLintResponse?.valid == true) {
             showGitlabTokenNotification = true
-            setMergedPreview(pass, gitlabLintResponse)
+            setMergedPreview(pass, gitlabLintResponse.mergedYaml)
+            return Pair(gitlabLintResponse, LintStatusEnum.VALID)
+        }
+
+        // Reduce errors by ignored errors
+        val ignoredErrors = pass.project.service<ProjectSettings>().ignoredErrors
+        gitlabLintResponse?.errors?.removeIf { ignoredErrors[pass.file.virtualFile.path]?.contains(it) == true }
+        if (gitlabLintResponse?.errors?.isEmpty() == true) {
+            gitlabLintResponse.valid = true
+            showGitlabTokenNotification = true
+            setMergedPreview(pass, gitlabLintResponse.mergedYaml)
             return Pair(gitlabLintResponse, LintStatusEnum.VALID)
         }
 
@@ -39,25 +51,24 @@ class LintContext : Middleware {
             gitlabLintResponse = lintContent(gitlab, gitlabUrl, gitlabToken, pass, remoteId, fallbackBranch)
             if (gitlabLintResponse?.valid == true) {
                 showGitlabTokenNotification = true
-                setMergedPreview(pass, gitlabLintResponse)
+                setMergedPreview(pass, gitlabLintResponse.mergedYaml)
                 return Pair(gitlabLintResponse, LintStatusEnum.VALID)
             }
         }
 
         // Show error
         showGitlabTokenNotification = false
+        setMergedPreview(pass, gitlabLintResponse?.mergedYaml)
         return Pair(gitlabLintResponse, LintStatusEnum.INVALID)
     }
 
     private fun setMergedPreview(
-        pass: Pass,
-        gitlabLintResponse: GitlabLintResponse
+        pass: Pass, mergedYaml: String?
     ) {
         WriteCommandAction.runWriteCommandAction(pass.project) {
-            val selectedEditor =
-                FileEditorManager.getInstance(pass.project).getSelectedEditor(pass.file.virtualFile)
+            val selectedEditor = FileEditorManager.getInstance(pass.project).getSelectedEditor(pass.file.virtualFile)
             if (selectedEditor is EditorWithMergedPreview) {
-                gitlabLintResponse.mergedYaml?.let { selectedEditor.setPreviewText(it) }
+                mergedYaml?.let { selectedEditor.setPreviewText(it) }
             }
         }
     }

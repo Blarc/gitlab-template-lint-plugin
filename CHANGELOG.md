@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Option to ignore specific error for a file.
 
 ### Changed
 - Refactor code for getting remote URL and Gitlab API URL in `ResolveContext`.

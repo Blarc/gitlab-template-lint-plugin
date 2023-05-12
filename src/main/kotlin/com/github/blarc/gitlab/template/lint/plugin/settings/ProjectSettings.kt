@@ -26,6 +26,7 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
     var fallbackBranch: String = ""
     var remote = "origin"
     var forceHttps = true
+    val ignoredErrors: MutableMap<String, MutableSet<String>> = mutableMapOf()
 
     override fun getState() = this
 

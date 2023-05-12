@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
 data class GitlabLintResponse(
-    val valid: Boolean,
-    val errors: List<String>,
+    var valid: Boolean,
+    var errors: MutableList<String>,
     val warnings: List<String>,
     @SerialName("merged_yaml")
     val mergedYaml: String?
