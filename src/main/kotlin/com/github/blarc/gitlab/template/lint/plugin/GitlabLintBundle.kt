@@ -31,7 +31,11 @@ object GitlabLintBundle : DynamicBundle(BUNDLE) {
     }
 
     fun openRepository() {
-        BrowserLauncher.instance.open("https://github.com/Blarc/gitlab-template-lint-plugin");
+        BrowserLauncher.instance.open("https://github.com/Blarc/gitlab-template-lint-plugin")
+    }
+
+    fun openPipelineFilteredIssue() {
+        BrowserLauncher.instance.open("https://github.com/Blarc/gitlab-template-lint-plugin/issues/118#issuecomment-1538732251")
     }
 
     fun plugin() = PluginManagerCore.getPlugin(PluginId.getId("com.github.blarc.gitlab-template-lint-plugin"))

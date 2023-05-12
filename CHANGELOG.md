@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - Option to ignore specific error for a file.
+- Explanation for `Pipeline filtered out by workflow rules` error.
 
 ### Changed
 - Refactor code for getting remote URL and Gitlab API URL in `ResolveContext`.

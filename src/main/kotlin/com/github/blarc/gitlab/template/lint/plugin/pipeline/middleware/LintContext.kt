@@ -1,6 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.pipeline.middleware
 
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab
+import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintErrorsEnum
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintResponse
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.providers.EditorWithMergedPreview
@@ -46,7 +47,7 @@ class LintContext : Middleware {
         }
 
         val fallbackBranch = pass.project.service<ProjectSettings>().fallbackBranch
-        if (gitlabLintResponse?.errors?.get(0).equals("Reference not found", true) && fallbackBranch.isNotBlank()) {
+        if (gitlabLintResponse?.errors?.firstOrNull().equals(GitlabLintErrorsEnum.REFERENCE_NOT_FOUND.message, true) && fallbackBranch.isNotBlank()) {
             // Try to lint with fallback branch
             gitlabLintResponse = lintContent(gitlab, gitlabUrl, gitlabToken, pass, remoteId, fallbackBranch)
             if (gitlabLintResponse?.valid == true) {
