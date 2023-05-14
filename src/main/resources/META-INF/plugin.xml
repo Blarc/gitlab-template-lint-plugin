@@ -112,6 +112,12 @@
                 id="com.github.blarc.gitlab.template.lint.plugin.settings.remote.RemotesConfigurable"
                 key="settings.remotes.group.title" />
 
+        <projectConfigurable
+                parentId="com.github.blarc.gitlab.template.lint.plugin.settings.configurables.SettingsConfigurable"
+                instance="com.github.blarc.gitlab.template.lint.plugin.settings.ignoredErrors.IgnoredErrorsConfigurable"
+                id="com.github.blarc.gitlab.template.lint.plugin.settings.ignoredErrors.IgnoredErrorsConfigurable"
+                key="settings.ignored-errors.group.title" />
+
         <applicationConfigurable
             parentId="com.github.blarc.gitlab.template.lint.plugin.settings.configurables.SettingsConfigurable"
             instance="com.github.blarc.gitlab.template.lint.plugin.settings.configurables.GlobsConfigurable"
