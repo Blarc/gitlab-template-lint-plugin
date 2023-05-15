@@ -7,6 +7,7 @@ import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.providers.EditorWithMergedPreview
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
+import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -82,13 +83,16 @@ class LintContext : Middleware {
         remoteId: Long,
         branch: String
     ): GitlabLintResponse? {
-        return gitlab.lintContent(
-            gitlabUrl,
-            gitlabToken,
-            pass.file.text,
-            remoteId,
-            branch,
-            showGitlabTokenNotification
-        ).get()
+
+        return runReadAction {
+            return@runReadAction gitlab.lintContent(
+                gitlabUrl,
+                gitlabToken,
+                pass.file.text,
+                remoteId,
+                branch,
+                showGitlabTokenNotification
+            ).get()
+        }
     }
 }

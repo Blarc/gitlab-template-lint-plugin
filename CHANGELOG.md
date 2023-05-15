@@ -13,6 +13,7 @@
 
 ### Fixed
 - NPE when opening a folder as project.
+- Access is allowed only from Event Dispatch Thread in `LintContext`.
 
 ## [1.11.1] - 2023-05-08
 
