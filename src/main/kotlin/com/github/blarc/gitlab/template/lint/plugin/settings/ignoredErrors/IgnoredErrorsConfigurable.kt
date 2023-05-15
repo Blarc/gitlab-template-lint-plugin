@@ -14,9 +14,8 @@ import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ListTableModel
 import javax.swing.ListSelectionModel
 
-class IgnoredErrorsConfigurable(val project: Project) :
-    BoundConfigurable(message("settings.ignored-errors.group.title")) {
-    private var ignoredErrors = project.service<ProjectSettings>().ignoredErrors.toMutableMap()
+class IgnoredErrorsConfigurable(val project: Project) : BoundConfigurable(message("settings.ignored-errors.group.title")) {
+    private var ignoredErrors = projectsIgnoredErrors()
 
     private val tableModel = createTableModel()
 
@@ -45,36 +44,40 @@ class IgnoredErrorsConfigurable(val project: Project) :
             createColumn<IgnoredError>(message("settings.ignored-error.file")) { ignoredError -> ignoredError.filePath.removePrefix("${project.basePath ?: ""}/") },
             createColumn(message("settings.ignored-error.message")) { ignoredError -> ignoredError.errorMessage }
         ),
-        ignoredErrorsList()
+        ignoredErrors
     )
 
     private fun removeIgnoredError() {
         val selectedRow = table.selectedObject ?: return
 
-        ignoredErrors[selectedRow.filePath]?.remove(selectedRow.errorMessage)
+        ignoredErrors = ignoredErrors.minus(selectedRow)
         refreshTableModel()
     }
 
     private fun refreshTableModel() {
-        tableModel.items = ignoredErrorsList()
+        tableModel.items = ignoredErrors
     }
 
     override fun reset() {
         super.reset()
-        ignoredErrors = project.service<ProjectSettings>().ignoredErrors.toMutableMap()
+        ignoredErrors = projectsIgnoredErrors()
         refreshTableModel()
     }
 
     override fun isModified(): Boolean {
-        return super.isModified() || ignoredErrors != project.service<ProjectSettings>().ignoredErrors
+        return ignoredErrors != projectsIgnoredErrors()
     }
 
     override fun apply() {
         super.apply()
-        project.service<ProjectSettings>().ignoredErrors = ignoredErrors
+        project.service<ProjectSettings>().ignoredErrors = ignoredErrors.groupBy {
+            it.filePath
+        }.mapValues {
+            it.value.map { ignoredError -> ignoredError.errorMessage }.toMutableSet()
+        }.toMutableMap()
     }
 
-    private fun ignoredErrorsList() = ignoredErrors.map { mapEntry ->
+    private fun projectsIgnoredErrors() = project.service<ProjectSettings>().ignoredErrors.map { mapEntry ->
         mapEntry.value.map {
             IgnoredError(mapEntry.key, it)
         }
