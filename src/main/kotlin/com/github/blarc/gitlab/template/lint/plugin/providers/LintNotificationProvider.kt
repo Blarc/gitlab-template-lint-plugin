@@ -2,7 +2,6 @@ package com.github.blarc.gitlab.template.lint.plugin.providers
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
-import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.gitlab.GitlabLintErrorsEnum
 import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pipeline
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
@@ -22,7 +21,7 @@ class LintNotificationProvider : EditorNotificationProvider {
     ) = Function { _: FileEditor ->
         val pipeline = project.service<Pipeline>()
 
-        if (pipeline.gitlabLintResponse?.valid == false && GitlabLintUtils.isGitlabYaml(file)) {
+        if (pipeline.gitlabLintResponse?.valid == false && file.path == pipeline.file?.virtualFile?.path) {
             val panel = EditorNotificationPanel(HintUtil.ERROR_COLOR_KEY)
 
             val errors = pipeline.gitlabLintResponse?.errors

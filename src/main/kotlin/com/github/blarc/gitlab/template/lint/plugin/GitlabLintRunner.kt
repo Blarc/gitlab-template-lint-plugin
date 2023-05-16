@@ -7,14 +7,18 @@ import com.intellij.psi.PsiFile
 import com.intellij.ui.EditorNotifications
 
 
-fun runLinting(file: PsiFile) {
+fun lintGitlabYaml(file: PsiFile) {
     if (GitlabLintUtils.isGitlabYaml(file.virtualFile)) {
-        runBackgroundableTask(GitlabLintBundle.message("inspection.title"), file.project) { indicator ->
-            indicator.isIndeterminate = true
-            val project = file.project
-            val pipeline = project.service<Pipeline>()
-            pipeline.accept(file)
-            EditorNotifications.getInstance(project).updateAllNotifications()
-        }
+        lint(file)
+    }
+}
+
+fun lint(file: PsiFile) {
+    runBackgroundableTask(GitlabLintBundle.message("inspection.title"), file.project) { indicator ->
+        indicator.isIndeterminate = true
+        val project = file.project
+        val pipeline = project.service<Pipeline>()
+        pipeline.accept(file)
+        EditorNotifications.getInstance(project).updateAllNotifications()
     }
 }

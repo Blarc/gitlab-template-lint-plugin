@@ -2,7 +2,7 @@ package com.github.blarc.gitlab.template.lint.plugin.listeners
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils.updateStatusWidget
-import com.github.blarc.gitlab.template.lint.plugin.runLinting
+import com.github.blarc.gitlab.template.lint.plugin.lintGitlabYaml
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusWidget
@@ -37,7 +37,7 @@ class FileListener : FileEditorManagerListener {
             WindowManager.getInstance().getStatusBar(project).updateWidget(LintStatusWidget.ID)
             // If we can get the psi file, run linting
             PsiManager.getInstance(project).findFile(file)?.let {
-                runLinting(it)
+                lintGitlabYaml(it)
             }
         } else {
             updateStatusWidget(project, LintStatusEnum.WAITING)

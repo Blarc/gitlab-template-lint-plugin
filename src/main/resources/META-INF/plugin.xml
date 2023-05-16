@@ -176,5 +176,12 @@
                 class="com.github.blarc.gitlab.template.lint.plugin.widget.actions.RefreshAction"
                 text="RefreshAction"
         />
+        <action id="com.github.blarc.gitlab.template.lint.plugin.GitlabLintAction"
+                class="com.github.blarc.gitlab.template.lint.plugin.GitlabLintAction"
+                text="Run Gitlab Lint..."
+        >
+            <add-to-group group-id="EditorPopupMenu"/>
+            <add-to-group group-id="EditorTabPopupMenu"/>
+        </action>
     </actions>
 </idea-plugin>

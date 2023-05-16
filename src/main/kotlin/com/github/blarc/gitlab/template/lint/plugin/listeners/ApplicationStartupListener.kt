@@ -3,7 +3,7 @@ package com.github.blarc.gitlab.template.lint.plugin.listeners
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle
 import com.github.blarc.gitlab.template.lint.plugin.notifications.Notification
 import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotification
-import com.github.blarc.gitlab.template.lint.plugin.runLinting
+import com.github.blarc.gitlab.template.lint.plugin.lintGitlabYaml
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.PlatformDataKeys
@@ -20,7 +20,7 @@ class ApplicationStartupListener : ProjectActivity {
         DataManager.getInstance().dataContextFromFocusAsync.onSuccess {
             runReadAction {
                 it.getData(PlatformDataKeys.PSI_FILE)?.let { file ->
-                    runLinting(file)
+                    lintGitlabYaml(file)
                 }
             }
         }

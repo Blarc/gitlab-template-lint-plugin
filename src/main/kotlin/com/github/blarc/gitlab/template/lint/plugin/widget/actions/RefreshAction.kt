@@ -1,7 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.widget.actions
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
-import com.github.blarc.gitlab.template.lint.plugin.runLinting
+import com.github.blarc.gitlab.template.lint.plugin.lintGitlabYaml
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.DumbAwareAction
@@ -13,7 +13,7 @@ class RefreshAction : DumbAwareAction(message("actions.refresh")) {
         if (project != null) {
             FileEditorManager.getInstance(project).selectedEditor?.file?.let {
                 PsiManager.getInstance(project).findFile(it)?.let { psiFile ->
-                    runLinting(psiFile)
+                    lintGitlabYaml(psiFile)
                 }
             }
         }

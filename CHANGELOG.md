@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+- Action for running lint on current yaml file to editor menu.
+
 ## [1.12.0] - 2023-05-15
 
 ### Added

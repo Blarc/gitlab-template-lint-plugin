@@ -14,6 +14,7 @@ import java.util.*
 class Pipeline(private val project: Project) {
     var gitlabLintResponse: GitlabLintResponse? = null
     var lintStatus: LintStatusEnum = LintStatusEnum.HIDDEN
+    var file: PsiFile? = null
 
     private val middlewares: Set<Middleware> = setOf(
         project.service<ResolveContext>(),
@@ -25,6 +26,7 @@ class Pipeline(private val project: Project) {
     )
 
     fun accept(file: PsiFile) {
+        this.file = file
 
         if (middlewares.isEmpty()) {
             throw IllegalStateException("No middleware registered")
