@@ -5,6 +5,9 @@
 ### Added
 - Action for running lint on current yaml file to editor menu.
 
+### Fixed
+- Running lint context in read action freezes UI.
+
 ## [1.12.0] - 2023-05-15
 
 ### Added

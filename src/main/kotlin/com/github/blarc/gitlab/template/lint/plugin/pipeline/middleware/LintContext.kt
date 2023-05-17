@@ -7,7 +7,6 @@ import com.github.blarc.gitlab.template.lint.plugin.pipeline.Pass
 import com.github.blarc.gitlab.template.lint.plugin.providers.EditorWithMergedPreview
 import com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
-import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -48,7 +47,9 @@ class LintContext : Middleware {
         }
 
         val fallbackBranch = pass.project.service<ProjectSettings>().fallbackBranch
-        if (gitlabLintResponse?.errors?.firstOrNull().equals(GitlabLintErrorsEnum.REFERENCE_NOT_FOUND.message, true) && fallbackBranch.isNotBlank()) {
+        if (gitlabLintResponse?.errors?.firstOrNull()
+                .equals(GitlabLintErrorsEnum.REFERENCE_NOT_FOUND.message, true) && fallbackBranch.isNotBlank()
+        ) {
             // Try to lint with fallback branch
             gitlabLintResponse = lintContent(gitlab, gitlabUrl, gitlabToken, pass, remoteId, fallbackBranch)
             if (gitlabLintResponse?.valid == true) {
@@ -83,16 +84,13 @@ class LintContext : Middleware {
         remoteId: Long,
         branch: String
     ): GitlabLintResponse? {
-
-        return runReadAction {
-            return@runReadAction gitlab.lintContent(
-                gitlabUrl,
-                gitlabToken,
-                pass.file.text,
-                remoteId,
-                branch,
-                showGitlabTokenNotification
-            ).get()
-        }
+        return gitlab.lintContent(
+            gitlabUrl,
+            gitlabToken,
+            pass.file.text,
+            remoteId,
+            branch,
+            showGitlabTokenNotification
+        ).get()
     }
 }
