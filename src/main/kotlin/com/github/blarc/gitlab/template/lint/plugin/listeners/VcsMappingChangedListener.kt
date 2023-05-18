@@ -29,7 +29,7 @@ class VcsMappingChangedListener(val project: Project) : VcsRepositoryMappingList
 
         projectSettings.gitlabUrls = currentGitlabUrls
         AppSettings.instance.remotes
-            .mapNotNull { it.value.gitlabUrl }
+            .mapNotNull { it.value?.gitlabUrl }
             .forEach { projectSettings.gitlabUrls += it }
 
         if (projectSettings.newProject) {

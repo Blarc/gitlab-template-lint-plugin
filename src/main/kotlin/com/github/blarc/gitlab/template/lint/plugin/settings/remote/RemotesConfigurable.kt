@@ -15,7 +15,7 @@ import com.intellij.util.ui.ListTableModel
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 
 class RemotesConfigurable(project: Project) : BoundConfigurable(message("settings.remotes.group.title")) {
-    private var remotes = AppSettings.instance.remotes.values.toList()
+    private var remotes = AppSettings.instance.remotes.values.filterNotNull()
     private val gitlabUrls = project.service<ProjectSettings>().gitlabUrls
 
 
@@ -86,7 +86,7 @@ class RemotesConfigurable(project: Project) : BoundConfigurable(message("setting
 
     override fun reset() {
         super.reset()
-        remotes = AppSettings.instance.remotes.values.toList()
+        remotes = AppSettings.instance.remotes.values.filterNotNull()
         refreshTableModel()
     }
 

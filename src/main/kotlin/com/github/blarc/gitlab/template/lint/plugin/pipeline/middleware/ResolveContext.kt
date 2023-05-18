@@ -39,26 +39,40 @@ class ResolveContext : Middleware {
         if (settings.forceHttps) {
             val remoteUrl = remote.httpUrl?.toHttps()?.toString() ?: return null
             pass.remoteUrl = remoteUrl
-            pass.gitlabUrl = remotesMap.getOrPut(remoteUrl) {
-                Remote(
-                    remoteUrl,
-                    remote.gitlabUrl?.toHttps()?.toString(),
-                    null
-                )
-            }.gitlabUrl
+
+            val gitlabUrl = remote.gitlabUrl?.toHttps()?.toString()
+            pass.gitlabUrl = getGitlabUrlOrCreateRemote(remotesMap, remoteUrl, gitlabUrl!!)
         } else {
             val remoteUrl = remote.httpUrl?.toString() ?: return null
             pass.remoteUrl = remoteUrl
-            pass.gitlabUrl = remotesMap.getOrPut(remoteUrl) {
-                Remote(
-                    remoteUrl,
-                    remote.gitlabUrl?.toString(),
-                    null
-                )
-            }.gitlabUrl
+
+            val gitlabUrl = remote.gitlabUrl?.toString()
+            pass.gitlabUrl = getGitlabUrlOrCreateRemote(remotesMap, remoteUrl, gitlabUrl!!)
         }
 
         return next()
+    }
+
+    /*
+        * If the remoteUrl is not in the remotesMap, then add it to the map.
+        * If the remoteUrl is in the remotesMap, but the gitlabUrl is null, then set the gitlabUrl.
+        * If the remoteUrl is in the remotesMap, but the gitlabUrl is not null, then return the gitlabUrl.
+     */
+    private fun getGitlabUrlOrCreateRemote(
+        remotesMap: MutableMap<String, Remote?>,
+        remoteUrl: String,
+        gitlabUrl: String
+    ): String {
+        return remotesMap.getOrPut(remoteUrl) {
+            Remote(
+                remoteUrl,
+                gitlabUrl,
+                null
+            )
+        }?.gitlabUrl ?: let {
+            remotesMap[remoteUrl] = Remote(remoteUrl, gitlabUrl, null)
+            gitlabUrl
+        }
     }
 
     private fun locateRepository(pass: Pass): GitRepository? {

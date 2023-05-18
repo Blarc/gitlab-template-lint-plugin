@@ -7,6 +7,7 @@
 
 ### Fixed
 - Running lint context in read action freezes UI.
+- Remote can be null and throws NPE in `VcsMappingChangedListener`.
 
 ## [1.12.0] - 2023-05-15
 
