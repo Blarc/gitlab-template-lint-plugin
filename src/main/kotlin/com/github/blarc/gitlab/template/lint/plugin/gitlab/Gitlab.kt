@@ -68,7 +68,8 @@ open class Gitlab(val project: Project) {
     fun searchProjectId(
         baseUrl: String,
         gitlabToken: String,
-        remoteUrl: String
+        remoteUrl: String,
+        showProjectIdNotification: Boolean
     ): CompletableFuture<Long?> {
 
         val projectName = remoteUrl.split("/").last()
@@ -80,7 +81,9 @@ open class Gitlab(val project: Project) {
         createHttpClient().newCall(request)
             .enqueue(object: Callback{
                 override fun onFailure(call: Call, e: IOException) {
-                    sendNotification(Notification.remoteIdNotFound(project), project)
+                    if (showProjectIdNotification) {
+                        sendNotification(Notification.remoteIdNotFound(project), project)
+                    }
                     result.complete(null)
                 }
 
@@ -92,21 +95,23 @@ open class Gitlab(val project: Project) {
                             val gitlabProject = gitlabProjects.find { gitlabProject -> gitlabProject.webUrl.equals(remoteUrl, true) }
                             val gitlabProjectId = gitlabProject?.id
 
-                            if (gitlabProjectId == null) {
+                            if (gitlabProjectId == null && showProjectIdNotification) {
                                 sendNotification(Notification.remoteIdNotFound(project), project)
                             }
-
                             result.complete(gitlabProjectId)
-
                         }
                         else {
                             when(it.code) {
                                 401 -> {
-                                    sendNotification(Notification.unauthorizedRequest(project), project)
+                                    if (showProjectIdNotification) {
+                                        sendNotification(Notification.unauthorizedRequest(project), project)
+                                    }
                                     result.complete(null)
                                 }
                                 else -> {
-                                    sendNotification(Notification.remoteIdNotFound(project), project)
+                                    if (showProjectIdNotification) {
+                                        sendNotification(Notification.remoteIdNotFound(project), project)
+                                    }
                                     result.complete(null)
                                 }
                             }
@@ -115,7 +120,6 @@ open class Gitlab(val project: Project) {
                 }
 
             })
-
         return result
     }
 

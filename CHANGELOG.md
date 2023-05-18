@@ -8,6 +8,7 @@
 ### Fixed
 - Running lint context in read action freezes UI.
 - Remote can be null and throws NPE in `VcsMappingChangedListener`.
+- Show notification about unsuccessfully detecting project id only once.
 
 ## [1.12.0] - 2023-05-15
 

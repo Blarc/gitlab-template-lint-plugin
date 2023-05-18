@@ -12,6 +12,7 @@ import com.intellij.openapi.project.Project
 @Service
 class ResolveRemoteId : Middleware {
     override val priority = 30
+    private var showRemoteIdNotification = true
 
     override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
         val remoteUrl = pass.remoteOrThrow()
@@ -28,11 +29,17 @@ class ResolveRemoteId : Middleware {
         val remotesMap = AppSettings.instance.remotes
 
         return if (remotesMap.containsKey(remoteUrl) && remotesMap[remoteUrl]?.remoteId != null) {
+            showRemoteIdNotification = true
             remotesMap[remoteUrl]!!.remoteId
         }
         else {
             val gitlab = project.service<Gitlab>()
-            gitlab.searchProjectId(gitlabUrl, gitlabToken, remoteUrl).get().let {
+
+            // This prevents multiple notifications from showing up
+            val showRemoteIdNotificationTemp = showRemoteIdNotification
+            showRemoteIdNotification = false
+            gitlab.searchProjectId(gitlabUrl, gitlabToken, remoteUrl, showRemoteIdNotificationTemp).get().let {
+                showRemoteIdNotification = it != null
 
                 // Cache project's ID
                 if (remotesMap.containsKey(remoteUrl)) {
