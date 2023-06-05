@@ -11,6 +11,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.WindowManager
 import java.nio.file.FileSystems
+import java.nio.file.InvalidPathException
 
 object GitlabLintUtils {
     fun isGitlabYaml(file: VirtualFile): Boolean {
@@ -40,8 +41,11 @@ object GitlabLintUtils {
         val fileSystem = FileSystems.getDefault()
         for (globString in globs) {
             val glob = fileSystem.getPathMatcher("glob:$globString")
-            if (glob.matches(fileSystem.getPath(text))) {
-                return true
+            try {
+                return glob.matches(fileSystem.getPath(text))
+            }
+            catch (e: InvalidPathException) {
+                return false
             }
         }
         return false

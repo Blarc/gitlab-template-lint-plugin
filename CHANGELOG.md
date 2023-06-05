@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- Prevent `InvalidPathException` being raised in `GitlabLintUtils.matchesGlobs`.
+
 ## [1.13.0] - 2023-05-18
 
 ### Added
