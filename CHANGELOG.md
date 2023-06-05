@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.13.1] - 2023-06-05
+
 ### Fixed
 - Prevent `InvalidPathException` being raised in `GitlabLintUtils.matchesGlobs`.
 
@@ -266,7 +268,8 @@ remotes table.
 - Setting private Gitlab token
 - Error message on linting error
 
-[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.13.0...HEAD
+[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.13.1...HEAD
+[1.13.1]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.13.0...v1.13.1
 [1.13.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.11.0...v1.11.1
