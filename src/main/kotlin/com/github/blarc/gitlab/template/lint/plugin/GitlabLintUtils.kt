@@ -42,10 +42,12 @@ object GitlabLintUtils {
         for (globString in globs) {
             val glob = fileSystem.getPathMatcher("glob:$globString")
             try {
-                return glob.matches(fileSystem.getPath(text))
+                if (glob.matches(fileSystem.getPath(text))) {
+                    return true
+                }
             }
             catch (e: InvalidPathException) {
-                return false
+                // Ignore invalid paths
             }
         }
         return false

@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- Files are excluded from linting because globs check does not check all globs.
+
 ## [1.13.1] - 2023-06-05
 
 ### Fixed
