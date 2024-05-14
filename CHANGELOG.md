@@ -7,6 +7,7 @@
 ### Changed
 - Update dependencies.
 - Update code to latest IntelliJ API.
+- Bump IDE compatibility property `pluginSinceBuild` to `232`.
 
 ## [1.13.2] - 2023-06-08
 
