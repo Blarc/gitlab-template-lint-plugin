@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Plugin can be updated/installed without IDE restart.
+
 ### Changed
 - Update dependencies.
 - Update code to latest IntelliJ API.
