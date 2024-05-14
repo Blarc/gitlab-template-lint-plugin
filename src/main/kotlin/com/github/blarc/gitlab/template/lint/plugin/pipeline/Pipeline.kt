@@ -10,7 +10,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import java.util.*
 
-@Service
+@Service(Service.Level.PROJECT)
 class Pipeline(private val project: Project) {
     var gitlabLintResponse: GitlabLintResponse? = null
     var lintStatus: LintStatusEnum = LintStatusEnum.HIDDEN
@@ -45,7 +45,7 @@ class Pipeline(private val project: Project) {
         val middleware = queue.remove()
 
         return middleware(pass) {
-            return@middleware next(queue, pass);
+            return@middleware next(queue, pass)
         }
     }
 }

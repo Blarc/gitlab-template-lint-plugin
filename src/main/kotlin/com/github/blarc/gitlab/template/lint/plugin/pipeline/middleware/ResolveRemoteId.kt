@@ -9,7 +9,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 
-@Service
+@Service(Service.Level.PROJECT)
 class ResolveRemoteId : Middleware {
     override val priority = 30
     private var showRemoteIdNotification = true

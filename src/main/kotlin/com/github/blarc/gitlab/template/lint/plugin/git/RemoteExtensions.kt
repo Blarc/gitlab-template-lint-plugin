@@ -29,7 +29,7 @@ private fun normaliseUrl(url: String): URL {
     // 'git@github.com:foo.git'. This syntax does not support port definitions. Attempting to remove the port
     // will result in an invalid URL when the repository name is made up of digits.
     if (!tmpUrl.startsWith("git@")) {
-        tmpUrl = tmpUrl.replace(":\\d{1,5}".toRegex(), ""); // remove the port
+        tmpUrl = tmpUrl.replace(":\\d{1,5}".toRegex(), "") // remove the port
     }
 
     if (!tmpUrl.startsWith("http")) {

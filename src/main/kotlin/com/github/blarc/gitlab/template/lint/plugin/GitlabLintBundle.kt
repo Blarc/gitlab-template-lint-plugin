@@ -14,7 +14,7 @@ import java.net.URL
 private const val BUNDLE = "messages.MyBundle"
 
 object GitlabLintBundle : DynamicBundle(BUNDLE) {
-    public val URL_BUG_REPORT = URL("https://github.com/Blarc/gitlab-template-lint-plugin/issues")
+    val URL_BUG_REPORT = URL("https://github.com/Blarc/gitlab-template-lint-plugin/issues")
 
     @Suppress("SpreadOperator")
     @JvmStatic

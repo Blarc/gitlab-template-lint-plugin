@@ -12,7 +12,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditorManager
 
-@Service
+@Service(Service.Level.PROJECT)
 class LintContext : Middleware {
     override val priority = 50
     private var showGitlabTokenNotification = true

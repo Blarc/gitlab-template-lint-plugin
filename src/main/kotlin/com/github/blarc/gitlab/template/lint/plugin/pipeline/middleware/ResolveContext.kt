@@ -18,7 +18,7 @@ import git4idea.repo.GitRemote
 import git4idea.repo.GitRepository
 import git4idea.repo.GitRepositoryManager
 
-@Service
+@Service(Service.Level.PROJECT)
 class ResolveContext : Middleware {
     override val priority = 1
     private var showRepositoryNotification = true

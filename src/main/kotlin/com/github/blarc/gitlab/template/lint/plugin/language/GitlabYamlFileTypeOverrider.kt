@@ -1,4 +1,4 @@
-package com.github.blarc.gitlab.template.lint.plugin.language;
+package com.github.blarc.gitlab.template.lint.plugin.language
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.intellij.openapi.fileTypes.FileType

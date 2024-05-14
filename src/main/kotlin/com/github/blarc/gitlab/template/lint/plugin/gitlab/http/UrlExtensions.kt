@@ -3,6 +3,7 @@ package com.github.blarc.gitlab.template.lint.plugin.gitlab.http
 import java.net.URI
 import java.net.URL
 
+@Suppress("unused")
 val URI.domain: URI get() { return URI(host) }
 
 fun URI.toHttps(): URI {
@@ -21,11 +22,12 @@ fun URI.toHttps(): URI {
     return URL("https", host, port, normalised).toURI()
 }
 
+@Suppress("unused")
 fun URI.withTrimmedPath(): URI {
     val url = toURL()
 
     if (!url.path.endsWith("/")) {
-        return this;
+        return this
     }
 
     var normalisedFile = url.path.trimEnd('/')

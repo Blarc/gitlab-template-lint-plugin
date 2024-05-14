@@ -1,4 +1,4 @@
-package com.github.blarc.gitlab.template.lint.plugin.settings.gitlabUrlToken;
+package com.github.blarc.gitlab.template.lint.plugin.settings.gitlabUrlToken
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
 import com.github.blarc.gitlab.template.lint.plugin.extensions.createColumn
@@ -140,7 +140,7 @@ class GitlabUrlTokenTable(val project: Project) {
                         } catch (e: Exception) {
                             "https://gitlab.com"
                         }
-                        BrowserLauncher.instance.open("$host/-/profile/personal_access_tokens?name=Gitlab+Template+Lint+token&scopes=api,read_api");
+                        BrowserLauncher.instance.open("$host/-/profile/personal_access_tokens?name=Gitlab+Template+Lint+token&scopes=api,read_api")
                     })
             }
             row {

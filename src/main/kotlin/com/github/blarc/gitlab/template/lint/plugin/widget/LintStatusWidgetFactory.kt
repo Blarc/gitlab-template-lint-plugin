@@ -1,14 +1,12 @@
 package com.github.blarc.gitlab.template.lint.plugin.widget
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintBundle.message
-import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.StatusBar
 import com.intellij.openapi.wm.StatusBarWidget
 import com.intellij.openapi.wm.StatusBarWidgetFactory
 
-@Service
 class LintStatusWidgetFactory : StatusBarWidgetFactory {
 
     override fun getId(): String = LintStatusWidget.ID

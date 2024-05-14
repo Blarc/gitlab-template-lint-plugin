@@ -7,14 +7,13 @@ import com.github.blarc.gitlab.template.lint.plugin.notifications.sendNotificati
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import okhttp3.*
 import java.io.IOException
 import java.util.concurrent.CompletableFuture
 
-@Service
-open class Gitlab(val project: Project) {
+@Service(Service.Level.PROJECT)
+class Gitlab(val project: Project) {
     private val json: Json = Json { ignoreUnknownKeys = true }
 
     private fun createHttpClient(): OkHttpClient {

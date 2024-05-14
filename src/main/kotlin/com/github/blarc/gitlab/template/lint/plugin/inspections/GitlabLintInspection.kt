@@ -7,11 +7,9 @@ import com.github.blarc.gitlab.template.lint.plugin.settings.lintFrequency.LintF
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemsHolder
-import com.intellij.openapi.components.Service
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.PsiFile
 
-@Service
 class GitlabLintInspection : LocalInspectionTool() {
 
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {

@@ -1,6 +1,7 @@
 package com.github.blarc.gitlab.template.lint.plugin.settings
 
 import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull
  * The [State] and [Storage] annotations define the name of the data and the file name where
  * these persistent application settings are stored.
  */
+@Service(Service.Level.PROJECT)
 @State(
     name = ProjectSettings.SERVICE_NAME,
     storages = [Storage("GitlabLint.xml")]

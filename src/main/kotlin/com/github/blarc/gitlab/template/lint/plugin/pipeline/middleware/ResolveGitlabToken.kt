@@ -8,7 +8,7 @@ import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
 import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.intellij.openapi.components.Service
 
-@Service
+@Service(Service.Level.PROJECT)
 class ResolveGitlabToken : Middleware {
     override val priority = 5
     private var showGitlabTokenNotification = true

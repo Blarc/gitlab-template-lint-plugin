@@ -21,7 +21,7 @@ class SettingsConfigurable(val project: Project) :
     private val gitlabUrlTokenTable = GitlabUrlTokenTable(project)
     override fun createPanel() = panel {
         row {
-            comboBox(LintFrequencyEnum.values().toList(), ListCellRenderer())
+            comboBox(LintFrequencyEnum.entries, ListCellRenderer())
                 .label(GitlabLintBundle.message("settings.frequency.label"))
                 .bindItem(AppSettings.instance::lintFrequency.toNullableProperty())
 

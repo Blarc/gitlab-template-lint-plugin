@@ -86,12 +86,6 @@
         <applicationService
                 serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings"/>
 
-        <projectService
-                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.settings.ProjectSettings"/>
-
-        <projectService
-                serviceImplementation="com.github.blarc.gitlab.template.lint.plugin.gitlab.Gitlab"/>
-
         <!--        <projectConfigurable-->
         <!--                parentId="tools"-->
         <!--                instance="com.github.blarc.gitlab.template.lint.plugin.ui.settings.ProjectSettingsConfigurable"-->
@@ -178,6 +172,7 @@
         />
         <action id="com.github.blarc.gitlab.template.lint.plugin.GitlabLintAction"
                 class="com.github.blarc.gitlab.template.lint.plugin.GitlabLintAction"
+                icon="com.github.blarc.gitlab.template.lint.plugin.Icons.GITLAB_LOGO"
                 text="Run Gitlab Lint..."
         >
             <add-to-group group-id="EditorPopupMenu"/>

@@ -42,11 +42,11 @@ data class Notification(
                 Finding Gitlab Template Lint useful? Show your support 💖 and ⭐ the repository 🙏.
             """.trimIndent(),
             actions = setOf(
-                NotificationAction.openRepository() {
-                    service<AppSettings>().requestSupport = false;
+                NotificationAction.openRepository {
+                    service<AppSettings>().requestSupport = false
                 },
-                NotificationAction.doNotAskAgain() {
-                    service<AppSettings>().requestSupport = false;
+                NotificationAction.doNotAskAgain {
+                    service<AppSettings>().requestSupport = false
                 }
             )
         )
@@ -81,8 +81,8 @@ data class Notification(
 
     }
 
+    @Suppress("unused")
     fun isTransient() = type == Type.TRANSIENT
-    fun isPersistent() = !isTransient();
 }
 
 data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) -> Unit) {
@@ -109,7 +109,7 @@ data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) 
 
         fun openUrl(url: URI, title: String = message("actions.take-me-there")) = NotificationAction(title) { dismiss ->
             dismiss()
-            BrowserLauncher.instance.open(url.toString());
+            BrowserLauncher.instance.open(url.toString())
         }
     }
 }

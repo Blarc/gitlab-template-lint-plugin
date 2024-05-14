@@ -9,7 +9,7 @@ import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 
-@Service
+@Service(Service.Level.PROJECT)
 class ShowSupportNotification : Middleware {
     override val priority = 10
 
@@ -22,6 +22,6 @@ class ShowSupportNotification : Middleware {
             sendNotification(Notification.star())
         }
 
-        return gitlabLintResponse;
+        return gitlabLintResponse
     }
 }
