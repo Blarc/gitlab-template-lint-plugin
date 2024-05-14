@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Update dependencies.
+- Update code to latest IntelliJ API.
 
 ## [1.13.2] - 2023-06-08
 
