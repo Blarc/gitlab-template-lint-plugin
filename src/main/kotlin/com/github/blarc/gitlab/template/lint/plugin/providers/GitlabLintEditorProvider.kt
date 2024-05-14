@@ -2,6 +2,8 @@ package com.github.blarc.gitlab.template.lint.plugin.providers
 
 import com.github.blarc.gitlab.template.lint.plugin.GitlabLintUtils
 import com.github.blarc.gitlab.template.lint.plugin.settings.AppSettings
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.fileEditor.*
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider
@@ -30,8 +32,18 @@ class GitlabLintEditorProvider : FileEditorProvider, DumbAware {
 
 class EditorWithMergedPreview private constructor(
     editor: TextEditor,
-    private val preview: TextEditor
+    private val preview: TextEditor,
+    private val editorViewer: Editor
 ) : TextEditorWithPreview(editor, preview) {
+
+    init {
+        (editor as? Disposable)?.let { Disposer.register(this, it) }
+        (preview as? Disposable)?.let { Disposer.register(this, it) }
+    }
+
+    override fun dispose() {
+        EditorFactory.getInstance().releaseEditor(editorViewer)
+    }
 
     fun setPreviewText(text: String) {
         preview.editor.document.setText(text)
@@ -43,7 +55,7 @@ class EditorWithMergedPreview private constructor(
             val mainEditor = textEditorProvider.createEditor(project, file) as TextEditor
             val editorFactory = EditorFactory.getInstance()
 
-            val viewer = editorFactory.createEditor(
+            val editorViewer = editorFactory.createEditor(
                 editorFactory.createDocument(""),
                 project,
                 file.fileType,
@@ -51,13 +63,11 @@ class EditorWithMergedPreview private constructor(
             )
 
             // Removes vertical line
-            viewer.settings.isRightMarginShown = false
+            editorViewer.settings.isRightMarginShown = false
 
-            Disposer.register(mainEditor) { editorFactory.releaseEditor(viewer) }
+            val previewEditor = textEditorProvider.getTextEditor(editorViewer)
 
-            val previewEditor = textEditorProvider.getTextEditor(viewer)
-
-            return EditorWithMergedPreview(mainEditor, previewEditor)
+            return EditorWithMergedPreview(mainEditor, previewEditor, editorViewer)
         }
     }
 }
