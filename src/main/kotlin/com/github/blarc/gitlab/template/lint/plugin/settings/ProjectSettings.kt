@@ -1,10 +1,15 @@
 package com.github.blarc.gitlab.template.lint.plugin.settings
 
+import com.github.blarc.gitlab.template.lint.plugin.settings.gitlabUrlToken.GitlabUrlToken
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
+import com.intellij.util.xmlb.annotations.Transient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.jetbrains.annotations.NotNull
 
 /**
@@ -30,9 +35,20 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
     var forceHttps = true
     var ignoredErrors: MutableMap<String, MutableSet<String>> = mutableMapOf()
 
+    @Transient
+    @get:Transient
+    var gitlabUrlTokens: List<GitlabUrlToken> = listOf()
+
     override fun getState() = this
 
     override fun loadState(@NotNull state: ProjectSettings) {
         XmlSerializerUtil.copyBean(state, this)
+    }
+
+    override fun initializeComponent() {
+        CoroutineScope(Dispatchers.IO).launch {
+            gitlabUrlTokens =
+                gitlabUrls.map { GitlabUrlToken(it, AppSettings.instance.getGitlabToken(it)) }
+        }
     }
 }

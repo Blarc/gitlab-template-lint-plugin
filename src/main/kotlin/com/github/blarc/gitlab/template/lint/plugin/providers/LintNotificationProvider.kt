@@ -25,12 +25,6 @@ class LintNotificationProvider : EditorNotificationProvider {
             val panel = EditorNotificationPanel(HintUtil.ERROR_COLOR_KEY)
 
             val errors = pipeline.gitlabLintResponse?.errors
-            if (errors?.firstOrNull().equals("Reference not found", true)) {
-                panel.text = message("lint.error.reference-not-found")
-            } else {
-                panel.text =
-                    errors?.joinToString(separator = " ") ?: "Lint response was invalid, but no errors were returned."
-            }
 
             panel.text = when (errors?.firstOrNull()) {
                 GitlabLintErrorsEnum.REFERENCE_NOT_FOUND.message -> message("lint.error.reference-not-found")

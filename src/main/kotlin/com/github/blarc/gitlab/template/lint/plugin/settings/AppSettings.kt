@@ -10,6 +10,9 @@ import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
 
@@ -47,10 +50,18 @@ class AppSettings : PersistentStateComponent<AppSettings> {
         PasswordSafe.instance.setPassword(getCredentialAttributes(gitlabUrl), token)
     }
 
-    fun getGitlabToken(gitlabUrl: String): String? {
+    suspend fun getGitlabToken(gitlabUrl: String): String? {
         val credentialAttributes = getCredentialAttributes(gitlabUrl)
-        val credentials: Credentials = PasswordSafe.instance.get(credentialAttributes) ?: return null
-        return credentials.getPasswordAsString()
+        val credentials: Credentials? = withContext(Dispatchers.IO) {
+            return@withContext PasswordSafe.instance.get(credentialAttributes)
+        }
+        return credentials?.getPasswordAsString()
+    }
+
+    fun getGitlabTokenBlocking(gitlabUrl: String): String? {
+        return runBlocking {
+            return@runBlocking getGitlabToken(gitlabUrl)
+        }
     }
 
     private fun getCredentialAttributes(title: String): CredentialAttributes {

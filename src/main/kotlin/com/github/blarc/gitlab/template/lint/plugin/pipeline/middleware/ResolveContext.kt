@@ -24,9 +24,9 @@ class ResolveContext : Middleware {
     private var showRepositoryNotification = true
     private var showRemoteNotification = true
 
-    override fun invoke(
+    override suspend fun invoke(
         pass: Pass,
-        next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?
+        next: suspend () -> Pair<GitlabLintResponse?, LintStatusEnum>?
     ): Pair<GitlabLintResponse?, LintStatusEnum>? {
 
         val repository = locateRepository(pass) ?: return null

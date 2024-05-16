@@ -13,7 +13,10 @@ class ResolveGitlabToken : Middleware {
     override val priority = 5
     private var showGitlabTokenNotification = true
 
-    override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
+    override suspend fun invoke(
+        pass: Pass,
+        next: suspend () -> Pair<GitlabLintResponse?, LintStatusEnum>?
+    ): Pair<GitlabLintResponse?, LintStatusEnum>? {
 
         val gitlabToken = resolveGitlabToken(pass) ?: return null
 
@@ -22,10 +25,10 @@ class ResolveGitlabToken : Middleware {
         return next()
     }
 
-    private fun resolveGitlabToken(pass: Pass) : String? {
+    private suspend fun resolveGitlabToken(pass: Pass) : String? {
         val gitlabUrl = pass.gitlabUrlOrThrow()
-        val gitlabToken = AppSettings.instance.getGitlabToken(gitlabUrl)
 
+        val gitlabToken = AppSettings.instance.getGitlabToken(gitlabUrl)
         if (gitlabToken.isNullOrEmpty() && showGitlabTokenNotification) {
             sendNotification(Notification.gitlabTokenNotSet(pass.project), pass.project)
             showGitlabTokenNotification = false

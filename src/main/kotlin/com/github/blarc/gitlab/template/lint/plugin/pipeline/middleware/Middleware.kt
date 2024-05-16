@@ -7,7 +7,7 @@ import com.github.blarc.gitlab.template.lint.plugin.widget.LintStatusEnum
 interface Middleware : Comparable<Middleware> {
     val priority: Int
 
-    operator fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?) : Pair<GitlabLintResponse?, LintStatusEnum>?
+    suspend operator fun invoke(pass: Pass, next: suspend () -> Pair<GitlabLintResponse?, LintStatusEnum>?) : Pair<GitlabLintResponse?, LintStatusEnum>?
 
     override fun compareTo(other: Middleware): Int {
         return priority - other.priority

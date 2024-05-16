@@ -9,6 +9,10 @@
 - Update code to latest IntelliJ API.
 - Bump IDE compatibility property `pluginSinceBuild` to `232`.
 
+### Fixed
+- Access is only allowed from Event Dispatch Thread.
+- Read access is allowed from inside read-action only.
+
 ## [1.13.2] - 2023-06-08
 
 ### Fixed

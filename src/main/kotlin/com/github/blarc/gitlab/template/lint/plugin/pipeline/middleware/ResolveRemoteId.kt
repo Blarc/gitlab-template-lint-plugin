@@ -14,7 +14,10 @@ class ResolveRemoteId : Middleware {
     override val priority = 30
     private var showRemoteIdNotification = true
 
-    override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
+    override suspend fun invoke(
+        pass: Pass,
+        next: suspend () -> Pair<GitlabLintResponse?, LintStatusEnum>?
+    ): Pair<GitlabLintResponse?, LintStatusEnum>? {
         val remoteUrl = pass.remoteOrThrow()
         val gitlabUrl = pass.gitlabUrlOrThrow()
         val gitlabToken = pass.gitlabTokenOrThrow()

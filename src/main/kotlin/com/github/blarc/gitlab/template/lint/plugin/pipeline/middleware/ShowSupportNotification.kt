@@ -13,7 +13,10 @@ import com.intellij.openapi.components.service
 class ShowSupportNotification : Middleware {
     override val priority = 10
 
-    override fun invoke(pass: Pass, next: () -> Pair<GitlabLintResponse?, LintStatusEnum>?): Pair<GitlabLintResponse?, LintStatusEnum>? {
+    override suspend fun invoke(
+        pass: Pass,
+        next: suspend () -> Pair<GitlabLintResponse?, LintStatusEnum>?
+    ): Pair<GitlabLintResponse?, LintStatusEnum>? {
         val gitlabLintResponse = next()
 
         val settings = service<AppSettings>()

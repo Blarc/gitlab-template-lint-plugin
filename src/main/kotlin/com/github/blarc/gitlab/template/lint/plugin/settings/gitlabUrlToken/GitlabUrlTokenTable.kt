@@ -28,8 +28,7 @@ import javax.swing.ListSelectionModel.SINGLE_SELECTION
 
 class GitlabUrlTokenTable(val project: Project) {
     private var gitlabUrls = project.service<ProjectSettings>().gitlabUrls
-    private var gitlabUrlTokens = gitlabUrls
-        .map { GitlabUrlToken(it, AppSettings.instance.getGitlabToken(it)) }
+    private var gitlabUrlTokens = project.service<ProjectSettings>().gitlabUrlTokens
 
     private val tableModel = createTableModel()
 
@@ -80,7 +79,7 @@ class GitlabUrlTokenTable(val project: Project) {
 
     fun reset() {
         gitlabUrlTokens =
-            gitlabUrlTokens.map { GitlabUrlToken(it.gitlabUrl, AppSettings.instance.getGitlabToken(it.gitlabUrl)) }
+            gitlabUrlTokens.map { GitlabUrlToken(it.gitlabUrl, AppSettings.instance.getGitlabTokenBlocking(it.gitlabUrl)) }
         refreshTableModel()
     }
 
@@ -89,13 +88,14 @@ class GitlabUrlTokenTable(val project: Project) {
         return orgGitlabUrls.size != gitlabUrlTokens.size ||
                 gitlabUrlTokens.any {
                     !orgGitlabUrls.contains(it.gitlabUrl) ||
-                            AppSettings.instance.getGitlabToken(it.gitlabUrl) != it.gitlabToken
+                            AppSettings.instance.getGitlabTokenBlocking(it.gitlabUrl) != it.gitlabToken
                 }
     }
 
     fun apply() {
         gitlabUrlTokens.forEach { AppSettings.instance.saveGitlabToken(it.gitlabToken.orEmpty(), it.gitlabUrl) }
         project.service<ProjectSettings>().gitlabUrls = gitlabUrlTokens.map { it.gitlabUrl }.toSet()
+        project.service<ProjectSettings>().gitlabUrlTokens =  gitlabUrlTokens.toList()
     }
 
     private class GitlabUrlTokenDialog(val project: Project, newGitlabUrlToken: GitlabUrlToken? = null) :

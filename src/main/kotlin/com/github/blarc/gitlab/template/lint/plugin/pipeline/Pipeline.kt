@@ -8,10 +8,11 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
+import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
 @Service(Service.Level.PROJECT)
-class Pipeline(private val project: Project) {
+class Pipeline(private val project: Project, private val cs: CoroutineScope) {
     var gitlabLintResponse: GitlabLintResponse? = null
     var lintStatus: LintStatusEnum = LintStatusEnum.HIDDEN
     var file: PsiFile? = null
@@ -25,7 +26,7 @@ class Pipeline(private val project: Project) {
         project.service<LintContext>()
     )
 
-    fun accept(file: PsiFile) {
+    suspend fun accept(file: PsiFile) {
         this.file = file
 
         if (middlewares.isEmpty()) {
@@ -35,15 +36,14 @@ class Pipeline(private val project: Project) {
         val queue = PriorityQueue(middlewares)
 
         updateStatusWidget(project, LintStatusEnum.RUNNING)
-        val result = next(queue, Pass(project, file))
 
+        val result = next(queue, Pass(project, file))
         gitlabLintResponse = result?.first
-        updateStatusWidget(project,result?.second ?: LintStatusEnum.INVALID)
+        updateStatusWidget(project, result?.second ?: LintStatusEnum.INVALID)
     }
 
-    private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : Pair<GitlabLintResponse?, LintStatusEnum>? {
+    private suspend fun next(queue: PriorityQueue<Middleware>, pass: Pass): Pair<GitlabLintResponse?, LintStatusEnum>? {
         val middleware = queue.remove()
-
         return middleware(pass) {
             return@middleware next(queue, pass)
         }
