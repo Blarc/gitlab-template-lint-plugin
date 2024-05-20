@@ -12,6 +12,8 @@ import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditorManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Service(Service.Level.PROJECT)
 class LintContext : Middleware {
@@ -78,7 +80,7 @@ class LintContext : Middleware {
         }
     }
 
-    private fun lintContent(
+    private suspend fun lintContent(
         gitlab: Gitlab,
         gitlabUrl: String,
         gitlabToken: String,
@@ -93,13 +95,15 @@ class LintContext : Middleware {
             fileText = pass.file.text
         }
 
-        return gitlab.lintContent(
-            gitlabUrl,
-            gitlabToken,
-            fileText,
-            remoteId,
-            branch,
-            showGitlabTokenNotification
-        ).get()
+        return withContext(Dispatchers.IO) {
+            gitlab.lintContent(
+                gitlabUrl,
+                gitlabToken,
+                fileText,
+                remoteId,
+                branch,
+                showGitlabTokenNotification
+            ).get()
+        }
     }
 }

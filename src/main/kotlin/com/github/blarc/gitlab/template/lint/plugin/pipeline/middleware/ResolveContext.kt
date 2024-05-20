@@ -17,6 +17,8 @@ import com.intellij.openapi.components.service
 import git4idea.repo.GitRemote
 import git4idea.repo.GitRepository
 import git4idea.repo.GitRepositoryManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Service(Service.Level.PROJECT)
 class ResolveContext : Middleware {
@@ -75,8 +77,10 @@ class ResolveContext : Middleware {
         }
     }
 
-    private fun locateRepository(pass: Pass): GitRepository? {
-        val repository = GitRepositoryManager.getInstance(pass.project).getRepositoryForFile(pass.file.virtualFile)
+    private suspend fun locateRepository(pass: Pass): GitRepository? {
+        val repository = withContext(Dispatchers.IO) {
+            GitRepositoryManager.getInstance(pass.project).getRepositoryForFile(pass.file.virtualFile)
+        }
 
         showRepositoryNotification = if (repository == null) {
             sendNotification(Notification.repositoryNotFound(), pass.project)

@@ -8,7 +8,6 @@ import com.intellij.ui.EditorNotifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 fun lintGitlabYaml(file: PsiFile) {
@@ -21,13 +20,10 @@ fun lint(file: PsiFile) {
     val project = file.project
     val pipeline = project.service<Pipeline>()
 
-    CoroutineScope(Dispatchers.IO).launch {
+    CoroutineScope(Dispatchers.Default).launch {
         withBackgroundProgress(file.project, GitlabLintBundle.message("inspection.title")) {
             pipeline.accept(file)
-
-            withContext(Dispatchers.Main) {
-                EditorNotifications.getInstance(project).updateAllNotifications()
-            }
+            EditorNotifications.getInstance(project).updateAllNotifications()
         }
     }
 }
