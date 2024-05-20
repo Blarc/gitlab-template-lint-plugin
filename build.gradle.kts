@@ -26,7 +26,9 @@ intellij {
     pluginName.set(properties("pluginName"))
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
-    updateSinceUntilBuild.set(false)
+
+    // TODO @Blarc: Uncomment out this line when new version of plugin verifier is released
+    // updateSinceUntilBuild.set(false)
 
     plugins.set(
         properties("platformPlugins").split(',')
@@ -60,7 +62,8 @@ tasks {
     patchPluginXml {
         version.set(properties("pluginVersion"))
         sinceBuild.set(properties("pluginSinceBuild"))
-        // untilBuild.set(properties("pluginUntilBuild"))
+        // TODO @Blarc: Comment out this line when new version of plugin verifier is released
+        untilBuild.set(properties("pluginUntilBuild"))
 
         // Get the latest available change notes from the changelog file
         changeNotes.set(provider {

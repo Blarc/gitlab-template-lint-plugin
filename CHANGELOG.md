@@ -7,7 +7,8 @@
 ### Changed
 - Update dependencies.
 - Update code to latest IntelliJ API.
-- Bump IDE compatibility property `pluginSinceBuild` to `232`.
+- Bump IDE compatibility property `pluginSinceBuild` to `233`.
+- Set `pluginUntilBuild` to 241 to pass pluginVerifier task
 
 ### Fixed
 - Access is only allowed from Event Dispatch Thread.
