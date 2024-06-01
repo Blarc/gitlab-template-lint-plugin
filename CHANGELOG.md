@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- Remove `pluginUntilBuild` to enable plugin for newer versions.
+
 ## [1.14.0] - 2024-05-21
 
 ### Added
