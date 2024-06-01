@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 
+## [1.14.1] - 2024-06-01
+
 ### Fixed
+
 - Remove `pluginUntilBuild` to enable plugin for newer versions.
 
 ## [1.14.0] - 2024-05-21
@@ -346,7 +349,8 @@ remotes table.
 - Setting private Gitlab token
 - Error message on linting error
 
-[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.14.0...HEAD
+[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.14.1...HEAD
+[1.14.1]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.14.0...v1.14.1
 [1.14.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.13.2...v1.14.0
 [1.13.2]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.13.1...v1.13.2
 [1.13.1]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.13.0...v1.13.1
