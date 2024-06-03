@@ -93,6 +93,15 @@ tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
 }
 
+tasks.test {
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // tests
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
