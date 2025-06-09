@@ -101,7 +101,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     // tests
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.13.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.13.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.13.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.13.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
