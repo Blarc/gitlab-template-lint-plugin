@@ -98,7 +98,7 @@ tasks.test {
 }
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:5.2.1")
+    implementation("com.squareup.okhttp3:okhttp:5.3.0")
 
     // tests
     testImplementation("org.junit.jupiter:junit-jupiter-params:6.0.0")
