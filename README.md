@@ -5,8 +5,8 @@
         <img src="./src/main/resources/META-INF/pluginIcon.svg" width="200" height="200" alt="logo"/>
     </a>
 </div>
-<h1 align="center">Gitlab Template Lint</h1>
-<p align="center">Gitlab Template Lint for IntelliJ based IDEs/Android Studio.</p>
+<h1 align="center">CI Lint for GitLab</h1>
+<p align="center">CI Lint for GitLab for IntelliJ based IDEs/Android Studio.</p>
 
 <p align="center">
 <a href="https://actions-badge.atrox.dev/Blarc/gitlab-lint-plugin/goto?ref=main"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FBlarc%2Fgitlab-lint-plugin%2Fbadge%3Fref%3Dmain&style=flat" /></a>
@@ -26,12 +26,12 @@
 - [Configuration](/docs/configuration.md)
 
 ## Description
-Gitlab Template Lint Plugin is a plugin for IntelliJ based IDEs/Android studio for linting
+CI Lint for GitLab is a plugin for IntelliJ based IDEs/Android studio for linting
 Gitlab CI/CD yaml configuration files. It uses the Gitlab lint API to check the currently
 open yaml configuration and shows the errors in the notification bar.
 
 To get started, install the plugin and set Gitlab private token with <kbd>read_api</kbd> and <kbd>api</kbd> scope in plugin's settings:
-<kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Gitlab Template Lint</kbd>
+<kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>CI Lint for GitLab</kbd>
 
 ## Features
 - Linting of Gitlab CI/CD yaml configuration files
@@ -53,15 +53,15 @@ IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, GoLand, Da
 
 Or you could install it inside your IDE:
 
-For Windows & Linux: <kbd>File</kbd> > <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Gitlab Template Lint"</kbd> > <kbd>Install Plugin</kbd> > <kbd>Restart IntelliJ IDEA</kbd>
+For Windows & Linux: <kbd>File</kbd> > <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "CI Lint for GitLab"</kbd> > <kbd>Install Plugin</kbd> > <kbd>Restart IntelliJ IDEA</kbd>
 
-For Mac: <kbd>IntelliJ IDEA</kbd> > <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Gitlab Template Lint"</kbd> > <kbd>Install Plugin</kbd>  > <kbd>Restart IntelliJ IDEA</kbd>
+For Mac: <kbd>IntelliJ IDEA</kbd> > <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "CI Lint for GitLab"</kbd> > <kbd>Install Plugin</kbd>  > <kbd>Restart IntelliJ IDEA</kbd>
 
 
 ## Installation from zip
 1. Download zip from [releases](https://github.com/Blarc/gitlab-lint-plugin/releases)
 2. Import to IntelliJ: <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Cog</kbd> > <kbd>Install plugin from disk...</kbd>
-3. Set Gitlab private token in plugin's settings: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Gitlab Template Lint</kbd>
+3. Set GitLab private token in plugin's settings: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>CI Lint for GitLab</kbd>
 
 ## Support
 
