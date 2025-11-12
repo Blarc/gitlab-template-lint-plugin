@@ -7,6 +7,11 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys
 import org.jetbrains.yaml.YAMLFileType
 
 class GitlabLintAction : AnAction() {
+
+    init {
+        templatePresentation.icon = Icons.GITLAB_LINT
+    }
+
     override fun actionPerformed(e: AnActionEvent) {
         e.dataContext.getData(PlatformDataKeys.PSI_FILE)?.let { file ->
             lint(file)
