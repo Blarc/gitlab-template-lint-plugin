@@ -107,6 +107,12 @@ class Gitlab(val project: Project) {
                                     }
                                     result.complete(null)
                                 }
+                                403 -> {
+                                    if (showProjectIdNotification) {
+                                        sendNotification(Notification.forbiddenRequest(project), project)
+                                    }
+                                    result.complete(null)
+                                }
                                 else -> {
                                     if (showProjectIdNotification) {
                                         sendNotification(Notification.remoteIdNotFound(project), project)

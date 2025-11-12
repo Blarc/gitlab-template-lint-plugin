@@ -61,6 +61,11 @@ data class Notification(
             actions = setOf(NotificationAction.settings(project, message("actions.set-gitlab-token")))
         )
 
+        fun forbiddenRequest(project: Project) = Notification(
+            message = message("notifications.forbidden-request"),
+            actions = setOf(NotificationAction.settings(project, message("actions.set-gitlab-token")))
+        )
+
         fun couldNotDetectGitlabUrl(project: Project) = Notification(
             message = message("notifications.could-not-detect-gitlab-url"),
             actions = setOf(NotificationAction.settings(project, message("actions.configure-manually")))
