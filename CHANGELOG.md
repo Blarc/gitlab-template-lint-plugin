@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Rename plugin to CI Lint for GitLab due to violation of GitLab's published Trademark Guidelines.
+
+### Fixed
+
+- Error that icon cannot be found when right-clicking in the file.
+- Wrong link for creating a new GitLab personal access token.
+- Error due to insufficient token permissions is shown as an unknown error.
+
 ## [1.14.1] - 2024-06-01
 
 ### Fixed
