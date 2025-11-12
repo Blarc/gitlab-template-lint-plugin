@@ -5,7 +5,7 @@
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>Gitlab Template Lint</name>
+    <name>CI Lint for GitLab</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
     <vendor email="" url="https://github.com/Blarc">Blarc</vendor>
@@ -14,7 +14,7 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-        <p>Gitlab Template Lint Plugin is a plugin for IntelliJ based IDEs/Android studio for linting<br/>
+        <p>CI Lint for GitLab Plugin is a plugin for IntelliJ based IDEs/Android studio for linting<br/>
         Gitlab CI/CD yaml configuration files. It uses the Gitlab lint API to check the currently<br/>
         open yaml configuration and shows the errors in the notification bar.</p>
         <h3>Features</h3>
@@ -28,7 +28,7 @@
         <p>To get started, install the plugin and set Gitlab private token with <strong>read_api</strong> and
         <strong>api</strong> scope in plugin's settings:
         <br/>
-        Settings > Tools > Gitlab Template Lint</p>
+        Settings > Tools > CI Lint for GitLab</p>
         <h3>Troubleshooting</h3>
         <p>We'd love to hear from you if you have any issues or feature requests. Please report them
         <a href="https://github.com/Blarc/gitlab-template-lint-plugin/issues">here</a>.</p>
