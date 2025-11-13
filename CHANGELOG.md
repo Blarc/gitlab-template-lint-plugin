@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.15.0] - 2025-11-13
+
 ### Changed
 
 - Rename plugin to CI Lint for GitLab due to violation of GitLab's published Trademark Guidelines.
@@ -359,7 +361,8 @@ remotes table.
 - Setting private Gitlab token
 - Error message on linting error
 
-[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.14.1...HEAD
+[Unreleased]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.15.0...HEAD
+[1.15.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.14.1...v1.15.0
 [1.14.1]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.14.0...v1.14.1
 [1.14.0]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.13.2...v1.14.0
 [1.13.2]: https://github.com/Blarc/gitlab-template-lint-plugin/compare/v1.13.1...v1.13.2
