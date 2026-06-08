@@ -44,7 +44,7 @@ dependencies {
         // testFramework(TestFrameworkType.Platform)
     }
 
-    implementation("com.squareup.okhttp3:okhttp:5.3.2")
+    implementation("com.squareup.okhttp3:okhttp:5.4.0")
 
     // tests
     testImplementation("org.junit.jupiter:junit-jupiter-params:6.0.3")
